@@ -1,8 +1,0 @@
-title: Kitkat Documentation
-description: Centre de ressources pour les variateurs Danfoss
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site
-theme: jekyll-theme-minimal # Fallback theme, but we will use custom layout
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag

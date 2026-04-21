@@ -1,23 +1,24 @@
-# Kitkat - Documentation Danfoss
+# Kitkat - Portail de Ressources Danfoss
 
-Ce projet est prêt à être déployé sur **GitHub Pages** en utilisant **Jekyll**.
+Ce site centralise l'ensemble de la documentation technique et des ressources logicielles relatives aux solutions d'automatisation et de variation de vitesse Danfoss.
 
-## Comment déployer sur GitHub Pages
+## Contenu du Portail
 
-1. **Créez un nouveau dépôt** sur GitHub.
-2. **Poussez ces fichiers** sur la branche `main`.
-3. Allez dans **Settings** > **Pages** de votre dépôt GitHub.
-4. Dans la section **Build and deployment**, choisissez :
-   - Source : **Deploy from a branch**
-   - Branch : **main** / **(root)**
-5. Cliquez sur **Save**.
+Le portail est organisé par gammes de produits pour faciliter l'accès aux informations critiques :
 
-Votre site sera bientôt disponible à l'adresse `https://votre-pseudo.github.io/votre-depot/`.
+### Variateurs de Fréquence
+- **iC7 Automation** : Brochures, manuels de configuration et d'utilisation STO, guides d'applications industrielles et fiches techniques.
+- **iC2 Micro** : Documentation technique complète pour la gamme compacte.
+- **VLT FC-302 / FC-202 / FC-102** : Guides de dimensionnement (par puissance), manuels de programmation et encombrements.
 
-## Structure du projet
+### Options et Accessoires
+- Accès direct aux fiches techniques des cartes optionnelles (MCB, MCA).
+- Documentation sur la sécurité (STO) et la surveillance conditionnelle (CBM).
+- Filtres de sortie.
 
-- `index.md` : Contenu principal (formaté pour Jekyll).
-- `_config.yml` : Configuration du site.
-- `_layouts/default.html` : Structure HTML (Design Premium).
-- `assets/css/style.css` : Styles personnalisés (Glassmorphism).
-- `Gemfile` : Dépendances Jekyll.
+### Logiciels et Bibliothèques
+- **My Drive Insight** & **MCT-10** : Liens directs vers les dernières versions des outils de paramétrage.
+- **Librairies PLC** : Ressources pour l'intégration dans les contrôleurs logiques.
+
+---
+*Ce portail est maintenu par MEDIA MESURES pour garantir un accès rapide et structuré aux ressources techniques officielles.*
