@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    {% seo %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ site.title }}</h1>
+            <p>{{ site.description }}</p>
+        </header>
+
+        <main id="content-area">
+            {{ content }}
+        </main>
+
+        <footer>
+            <p>&copy; {{ "now" | date: "%Y" }} MEDIA MESURES - Kitkat Documentation</p>
+        </footer>
+    </div>
+
+    <script>
+        // Automatic layout enhancement: wrap sections (h2 + following ul) into cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const main = document.getElementById('content-area');
+            const children = Array.from(main.children);
+            let currentSection = null;
+
+            children.forEach(child => {
+                if (child.tagName === 'H2') {
+                    currentSection = document.createElement('section');
+                    main.insertBefore(currentSection, child);
+                    currentSection.appendChild(child);
+                } else if (currentSection && (child.tagName === 'UL' || child.tagName === 'P')) {
+                    currentSection.appendChild(child);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
