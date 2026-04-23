@@ -14,6 +14,17 @@
 <body>
     <div class="container">
         <header>
+            <div class="logo-container">
+                {{ $logoMM := resources.Get "images/logo-mm.jpg" }}
+                {{ if $logoMM }}
+                    <img src="{{ $logoMM.RelPermalink }}" alt="Logo Media Mesures" class="site-logo">
+                {{ end }}
+                
+                {{ $logoDanfoss := resources.Get "images/logo-danfoss.png" }}
+                {{ if $logoDanfoss }}
+                    <img src="{{ $logoDanfoss.RelPermalink }}" alt="Logo Danfoss" class="site-logo">
+                {{ end }}
+            </div>
             <h1>{{ .Site.Title }}</h1>
             <p>{{ .Site.Params.description }}</p>
         </header>
