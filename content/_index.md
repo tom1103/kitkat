@@ -3,10 +3,6 @@ layout: default
 title: Centre de Ressources Danfoss
 ---
 
-# Documentation
-
-Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouverez ici une synthèses des documentations techniques classées par gamme.
-
 ## iC7 Automation
 
 - [Brochure](https://assets.danfoss.com/documents/571789/AD503139935297fr-000302.pdf)
