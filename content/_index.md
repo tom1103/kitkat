@@ -3,9 +3,9 @@ layout: default
 title: Kitkat - Danfoss Resources
 ---
 
-# Kitkat Documentation
+# Documentation
 
-Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouverez ici toutes les documentations techniques classées par gamme.
+Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouverez ici une synthèses des documentations techniques classées par gamme.
 
 ## iC7 Automation
 
@@ -17,6 +17,7 @@ Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouver
 - [Fiche technique ED](https://assets.danfoss.com/documents/564183/AM480047856372fr-000501.pdf)
 - [Fiche technique Module Air](https://assets.danfoss.com/documents/482538/AM480030781351fr-000103.pdf)
 - [Encombrements](https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-automation/#tab-3d-models-and-drawings)
+- [Liste guide d'application](https://ftp.danfoss.com/public/file/rUxna4kkfEqoCx1xGjJvEg/Guides%20d'Application_iC7%20Automation.pdf)
 
 &nbsp;
 
@@ -28,6 +29,7 @@ Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouver
 - [Guide d'application](https://assets.danfoss.com/documents/560863/AB413939445838en-000401.pdf)
 - [Fiche technique](https://assets.danfoss.com/documents/428454/AM414644741332fr-000501.pdf)
 - [Encombrements](https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic2-series/ic2-micro/#tab-3d-models-and-drawings)
+- [Liste guide d'application](https://ftp.danfoss.com/public/file/RhNHnNcWtkas7U1T2qClqw/Guides%20d'Application_iC2%20micro.pdf)
 
 &nbsp;
 
@@ -38,6 +40,7 @@ Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouver
 - [Guide de dimensionnement 90-710kW](https://assets.danfoss.com/documents/277405/AJ361178947289fr-000401.pdf)
 - [Guide de dimensionnement 315-1200kW](https://assets.danfoss.com/documents/276882/AJ361178838261fr-000301.pdf)
 - [Guide de programmation](https://assets.danfoss.com/documents/569514/AU275636650261en-003301.pdf)
+- [Liste guide d'application](https://ftp.danfoss.com/public/file/OZ--HXbh9UOlDG6oAHWBjQ/Guides%20d'application_FC300%20VLT%20AutomationDrive.pdf)
 
 &nbsp;
 
@@ -49,6 +52,7 @@ Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouver
 - [Guide de dimensionnement 355-800kW](https://assets.danfoss.com/documents/270523/AQ275652274277fr-000101.pdf)
 - [Guide de programmation](https://assets.danfoss.com/documents/535068/AU361182657213en-002201.pdf)
 - [Encombrements](https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-aqua-drive-fc-202/#tab-drawings)
+- [Liste guide d'application](https://ftp.danfoss.com/public/file/kzcv3Tw5KEuafjaM6Lg0YA/Guides%20d'Application_FC202%20VLT%20AQUA%20Drive.pdf)
 
 &nbsp;
 
@@ -60,6 +64,7 @@ Bienvenue sur le portail de ressources pour les variateurs Danfoss. Vous trouver
 - [Guide de dimensionnement 110-800kW](https://assets.danfoss.com/documents/273456/AJ361178969194fr-000301.pdf)
 - [Guide de programmation](https://assets.danfoss.com/documents/562083/AU430028034214fr-001901.pdf)
 - [Encombrements](https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-hvac-drive-fc-102/#tab-drawings)
+- [Liste guide d'application](https://ftp.danfoss.com/public/file/-snXSp3eJEykBjz15LCiMw/Guides%20d'Application_FC102%20VLT%20HVAC%20Drive.pdf)
 
 &nbsp;
 
