@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Kitkat - Danfoss Resources
+title: Centre de Ressources Danfoss
 ---
 
 # Documentation

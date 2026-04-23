@@ -1,7 +1,7 @@
 baseURL = 'https://example.org/'
 languageCode = 'fr-fr'
-title = 'Kitkat Documentation'
+title = 'Centre de Ressources'
 
 [params]
-    description = 'Centre de ressources pour les variateurs Danfoss'
-    footer_text = 'MEDIA MESURES - Kitkat Documentation'
+    description = 'Documentations & Fiches Techniques Danfoss'
+    footer_text = 'MEDIA MESURES'
