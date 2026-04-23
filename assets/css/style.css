@@ -76,14 +76,19 @@ header p {
   font-size: 1.2rem;
 }
 
-main {
+main.grid-view {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+main.grid-view:has(section:hover) section:not(:hover) {
+  filter: brightness(0.5);
+  opacity: 0.6;
 }
 
 @media (max-width: 600px) {
-  main {
+  main.grid-view {
     grid-template-columns: 1fr;
   }
   header h1 {
@@ -106,11 +111,11 @@ section {
   background: var(--glass);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
 }
 
 section:hover {
@@ -168,4 +173,110 @@ footer {
   opacity: 0.5;
   margin-top: 0.5rem;
   font-style: italic;
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.view-toggle button {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.view-toggle button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* List view (table) styles */
+.table-container {
+  width: 100%;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.data-table th {
+  font-weight: 700;
+  color: var(--secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.data-table th:hover {
+  color: var(--primary);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.copy-btn:hover {
+  background: rgba(0,0,0,0.1);
+  color: var(--primary);
+}
+
+.copy-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sort-icon {
+  display: inline-block;
+  margin-left: 0.5rem;
+  width: 0; 
+  height: 0; 
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  vertical-align: middle;
+}
+th.asc .sort-icon {
+  border-bottom: 4px solid var(--primary);
+  border-top: none;
+}
+th.desc .sort-icon {
+  border-top: 4px solid var(--primary);
+  border-bottom: none;
 }
