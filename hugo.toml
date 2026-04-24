@@ -1,6 +1,7 @@
 baseURL = 'https://example.org/'
 languageCode = 'fr-fr'
 title = 'Centre de Ressources'
+relativeURLs = true
 
 [params]
     description = 'Documentations & Fiches Techniques Danfoss'

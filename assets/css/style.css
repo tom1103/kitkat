@@ -396,4 +396,22 @@ th.desc .sort-icon {
   section.grid-item {
     margin-bottom: 2rem;
   }
+  
+  /* Rendre les liens bien visibles et cliquables dans le PDF */
+  a {
+    color: #007bff !important;
+    text-decoration: underline !important;
+    background: transparent !important;
+  }
+  
+  /* Afficher l'URL complète à côté du lien pour plus de clarté sur papier/PDF */
+  main a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+    display: inline;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
