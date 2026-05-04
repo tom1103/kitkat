@@ -18,12 +18,16 @@
             <div class="logo-container">
                 {{ $logoMM := resources.Get "images/logo-mm.jpg" }}
                 {{ if $logoMM }}
-                    <img src="{{ $logoMM.RelPermalink }}" alt="Logo Media Mesures" class="site-logo">
+                    <a href="https://mediamesures.com" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ $logoMM.RelPermalink }}" alt="Logo Media Mesures" class="site-logo">
+                    </a>
                 {{ end }}
                 
                 {{ $logoDanfoss := resources.Get "images/logo-danfoss.png" }}
                 {{ if $logoDanfoss }}
-                    <img src="{{ $logoDanfoss.RelPermalink }}" alt="Logo Danfoss" class="site-logo">
+                    <a href="https://www.danfoss.com/fr-fr/service-and-support/documentation/" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ $logoDanfoss.RelPermalink }}" alt="Logo Danfoss" class="site-logo">
+                    </a>
                 {{ end }}
             </div>
             <h1>{{ .Site.Title }}</h1>
@@ -51,9 +55,15 @@
             </div>
 
             {{ if .IsHome }}
-            <div class="view-toggle">
-                <button id="btn-grid" class="active">Grille</button>
-                <button id="btn-list">Liste</button>
+            <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                <div class="view-toggle" style="margin-top: 0;">
+                    <button id="btn-simple" class="active">Simple</button>
+                    <button id="btn-complet">Complet</button>
+                </div>
+                <div class="view-toggle" style="margin-top: 0;">
+                    <button id="btn-grid" class="active">Grille</button>
+                    <button id="btn-list">Liste</button>
+                </div>
             </div>
             {{ end }}
         </header>
@@ -108,16 +118,28 @@
                     currentSection.className = 'grid-item';
                     main.insertBefore(currentSection, child);
                     currentSection.appendChild(child);
-                } else if (currentSection && (child.tagName === 'UL' || child.tagName === 'P')) {
+                } else if (currentSection) {
                     currentSection.appendChild(child);
                     
                     if (child.tagName === 'UL') {
                         const links = child.querySelectorAll('a');
                         links.forEach(link => {
+                            const rawText = link.textContent.trim();
+                            const isEssential = rawText.endsWith('*');
+                            const cleanName = isEssential ? rawText.slice(0, -1).trim() : rawText;
+                            
+                            link.textContent = cleanName;
+                            
+                            const li = link.closest('li');
+                            if (li) {
+                                li.classList.add(isEssential ? 'essential' : 'non-essential');
+                            }
+
                             tableData.push({
                                 category: currentCategory,
-                                name: link.textContent,
-                                url: link.href
+                                name: cleanName,
+                                url: link.href,
+                                isEssential: isEssential
                             });
                         });
                     }
@@ -135,7 +157,12 @@
                     <thead>
                         <tr>
                             <th data-sort="category">Catégorie <span class="sort-icon"></span></th>
-                            <th data-sort="name">Document <span class="sort-icon"></span></th>
+                            <th>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span data-sort="name" style="cursor: pointer;">Description <span class="sort-icon"></span></span>
+                                    <input type="text" id="search-input" placeholder="Rechercher..." style="padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); font-size: 0.85rem; width: 120px; font-family: inherit; font-weight: normal;">
+                                </div>
+                            </th>
                             <th>Lien</th>
                         </tr>
                     </thead>
@@ -144,9 +171,47 @@
                 
                 const tbody = table.querySelector('tbody');
                 
+                let currentMode = 'simple';
+                let searchText = '';
+                document.body.classList.add('mode-simple');
+
+                const updateGridVisibility = () => {
+                    const isSimple = currentMode === 'simple';
+                    document.querySelectorAll('.grid-item').forEach(section => {
+                        if (isSimple) {
+                            const hasEssential = section.querySelectorAll('.essential').length > 0;
+                            section.style.display = hasEssential ? '' : 'none';
+                            
+                            section.querySelectorAll('h3').forEach(h3 => {
+                                let next = h3.nextElementSibling;
+                                let hasVisibleLinks = false;
+                                while (next && next.tagName !== 'H3') {
+                                    if (next.tagName === 'UL' && next.querySelectorAll('.essential').length > 0) {
+                                        hasVisibleLinks = true;
+                                        break;
+                                    }
+                                    next = next.nextElementSibling;
+                                }
+                                h3.style.display = hasVisibleLinks ? '' : 'none';
+                            });
+                        } else {
+                            section.style.display = '';
+                            section.querySelectorAll('h3').forEach(h3 => h3.style.display = '');
+                        }
+                    });
+                };
+                
+                updateGridVisibility();
+                
                 const renderTable = (data) => {
                     tbody.innerHTML = '';
-                    data.forEach(item => {
+                    const filteredData = data.filter(item => {
+                        if (currentMode === 'simple' && !item.isEssential) return false;
+                        if (searchText && !item.name.toLowerCase().includes(searchText.toLowerCase())) return false;
+                        return true;
+                    });
+                    
+                    filteredData.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${item.category}</td>
@@ -163,8 +228,14 @@
                 };
 
                 renderTable(tableData);
+                
                 tableContainer.appendChild(table);
                 main.parentNode.insertBefore(tableContainer, main.nextSibling);
+
+                table.querySelector('#search-input').addEventListener('input', (e) => {
+                    searchText = e.target.value;
+                    renderTable(tableData);
+                });
 
                 tableContainer.addEventListener('click', (e) => {
                     const btn = e.target.closest('.copy-btn');
@@ -179,9 +250,9 @@
 
                 let sortCol = '';
                 let sortAsc = true;
-                table.querySelectorAll('th[data-sort]').forEach(th => {
-                    th.addEventListener('click', () => {
-                        const col = th.dataset.sort;
+                table.querySelectorAll('[data-sort]').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const col = el.dataset.sort;
                         if (sortCol === col) {
                             sortAsc = !sortAsc;
                         } else {
@@ -189,12 +260,17 @@
                             sortAsc = true;
                         }
                         
-                        table.querySelectorAll('th').forEach(h => {
+                        table.querySelectorAll('[data-sort]').forEach(h => {
                             h.classList.remove('asc', 'desc');
+                            const th = h.closest('th');
+                            if (th) th.classList.remove('asc', 'desc');
                         });
-                        th.classList.add(sortAsc ? 'asc' : 'desc');
+                        
+                        el.classList.add(sortAsc ? 'asc' : 'desc');
+                        const th = el.closest('th');
+                        if (th) th.classList.add(sortAsc ? 'asc' : 'desc');
 
-                        const sortedData = [...tableData].sort((a, b) => {
+                        tableData.sort((a, b) => {
                             const valA = a[col].toLowerCase();
                             const valB = b[col].toLowerCase();
                             if (valA < valB) return sortAsc ? -1 : 1;
@@ -202,12 +278,36 @@
                             return 0;
                         });
                         
-                        renderTable(sortedData);
+                        renderTable(tableData);
                     });
                 });
 
                 const btnGrid = document.getElementById('btn-grid');
                 const btnList = document.getElementById('btn-list');
+                const btnSimple = document.getElementById('btn-simple');
+                const btnComplet = document.getElementById('btn-complet');
+                
+                if (btnSimple && btnComplet) {
+                    btnSimple.addEventListener('click', () => {
+                        currentMode = 'simple';
+                        btnSimple.classList.add('active');
+                        btnComplet.classList.remove('active');
+                        document.body.classList.add('mode-simple');
+                        document.body.classList.remove('mode-complet');
+                        updateGridVisibility();
+                        renderTable(tableData);
+                    });
+                    
+                    btnComplet.addEventListener('click', () => {
+                        currentMode = 'complet';
+                        btnComplet.classList.add('active');
+                        btnSimple.classList.remove('active');
+                        document.body.classList.add('mode-complet');
+                        document.body.classList.remove('mode-simple');
+                        updateGridVisibility();
+                        renderTable(tableData);
+                    });
+                }
                 
                 if (btnGrid && btnList) {
                     btnGrid.addEventListener('click', () => {
