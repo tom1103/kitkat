@@ -142,12 +142,31 @@ section:hover {
   background: #ffffff; /* Pour éviter que l'arrière-plan ne transparaisse trop */
 }
 
+section h3 {
+  color: var(--secondary);
+  font-size: 0.9rem;
+  margin: 1.5rem 0 0.8rem;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(207, 30, 60, 0.1);
+  padding-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+section h3:first-of-type {
+  margin-top: 0.5rem;
+}
+
 ul {
   list-style: none;
 }
 
 li {
   margin-bottom: 0.8rem;
+}
+
+body.mode-simple .non-essential {
+  display: none !important;
 }
 
 a {
@@ -367,51 +386,156 @@ th.desc .sort-icon {
 }
 
 @media print {
+  /* Assurer un fond blanc propre et économiser l'encre */
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    padding: 0 !important;
+  }
+
   body::after {
     display: none !important;
   }
-  .page-actions, .view-toggle, .copy-btn {
+
+  /* Masquer tous les éléments interactifs inutiles à l'impression */
+  .page-actions, 
+  .view-toggle, 
+  .copy-btn, 
+  .share-group, 
+  #search-input,
+  .sort-icon {
     display: none !important;
   }
+
+  /* Rendre l'en-tête très professionnel et sobre */
   header {
-    box-shadow: none;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin-bottom: 2rem;
-  }
-  body {
-    background: white;
-  }
-  section {
-    page-break-inside: avoid;
+    border: none !important;
     box-shadow: none !important;
-    border: 1px solid #ddd;
-    background: white !important;
-    transform: none !important;
-  }
-  main.grid-view {
-    display: block;
-  }
-  section.grid-item {
-    margin-bottom: 2rem;
-  }
-  
-  /* Rendre les liens bien visibles et cliquables dans le PDF */
-  a {
-    color: #007bff !important;
-    text-decoration: underline !important;
     background: transparent !important;
+    padding: 0 0 1.5rem 0 !important;
+    margin-bottom: 2.5rem !important;
+    text-align: center;
+    border-bottom: 2px solid #eaeaea !important;
+    border-radius: 0 !important;
   }
-  
-  /* Afficher l'URL complète à côté du lien pour plus de clarté sur papier/PDF */
-  main a::after {
-    content: " (" attr(href) ")";
-    font-size: 0.85em;
-    color: #555;
-    word-break: break-all;
-    display: inline;
-    transform: none !important;
+
+  .logo-container {
     opacity: 1 !important;
+    filter: none !important;
+    margin-bottom: 1.5rem !important;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  .site-logo {
+    height: 45px !important;
+    filter: none !important;
+  }
+
+  header h1 {
+    font-size: 2.4rem !important;
+    color: #cf1e3c !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 800;
+  }
+
+  header p {
+    font-size: 1.1rem !important;
+    color: #444 !important;
+  }
+
+  /* Disposition en grille sur 2 colonnes pour économiser de l'espace sur l'A4 */
+  main.grid-view {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Design des cartes de sections (catégories) */
+  section.grid-item {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    box-shadow: none !important;
+    transform: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  h2 {
+    font-size: 1.4rem !important;
+    margin: 0 0 1rem 0 !important;
+    border-left: 5px solid #cf1e3c !important;
+    padding-left: 0.8rem !important;
+  }
+
+  section h3 {
+    font-size: 0.85rem !important;
+    margin: 1.2rem 0 0.6rem 0 !important;
+    border-bottom: 1px solid #eaeaea !important;
+  }
+
+  /* Style des liens propre sans afficher l'URL brute trop longue */
+  a {
+    color: #cf1e3c !important;
+    text-decoration: underline !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    position: relative !important;
+    z-index: 999 !important;
+  }
+
+  a::after {
+    content: " \2192" !important; /* Une flèche élégante à la place de l'URL brute */
+    opacity: 1 !important;
+    display: inline-block !important;
+    transform: none !important;
+    text-decoration: none !important; /* Pas de soulignement sur la flèche */
+  }
+
+  /* Page-break control inside lists */
+  li {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Mises en page de la vue Liste (Tableau) si elle est imprimée */
+  .table-container {
+    box-shadow: none !important;
+    border: 1px solid #e0e0e0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+  }
+
+  .data-table {
+    width: 100% !important;
+  }
+
+  .data-table th {
+    background: #f8f9fa !important;
+    border-bottom: 2px solid #cf1e3c !important;
+    color: #1a1a1a !important;
+    padding: 0.8rem !important;
+  }
+
+  .data-table td {
+    border-bottom: 1px solid #eaeaea !important;
+    padding: 0.8rem !important;
+  }
+
+  .data-table a {
+    text-decoration: underline !important;
+  }
+
+  /* Gestion fine des sauts de page */
+  footer {
+    page-break-before: avoid;
+    margin-top: 3rem !important;
+    border-top: 1px solid #eaeaea !important;
+    padding-top: 1rem !important;
   }
 }
