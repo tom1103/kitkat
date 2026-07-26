@@ -1,0 +1,435 @@
+# Catalogue structure du Centre de Ressources Danfoss (design Explorer).
+# Chaque document PDF liste ses versions FR/EN (langue, version, URL, latest).
+# Genere par scratchpad/gen_catalog.py
+
+families:
+  - id: ic7
+    label: "Gamme iC7"
+    color: "#ff3b47"
+  - id: ic2
+    label: "Gamme iC2"
+    color: "#ffab3d"
+  - id: vlt
+    label: "Gamme VLT (FC)"
+    color: "#3aa0ff"
+  - id: options
+    label: "Options"
+    color: "#b28bff"
+  - id: outils
+    label: "Outils & Logiciels"
+    color: "#2fd6a6"
+
+categories:
+  - name: "iC7 Automation"
+    family: ic7
+    groups:
+      - name: ""
+        docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.3.2", latest: false, url: "https://assets.danfoss.com/documents/latest/571789/document.pdf" }
+              - { lang: EN, ver: "2.4.3", latest: true, url: "https://assets.danfoss.com/documents/latest/597499/document.pdf" }
+          - name: "Manuel de configuration"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.6.1", latest: false, url: "https://assets.danfoss.com/documents/latest/560853/document.pdf" }
+              - { lang: EN, ver: "1.7.1", latest: true, url: "https://assets.danfoss.com/documents/latest/597036/document.pdf" }
+          - name: "Manuel d'utilisation STO"
+            type: manual
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
+          - name: "Guide d'application industrie"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.8.2", latest: false, url: "https://assets.danfoss.com/documents/latest/530712/document.pdf" }
+              - { lang: EN, ver: "1.10.1", latest: true, url: "https://assets.danfoss.com/documents/latest/593500/document.pdf" }
+          - name: "Fiche technique"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.4.2", latest: false, url: "https://assets.danfoss.com/documents/latest/597300/document.pdf" }
+              - { lang: EN, ver: "1.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/597294/document.pdf" }
+          - name: "Fiche technique ED"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.6.1", latest: false, url: "https://assets.danfoss.com/documents/latest/588092/document.pdf" }
+              - { lang: EN, ver: "1.6.1", latest: true, url: "https://assets.danfoss.com/documents/latest/587808/document.pdf" }
+          - name: "Fiche technique Module Air"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/593649/document.pdf" }
+              - { lang: EN, ver: "1.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/586403/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            essential: true
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-automation/#tab-3d-models-and-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/rUxna4kkfEqoCx1xGjJvEg/Guides%20d'Application_iC7%20Automation.pdf"
+          - name: "Logiciel iC7 (dernière version)"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+  - name: "iC-7 AQUA"
+    family: ic7
+    groups:
+      - name: ""
+        docs:
+          - name: "Fiche technique"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583616/document.pdf" }
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583610/document.pdf" }
+          - name: "Manuel de configuration"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/594901/document.pdf" }
+          - name: "Guide d'application"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/582811/document.pdf" }
+          - name: "Fiche technique ULH"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583623/document.pdf" }
+              - { lang: EN, ver: "1.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583621/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            essential: true
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-aqua/#tab-3d-models-and-drawings"
+          - name: "Logiciel iC7 (dernière version)"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+  - name: "iC7-HVACR"
+    family: ic7
+    groups:
+      - name: ""
+        docs:
+          - name: "Fiche technique"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583768/document.pdf" }
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583595/document.pdf" }
+          - name: "Manuel de configuration"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/594900/document.pdf" }
+          - name: "Fiche technique ULH"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583600/document.pdf" }
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583597/document.pdf" }
+          - name: "Guide d'installation"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/582842/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            essential: true
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-hvacr/#tab-3d-models-and-drawings"
+          - name: "Logiciel iC7 (dernière version)"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+  - name: "iC2"
+    family: ic2
+    groups:
+      - name: ""
+        docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.4.1", latest: false, url: "https://assets.danfoss.com/documents/latest/432897/document.pdf" }
+              - { lang: EN, ver: "1.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/581871/document.pdf" }
+          - name: "Manuel de configuration"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/463896/document.pdf" }
+              - { lang: EN, ver: "0.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/433324/document.pdf" }
+          - name: "Manuel d'utilisation"
+            type: manual
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: false, url: "https://assets.danfoss.com/documents/latest/403718/document.pdf" }
+              - { lang: EN, ver: "1.6.1", latest: true, url: "https://assets.danfoss.com/documents/latest/587156/document.pdf" }
+          - name: "Guide d'application"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/585527/document.pdf" }
+              - { lang: EN, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/560863/document.pdf" }
+          - name: "Fiche technique"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/428454/document.pdf" }
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/428175/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic2-series/ic2-micro/#tab-3d-models-and-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/RhNHnNcWtkas7U1T2qClqw/Guides%20d'Application_iC2%20micro.pdf"
+  - name: "FC-302"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/240832/document.pdf" }
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/452842/document.pdf" }
+          - name: "Guide de dimensionnement 0.25-75kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.21.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272178/document.pdf" }
+              - { lang: EN, ver: "0.22.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272132/document.pdf" }
+          - name: "Guide de dimensionnement 90-710kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.4.1", latest: false, url: "https://assets.danfoss.com/documents/latest/277405/document.pdf" }
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277391/document.pdf" }
+          - name: "Guide de dimensionnement 315-1200kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276882/document.pdf" }
+              - { lang: EN, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276825/document.pdf" }
+          - name: "Guide de programmation"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.33.1", latest: true, url: "https://assets.danfoss.com/documents/latest/569514/document.pdf" }
+          - name: "Liste guide d'application"
+            type: list
+            essential: true
+            url: "https://ftp.danfoss.com/public/file/OZ--HXbh9UOlDG6oAHWBjQ/Guides%20d'application_FC300%20VLT%20AutomationDrive.pdf"
+  - name: "FC-202"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/192226/document.pdf" }
+              - { lang: EN, ver: "1.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/192211/document.pdf" }
+          - name: "Guide de dimensionnement 0.25-90kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.25.1", latest: true, url: "https://assets.danfoss.com/documents/latest/274414/document.pdf" }
+              - { lang: EN, ver: "0.25.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273713/document.pdf" }
+          - name: "Guide de dimensionnement 110-400kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.8.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276577/document.pdf" }
+              - { lang: EN, ver: "0.10.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276531/document.pdf" }
+          - name: "Guide de dimensionnement 355-800kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/270523/document.pdf" }
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/270491/document.pdf" }
+          - name: "Guide de programmation"
+            type: guide
+            versions:
+              - { lang: EN, ver: "0.22.1", latest: true, url: "https://assets.danfoss.com/documents/latest/535068/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-aqua-drive-fc-202/#tab-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            essential: true
+            url: "https://ftp.danfoss.com/public/file/kzcv3Tw5KEuafjaM6Lg0YA/Guides%20d'Application_FC202%20VLT%20AQUA%20Drive.pdf"
+  - name: "FC-102"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/239077/document.pdf" }
+              - { lang: EN, ver: "1.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/239074/document.pdf" }
+          - name: "Guide de dimensionnement 1.1-90kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.18.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272771/document.pdf" }
+              - { lang: EN, ver: "0.20.1", latest: true, url: "https://assets.danfoss.com/documents/latest/523921/document.pdf" }
+          - name: "Guide de dimensionnement 110-400kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.13.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276405/document.pdf" }
+              - { lang: EN, ver: "0.16.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276173/document.pdf" }
+          - name: "Guide de dimensionnement 110-800kW"
+            type: guide
+            versions:
+              - { lang: FR, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273456/document.pdf" }
+              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273431/document.pdf" }
+          - name: "Guide de programmation"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.19.1", latest: true, url: "https://assets.danfoss.com/documents/latest/562083/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-hvac-drive-fc-102/#tab-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            essential: true
+            url: "https://ftp.danfoss.com/public/file/-snXSp3eJEykBjz15LCiMw/Guides%20d'Application_FC102%20VLT%20HVAC%20Drive.pdf"
+  - name: "Options FC"
+    family: options
+    groups:
+      - name: "Communication (MCA)"
+        docs:
+          - name: "MCA101 Profibus"
+            type: datasheet
+            versions:
+              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273361/document.pdf" }
+          - name: "MCA104 DeviceNet"
+            type: datasheet
+            versions:
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273364/document.pdf" }
+          - name: "MCA105 CANopen"
+            type: datasheet
+            versions:
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272282/document.pdf" }
+          - name: "MCA120 Profinet"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273343/document.pdf" }
+          - name: "MCA122 Modbus TCP"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/580445/document.pdf" }
+          - name: "MCA123 Powerlink"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276804/document.pdf" }
+              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276798/document.pdf" }
+          - name: "MCA124 EtherCAT"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276821/document.pdf" }
+              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276817/document.pdf" }
+      - name: "Extensions (MCB)"
+        docs:
+          - name: "MCB152"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277264/document.pdf" }
+              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277255/document.pdf" }
+      - name: "Sécurité & Monitoring"
+        docs:
+          - name: "CBM"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/549965/document.pdf" }
+          - name: "STO"
+            type: datasheet
+            versions:
+              - { lang: FR, ver: "0.12.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272672/document.pdf" }
+              - { lang: EN, ver: "0.14.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272633/document.pdf" }
+      - name: "Filtrage"
+        docs:
+          - name: "Filtres de sortie"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277679/document.pdf" }
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277639/document.pdf" }
+  - name: "Options iC7"
+    family: options
+    groups:
+      - name: "Communication (OC7)"
+        docs:
+          - name: "PROFINET"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590379/document.pdf" }
+          - name: "EtherNet/IP"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590380/document.pdf" }
+          - name: "EtherCAT"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590412/document.pdf" }
+      - name: "Extensions (OC7)"
+        docs:
+          - name: "Options d'extension fonctionnelle"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "0.12.1", latest: true, url: "https://assets.danfoss.com/documents/latest/570897/document.pdf" }
+      - name: "Sécurité & Monitoring"
+        docs:
+          - name: "Guide de sécurité"
+            type: guide
+            versions:
+              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/353022/document.pdf" }
+          - name: "Sécurité fonctionnelle (Automation)"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
+              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
+          - name: "Sécurité fonctionnelle (Modules système)"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/579725/document.pdf" }
+  - name: "Logiciels"
+    family: outils
+    groups:
+      - name: ""
+        docs:
+          - name: "My Drive Insight"
+            type: software
+            essential: true
+            url: "https://datacore.mydrive.danfoss.com/assets/7f3a85fb-1fd4-49d9-bd4a-3b5dcbe0fed2?download"
+          - name: "MyDrive Suite"
+            type: software
+            url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/mydrive-suite/"
+          - name: "MCT-10"
+            type: software
+            essential: true
+            url: "https://assets.danfoss.com/software/latest/566291/ID463243626411-0201.zip"
+          - name: "Logiciel iC7 (dernière version)"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+          - name: "Logiciel système iC7-Automation (dernière version)"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/572932/ID543724747716-0201.zip"
+          - name: "Firmware variateurs (VLT / VACON / iC7)"
+            type: software
+            url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/ac-drive-firmware/"
+  - name: "Librairies"
+    family: outils
+    groups:
+      - name: ""
+        docs:
+          - name: "Librairies PLC"
+            type: software
+            essential: true
+            url: "https://www.danfoss.com/en/service-and-support/downloads/dds/plc-libraries/"
+          - name: "Fichiers de configuration bus de terrain"
+            type: software
+            url: "https://www.danfoss.com/en/service-and-support/downloads/dds/fieldbus-configuration-files/"
+          - name: "Outil SISTEMA (sécurité fonctionnelle)"
+            type: software
+            url: "https://www.danfoss.com/en/service-and-support/downloads/dds/sistema-safety-integrity-software-tool/"
