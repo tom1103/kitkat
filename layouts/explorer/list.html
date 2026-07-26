@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <meta name="description" content="{{ .Site.Params.description }}">
+    <link rel="icon" type="image/png" href="{{ " favicon.png" | relURL }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    {{ $fam := dict }}
+    {{ range hugo.Data.catalog.families }}{{ $fam = merge $fam (dict .id .) }}{{ end }}
+
+    {{ $icons := dict
+        "brochure" "<path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/>"
+        "guide" "<path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/>"
+        "manual" "<path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/>"
+        "datasheet" "<rect x='3' y='3' width='18' height='18' rx='2'/><line x1='3' y1='9' x2='21' y2='9'/><line x1='3' y1='15' x2='21' y2='15'/><line x1='9' y1='3' x2='9' y2='21'/>"
+        "drawings" "<path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/><polyline points='3.27 6.96 12 12.01 20.73 6.96'/><line x1='12' y1='22.08' x2='12' y2='12'/>"
+        "list" "<line x1='8' y1='6' x2='21' y2='6'/><line x1='8' y1='12' x2='21' y2='12'/><line x1='8' y1='18' x2='21' y2='18'/><line x1='3' y1='6' x2='3.01' y2='6'/><line x1='3' y1='12' x2='3.01' y2='12'/><line x1='3' y1='18' x2='3.01' y2='18'/>"
+        "software" "<path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/>"
+    }}
+    {{ $syn := dict
+        "brochure" "brochure présentation"
+        "guide" "guide manuel configuration dimensionnement programmation installation application sécurité"
+        "manual" "manuel notice utilisation"
+        "datasheet" "fiche technique datasheet caractéristiques"
+        "drawings" "encombrements plans dessins 3d cad modèles"
+        "list" "liste guides application"
+        "software" "logiciel software firmware outil téléchargement"
+    }}
+
+    <style>
+        :root {
+            --bg: #0a0c11; --bg-2: #0e1118; --surface: #14171f; --surface-2: #1a1e28; --surface-3: #222735;
+            --border: rgba(255,255,255,.08); --border-strong: rgba(255,255,255,.16);
+            --text: #eef1f6; --muted: #9aa3b2; --muted-2: #6b7383;
+            --primary: #ff2f3a; --primary-soft: rgba(255,47,58,.14);
+            --shadow: 0 10px 40px rgba(0,0,0,.5); --radius: 16px; --radius-sm: 10px;
+        }
+        html[data-theme="light"] {
+            --bg:#f4f5f8; --bg-2:#eceef3; --surface:#fff; --surface-2:#f7f8fa; --surface-3:#eef0f4;
+            --border:rgba(10,12,20,.09); --border-strong:rgba(10,12,20,.18);
+            --text:#10131a; --muted:#5b6472; --muted-2:#8b93a1;
+            --primary:#e2000f; --primary-soft:rgba(226,0,15,.1); --shadow:0 10px 30px rgba(20,25,40,.12);
+        }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+            background: radial-gradient(1100px 600px at 80% -10%, rgba(255,47,58,.10), transparent 60%),
+                        radial-gradient(900px 500px at -10% 10%, rgba(58,160,255,.08), transparent 55%), var(--bg);
+            color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5;
+        }
+        a { color:inherit; text-decoration:none; }
+        button { font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+        .wrap { max-width:1280px; margin:0 auto; padding:0 20px 80px; }
+
+        .topbar { position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:16px; padding:14px 20px;
+            background:color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+        .brand { display:flex; align-items:center; gap:12px; min-width:0; }
+        .brand img { height:26px; width:auto; display:block; opacity:.95; border-radius:5px; }
+        .brand .sep { width:1px; height:22px; background:var(--border-strong); }
+        .brand b { font-weight:700; font-size:.98rem; white-space:nowrap; }
+        .topbar .spacer { flex:1; }
+        .search-trigger { display:flex; align-items:center; gap:10px; width:min(420px,42vw); padding:9px 12px; border-radius:12px;
+            background:var(--surface); border:1px solid var(--border); color:var(--muted); font-size:.9rem; transition:border-color .15s; }
+        .search-trigger:hover { border-color:var(--border-strong); }
+        .search-trigger svg { width:17px; height:17px; flex:none; }
+        .search-trigger .kbd { margin-left:auto; }
+        .kbd { font-size:.72rem; color:var(--muted); background:var(--surface-3); border:1px solid var(--border); border-radius:6px; padding:2px 7px; font-weight:600; white-space:nowrap; }
+        .icon-btn { display:grid; place-items:center; width:40px; height:40px; border-radius:11px; background:var(--surface); border:1px solid var(--border); color:var(--muted); transition:all .15s; }
+        .icon-btn:hover { color:var(--text); border-color:var(--border-strong); }
+        .icon-btn svg { width:18px; height:18px; }
+
+        .hero { text-align:center; padding:48px 0 26px; }
+        .hero h1 { font-size:clamp(2rem,5vw,3.1rem); font-weight:800; letter-spacing:-.02em;
+            background:linear-gradient(180deg,var(--text),color-mix(in srgb,var(--text) 55%,var(--muted)));
+            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero p { color:var(--muted); margin-top:10px; font-size:1.02rem; }
+        .hero-search { margin:26px auto 0; max-width:640px; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:16px;
+            background:var(--surface); border:1px solid var(--border-strong); box-shadow:var(--shadow); transition:border-color .15s,box-shadow .15s; }
+        .hero-search:focus-within { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-soft), var(--shadow); }
+        .hero-search svg.lupe { width:22px; height:22px; color:var(--muted); flex:none; }
+        .hero-search input { flex:1; background:none; border:none; outline:none; color:var(--text); font-size:1.05rem; font-family:inherit; min-width:0; }
+
+        .filters { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:26px 0 22px; }
+        .chip { display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-weight:600; font-size:.87rem; transition:all .15s; }
+        .chip:hover { border-color:var(--border-strong); color:var(--text); }
+        .chip .dot { width:9px; height:9px; border-radius:50%; background:var(--c,var(--muted)); }
+        .chip.active { color:var(--text); border-color:transparent; background:color-mix(in srgb,var(--c,var(--primary)) 22%,var(--surface)); box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c,var(--primary)) 55%,transparent); }
+        .filters .flex-sep { flex:1; }
+        .toggle-ess { display:inline-flex; align-items:center; gap:9px; padding:8px 14px; border-radius:999px; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-weight:600; font-size:.87rem; }
+        .toggle-ess .sw { width:34px; height:20px; border-radius:999px; background:var(--surface-3); position:relative; transition:background .15s; flex:none; }
+        .toggle-ess .sw::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:var(--muted); transition:all .15s; }
+        .toggle-ess.active { color:var(--text); }
+        .toggle-ess.active .sw { background:var(--primary); }
+        .toggle-ess.active .sw::after { left:16px; background:#fff; }
+        .count { color:var(--muted-2); font-size:.84rem; font-weight:500; white-space:nowrap; }
+
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:18px; align-items:start; }
+        .cat { background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; }
+        .cat:hover { border-color:var(--border-strong); }
+        .cat__head { display:flex; align-items:center; gap:11px; padding:16px 18px 12px; border-bottom:1px solid var(--border); position:relative; }
+        .cat__head::before { content:''; position:absolute; left:0; top:14px; bottom:12px; width:3px; border-radius:0 3px 3px 0; background:var(--fam); }
+        .cat__dot { width:10px; height:10px; border-radius:50%; background:var(--fam); box-shadow:0 0 12px var(--fam); flex:none; }
+        .cat__head h2 { font-size:1.06rem; font-weight:700; letter-spacing:-.01em; }
+        .cat__head .cat__count { margin-left:auto; font-size:.76rem; color:var(--muted-2); background:var(--surface-3); border-radius:999px; padding:2px 9px; font-weight:600; }
+        .cat__body { padding:8px; display:flex; flex-direction:column; gap:2px; }
+        .grp__title { font-size:.74rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-2); font-weight:700; padding:12px 12px 5px; }
+
+        .doc { display:flex; align-items:center; gap:11px; padding:9px 11px; border-radius:var(--radius-sm); transition:background .12s; }
+        .doc:hover { background:var(--surface-3); }
+        .doc__ic { display:grid; place-items:center; width:30px; height:30px; border-radius:8px; background:var(--surface-3); color:var(--muted); flex:none; }
+        .doc:hover .doc__ic { color:var(--text); }
+        .doc__ic svg { width:16px; height:16px; }
+        .doc__name { flex:1; font-size:.9rem; font-weight:500; min-width:0; }
+        .doc.ess .doc__name::after { content:'★'; color:var(--primary); font-size:.7rem; margin-left:7px; vertical-align:middle; }
+        .doc__open { opacity:0; color:var(--muted-2); flex:none; transition:opacity .12s; }
+        .doc:hover .doc__open { opacity:1; }
+        .doc__open svg { width:15px; height:15px; display:block; }
+        a.doc { cursor:pointer; }
+
+        /* Puces de langue */
+        .doc__vers { display:flex; gap:6px; flex:none; align-items:center; }
+        .lang { display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 3px; border-radius:999px; border:1px solid var(--border); background:var(--surface-3); transition:all .12s; }
+        .lang:hover { border-color:var(--fam); transform:translateY(-1px); }
+        .lang__badge { width:22px; height:22px; border-radius:50%; display:grid; place-items:center; font-size:.6rem; font-weight:800; background:var(--surface); color:var(--muted); flex:none; }
+        .lang__ver { font-size:.72rem; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums; }
+        .lang.latest { border-color:color-mix(in srgb,var(--fam) 45%,transparent); background:color-mix(in srgb,var(--fam) 13%,var(--surface-3)); }
+        .lang.latest .lang__badge { background:var(--fam); color:#fff; }
+        .lang.latest .lang__ver { color:var(--text); }
+
+        .empty { display:none; text-align:center; padding:70px 20px; color:var(--muted); }
+        .empty svg { width:42px; height:42px; opacity:.5; margin-bottom:14px; }
+        body.no-results .grid { display:none; }
+        body.no-results .empty { display:block; }
+
+        .legend { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:26px; color:var(--muted-2); font-size:.8rem; }
+        .legend span { display:inline-flex; align-items:center; gap:7px; }
+        .legend .mini { width:16px; height:16px; border-radius:50%; font-size:.5rem; font-weight:800; display:grid; place-items:center; color:#fff; background:var(--primary); }
+        .legend .mini.old { background:var(--surface-3); color:var(--muted); border:1px solid var(--border); }
+
+        .cmdk-overlay { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); display:none; align-items:flex-start; justify-content:center; padding:12vh 16px 16px; }
+        .cmdk-overlay.open { display:flex; }
+        .cmdk { width:min(640px,100%); background:var(--surface); border:1px solid var(--border-strong); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; animation:pop .13s ease-out; }
+        @keyframes pop { from { transform:translateY(-8px) scale(.98); opacity:0; } to { transform:none; opacity:1; } }
+        .cmdk__in { display:flex; align-items:center; gap:12px; padding:16px 18px; border-bottom:1px solid var(--border); }
+        .cmdk__in svg { width:20px; height:20px; color:var(--muted); flex:none; }
+        .cmdk__in input { flex:1; background:none; border:none; outline:none; color:var(--text); font-size:1.08rem; font-family:inherit; }
+        .cmdk__results { max-height:52vh; overflow-y:auto; padding:8px; }
+        .cmdk__group { font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-2); font-weight:700; padding:12px 12px 6px; }
+        .cmdk__item { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:11px; cursor:pointer; }
+        .cmdk__item.active { background:var(--surface-3); }
+        .cmdk__item .ci-ic { display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:var(--surface-2); color:var(--c); flex:none; }
+        .cmdk__item.active .ci-ic { background:color-mix(in srgb,var(--c) 20%,var(--surface-2)); }
+        .cmdk__item .ci-ic svg { width:17px; height:17px; }
+        .cmdk__item .ci-main { flex:1; min-width:0; }
+        .cmdk__item .ci-name { font-weight:600; font-size:.94rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .cmdk__item .ci-path { font-size:.78rem; color:var(--muted); }
+        .cmdk__item .ci-vers { display:flex; gap:5px; flex:none; }
+        .ci-lang { font-size:.62rem; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
+        .ci-lang.latest { background:var(--c); color:#fff; border-color:transparent; }
+        .cmdk__empty { padding:40px 16px; text-align:center; color:var(--muted); }
+        .cmdk__foot { display:flex; gap:16px; padding:10px 16px; border-top:1px solid var(--border); color:var(--muted-2); font-size:.76rem; }
+        .cmdk__foot span { display:inline-flex; align-items:center; gap:6px; }
+        mark { background:color-mix(in srgb,var(--primary) 35%,transparent); color:inherit; border-radius:3px; padding:0 1px; }
+
+        /* Easter egg discret : Mode Overdrive (code Konami) */
+        #egg { position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(18px); opacity:0; z-index:200;
+            background:var(--surface); border:1px solid var(--border-strong); color:var(--text); padding:11px 18px; border-radius:999px;
+            box-shadow:var(--shadow); font-weight:700; font-size:.9rem; display:flex; align-items:center; gap:9px; pointer-events:none;
+            transition:opacity .3s, transform .3s; }
+        #egg.show { opacity:1; transform:translateX(-50%) translateY(0); }
+        #egg .hz { color:var(--primary); font-variant-numeric:tabular-nums; }
+        #egg .motor { display:inline-flex; }
+        #egg .motor svg { width:20px; height:20px; color:var(--primary); transform-origin:center; }
+        #egg.show .motor svg { animation:motorspin .3s linear infinite; }
+        @keyframes motorspin { to { transform:rotate(360deg); } }
+        body.egg .cat__dot { animation:eggpulse 1s ease-in-out; }
+        @keyframes eggpulse { 0%,100%{ transform:scale(1);} 45%{ transform:scale(2); box-shadow:0 0 22px var(--fam);} }
+        body.egg .hero h1 { animation:egghue 2.6s linear; }
+        @keyframes egghue { from{ filter:hue-rotate(0deg);} to{ filter:hue-rotate(360deg);} }
+
+        footer { text-align:center; color:var(--muted-2); font-size:.82rem; padding:40px 0 0; }
+        footer a { color:var(--muted); text-decoration:underline; text-underline-offset:2px; }
+
+        @media (max-width:860px) { .brand .tag { display:none; } .search-trigger { display:none; } .hero { padding:30px 0 18px; } }
+        @media (max-width:560px) {
+            .brand b { display:none; }
+            .doc { flex-wrap:wrap; }
+            .doc__vers { width:100%; padding-left:41px; }
+        }
+    </style>
+</head>
+
+<body class="view-grid">
+
+    <div class="topbar">
+        <div class="brand">
+            {{ $logoMM := resources.Get "images/logo-mm.png" }}
+            {{ with $logoMM }}<a href="https://mediamesures.com" target="_blank" rel="noopener"><img src="{{ .RelPermalink }}" alt="Media Mesures"></a>{{ end }}
+            {{ $logoDf := resources.Get "images/logo-danfoss.png" }}
+            {{ with $logoDf }}<img src="{{ .RelPermalink }}" alt="Danfoss">{{ end }}
+            <span class="sep"></span>
+            <b>Centre de Ressources</b>
+        </div>
+        <div class="spacer"></div>
+        <button class="search-trigger" id="open-cmdk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Rechercher un document…
+            <span class="kbd">Ctrl K</span>
+        </button>
+        <button class="icon-btn" id="theme-toggle" title="Thème clair / sombre">
+            <svg id="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+    </div>
+
+    <div class="wrap">
+        <div class="hero">
+            <h1>Documentation Danfoss, en 2 secondes.</h1>
+            <p>Variateurs iC7, iC2, VLT (FC), options et logiciels — {{ .Site.Params.footer_text }}</p>
+            <label class="hero-search">
+                <svg class="lupe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="grid-search" placeholder="Filtrer : « sto », « fiche technique ic7 », « logiciel »…" autocomplete="off">
+                <span class="kbd">Ctrl K</span>
+            </label>
+        </div>
+
+        <div class="filters" id="filters">
+            <button class="chip active" data-family="all">Tout</button>
+            {{ range hugo.Data.catalog.families }}
+            <button class="chip" data-family="{{ .id }}" style="--c:{{ .color }}"><span class="dot"></span>{{ .label }}</button>
+            {{ end }}
+            <span class="flex-sep"></span>
+            <button class="toggle-ess" id="toggle-ess"><span class="sw"></span>Essentiels</button>
+            <span class="count" id="count"></span>
+        </div>
+
+        <div class="grid" id="grid">
+            {{ range hugo.Data.catalog.categories }}
+            {{ $cat := . }}
+            {{ $f := index $fam .family }}
+            {{ $c := 0 }}{{ range .groups }}{{ $c = add $c (len .docs) }}{{ end }}
+            <article class="cat" data-family="{{ .family }}" style="--fam:{{ $f.color }}">
+                <div class="cat__head"><span class="cat__dot"></span><h2>{{ .name }}</h2><span class="cat__count">{{ $c }}</span></div>
+                <div class="cat__body">
+                    {{ range .groups }}
+                    {{ $gname := .name }}
+                    <div class="grp">{{ if .name }}<div class="grp__title">{{ .name }}</div>{{ end }}
+                        {{ range .docs }}
+                        {{ $ic := index $icons .type }}{{ if not $ic }}{{ $ic = index $icons "guide" }}{{ end }}
+                        {{ $search := lower (printf "%s %s %s %s %s" .name $cat.name $gname $f.label (index $syn .type)) }}
+                        {{ if .url }}
+                        <a class="doc doc--single{{ if .essential }} ess{{ end }}" href="{{ .url }}" target="_blank" rel="noopener" data-family="{{ $cat.family }}" data-ess="{{ if .essential }}1{{ else }}0{{ end }}" data-search="{{ $search }}">
+                            <span class="doc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ $ic | safeHTML }}</svg></span>
+                            <span class="doc__name">{{ .name }}</span>
+                            <span class="doc__open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+                        </a>
+                        {{ else }}
+                        <div class="doc{{ if .essential }} ess{{ end }}" data-family="{{ $cat.family }}" data-ess="{{ if .essential }}1{{ else }}0{{ end }}" data-search="{{ $search }}">
+                            <span class="doc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ $ic | safeHTML }}</svg></span>
+                            <span class="doc__name">{{ .name }}</span>
+                            <span class="doc__vers">
+                                {{ range .versions }}
+                                <a class="lang{{ if .latest }} latest{{ end }}" href="{{ .url }}" target="_blank" rel="noopener" title="{{ .lang }} · version {{ .ver }}{{ if .latest }} · plus récente{{ end }}">
+                                    <span class="lang__badge">{{ .lang }}</span><span class="lang__ver">{{ .ver }}</span>
+                                </a>
+                                {{ end }}
+                            </span>
+                        </div>
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                </div>
+            </article>
+            {{ end }}
+        </div>
+
+        <div class="empty" id="empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <p>Aucun document ne correspond à votre recherche.</p>
+        </div>
+
+        <div class="legend">
+            <span><span class="mini">FR</span> version la plus récente</span>
+            <span><span class="mini old">EN</span> version antérieure</span>
+            <span>★ document essentiel</span>
+        </div>
+
+        <footer>
+            <p>&copy; {{ now.Format "2006" }} {{ .Site.Params.footer_text }} · Prototype « Explorer » · <a href="{{ " /" | relURL }}">Voir le design actuel</a></p>
+        </footer>
+    </div>
+
+    <div id="egg"><span class="motor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z"></path><circle cx="12" cy="12" r="1.5"></circle></svg></span> Mode Overdrive activé · <span class="hz">50 → 87 Hz</span></div>
+
+    <div class="cmdk-overlay" id="cmdk">
+        <div class="cmdk" role="dialog" aria-label="Recherche">
+            <div class="cmdk__in">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="cmdk-input" placeholder="Rechercher un document…" autocomplete="off">
+                <span class="kbd">Esc</span>
+            </div>
+            <div class="cmdk__results" id="cmdk-results"></div>
+            <div class="cmdk__foot">
+                <span><span class="kbd">↑</span><span class="kbd">↓</span> naviguer</span>
+                <span><span class="kbd">↵</span> ouvrir (récent)</span>
+                <span><span class="kbd">Esc</span> fermer</span>
+            </div>
+        </div>
+    </div>
+
+    <script id="catalog-data" type="application/json">{{ hugo.Data.catalog | jsonify }}</script>
+    <script>
+        let CATALOG = JSON.parse(document.getElementById('catalog-data').textContent);
+        if (typeof CATALOG === 'string') CATALOG = JSON.parse(CATALOG); // Hugo jsonify peut double-encoder
+        const ICONS = {
+            brochure:"<path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/>",
+            guide:"<path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/>",
+            manual:"<path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/>",
+            datasheet:"<rect x='3' y='3' width='18' height='18' rx='2'/><line x1='3' y1='9' x2='21' y2='9'/><line x1='3' y1='15' x2='21' y2='15'/><line x1='9' y1='3' x2='9' y2='21'/>",
+            drawings:"<path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/><polyline points='3.27 6.96 12 12.01 20.73 6.96'/><line x1='12' y1='22.08' x2='12' y2='12'/>",
+            list:"<line x1='8' y1='6' x2='21' y2='6'/><line x1='8' y1='12' x2='21' y2='12'/><line x1='8' y1='18' x2='21' y2='18'/><line x1='3' y1='6' x2='3.01' y2='6'/><line x1='3' y1='12' x2='3.01' y2='12'/><line x1='3' y1='18' x2='3.01' y2='18'/>",
+            software:"<path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/>"
+        };
+        const svgIcon = t => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>"+(ICONS[t]||ICONS.guide)+"</svg>";
+        const FAM = {}; CATALOG.families.forEach(f => FAM[f.id] = f);
+
+        const DOCS = [];
+        CATALOG.categories.forEach(cat => {
+            const f = FAM[cat.family] || {};
+            (cat.groups||[]).forEach(g => (g.docs||[]).forEach(d => {
+                const versions = d.versions || [];
+                const primary = d.url || (versions.find(v=>v.latest)||versions[0]||{}).url;
+                DOCS.push({ name:d.name, url:primary, versions, type:d.type, ess:!!d.essential,
+                    cat:cat.name, group:g.name||'', family:cat.family, famLabel:f.label||'', color:f.color||'var(--primary)',
+                    text:(d.name+' '+cat.name+' '+(g.name||'')+' '+(f.label||'')+' '+d.type).toLowerCase() });
+            }));
+        });
+
+        const norm = s => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'');
+        const matchDoc = (d,tk) => tk.every(t => norm(d.text).includes(t));
+        const scoreDoc = (d,q) => { const n=norm(d.name); if(n.startsWith(q))return 0; if(n.includes(' '+q)||n.includes('-'+q))return 1; if(n.includes(q))return 2; return 3; };
+
+        /* Thème */
+        const root = document.documentElement;
+        const saved = localStorage.getItem('kk-theme'); if (saved) root.setAttribute('data-theme', saved);
+        const moon="<path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'></path>";
+        const sun="<circle cx='12' cy='12' r='5'></circle><line x1='12' y1='1' x2='12' y2='3'></line><line x1='12' y1='21' x2='12' y2='23'></line><line x1='4.2' y1='4.2' x2='5.6' y2='5.6'></line><line x1='18.4' y1='18.4' x2='19.8' y2='19.8'></line><line x1='1' y1='12' x2='3' y2='12'></line><line x1='21' y1='12' x2='23' y2='12'></line><line x1='4.2' y1='19.8' x2='5.6' y2='18.4'></line><line x1='18.4' y1='5.6' x2='19.8' y2='4.2'></line>";
+        const setThemeIcon = () => document.getElementById('ic-moon').innerHTML = root.getAttribute('data-theme')==='light'?sun:moon;
+        setThemeIcon();
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const next = root.getAttribute('data-theme')==='light'?'dark':'light';
+            root.setAttribute('data-theme', next); localStorage.setItem('kk-theme', next); setThemeIcon();
+        });
+
+        /* Filtres */
+        const body = document.body, grid = document.getElementById('grid');
+        const cats = Array.from(grid.querySelectorAll('.cat')), countEl = document.getElementById('count');
+        let activeFamily='all', essOnly=false, gridQuery='';
+        function applyFilters() {
+            const tk = norm(gridQuery.trim()).split(/\s+/).filter(Boolean);
+            let visible=0;
+            cats.forEach(cat => {
+                if (activeFamily!=='all' && cat.dataset.family!==activeFamily) { cat.style.display='none'; return; }
+                let cv=0;
+                cat.querySelectorAll('.grp').forEach(grp => {
+                    let gv=0;
+                    grp.querySelectorAll('.doc').forEach(doc => {
+                        let ok=true;
+                        if (essOnly && doc.dataset.ess!=='1') ok=false;
+                        if (ok && tk.length) ok = tk.every(t => norm(doc.dataset.search).includes(t));
+                        doc.style.display = ok?'':'none'; if(ok){gv++;cv++;visible++;}
+                    });
+                    grp.style.display = gv?'':'none';
+                });
+                cat.style.display = cv?'':'none';
+                const b=cat.querySelector('.cat__count'); if(b) b.textContent=(essOnly||tk.length)?cv:(b.dataset.total||b.textContent);
+            });
+            countEl.textContent = visible+(visible>1?' documents':' document');
+            body.classList.toggle('no-results', visible===0);
+        }
+        cats.forEach(c => { const b=c.querySelector('.cat__count'); if(b) b.dataset.total=b.textContent; });
+        document.getElementById('filters').addEventListener('click', e => {
+            const chip=e.target.closest('.chip');
+            if (chip) { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); chip.classList.add('active'); activeFamily=chip.dataset.family; applyFilters(); }
+            const ess=e.target.closest('#toggle-ess');
+            if (ess) { essOnly=!essOnly; ess.classList.toggle('active', essOnly); applyFilters(); }
+        });
+        document.getElementById('grid-search').addEventListener('input', e => { gridQuery=e.target.value; applyFilters(); });
+        applyFilters();
+
+        /* Command palette */
+        const cmdk=document.getElementById('cmdk'), cmdkInput=document.getElementById('cmdk-input'), cmdkResults=document.getElementById('cmdk-results');
+        let cmdkItems=[], cmdkActive=0;
+        const hl=(text,q)=>{ if(!q)return text; const i=norm(text).indexOf(q); if(i<0)return text; return text.slice(0,i)+'<mark>'+text.slice(i,i+q.length)+'</mark>'+text.slice(i+q.length); };
+        function renderCmdk(query) {
+            const q=norm(query.trim()), tk=q.split(/\s+/).filter(Boolean);
+            let list = !tk.length ? DOCS.filter(d=>d.ess).slice(0,8) : DOCS.filter(d=>matchDoc(d,tk)).sort((a,b)=>scoreDoc(a,q)-scoreDoc(b,q)).slice(0,40);
+            cmdkItems=list; cmdkActive=0;
+            if(!list.length){ cmdkResults.innerHTML='<div class="cmdk__empty">Aucun résultat pour « '+query+' »</div>'; return; }
+            const head = tk.length ? (list.length+' résultat'+(list.length>1?'s':'')) : 'Documents essentiels';
+            let html='<div class="cmdk__group">'+head+'</div>';
+            list.forEach((d,i)=>{
+                const badges = (d.versions||[]).map(v=>'<span class="ci-lang'+(v.latest?' latest':'')+'">'+v.lang+' '+v.ver+'</span>').join('');
+                html+='<div class="cmdk__item'+(i===0?' active':'')+'" data-i="'+i+'" style="--c:'+d.color+'">'
+                    +'<span class="ci-ic">'+svgIcon(d.type)+'</span>'
+                    +'<span class="ci-main"><div class="ci-name">'+hl(d.name,q)+(d.ess?' <span style="color:var(--primary);font-size:.72rem">★</span>':'')+'</div>'
+                    +'<div class="ci-path">'+d.cat+(d.group?' › '+d.group:'')+' · '+d.famLabel+'</div></span>'
+                    +'<span class="ci-vers">'+badges+'</span></div>';
+            });
+            cmdkResults.innerHTML=html;
+        }
+        function setActive(i){ const it=cmdkResults.querySelectorAll('.cmdk__item'); if(!it.length)return; cmdkActive=(i+it.length)%it.length; it.forEach((el,x)=>el.classList.toggle('active',x===cmdkActive)); it[cmdkActive].scrollIntoView({block:'nearest'}); }
+        function openDoc(i){ const d=cmdkItems[i]; if(d&&d.url){ window.open(d.url,'_blank','noopener'); closeCmdk(); } }
+        function openCmdk(){ cmdk.classList.add('open'); cmdkInput.value=''; renderCmdk(''); setTimeout(()=>cmdkInput.focus(),20); }
+        function closeCmdk(){ cmdk.classList.remove('open'); }
+        document.getElementById('open-cmdk').addEventListener('click', openCmdk);
+        cmdkInput.addEventListener('input', e=>renderCmdk(e.target.value));
+        cmdkResults.addEventListener('click', e=>{ const it=e.target.closest('.cmdk__item'); if(it) openDoc(+it.dataset.i); });
+        cmdkResults.addEventListener('mousemove', e=>{ const it=e.target.closest('.cmdk__item'); if(it) setActive(+it.dataset.i); });
+        cmdk.addEventListener('click', e=>{ if(e.target===cmdk) closeCmdk(); });
+        document.addEventListener('keydown', e=>{
+            if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); cmdk.classList.contains('open')?closeCmdk():openCmdk(); return; }
+            if(!cmdk.classList.contains('open')){ if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){ e.preventDefault(); openCmdk(); } return; }
+            if(e.key==='Escape') closeCmdk();
+            else if(e.key==='ArrowDown'){ e.preventDefault(); setActive(cmdkActive+1); }
+            else if(e.key==='ArrowUp'){ e.preventDefault(); setActive(cmdkActive-1); }
+            else if(e.key==='Enter'){ e.preventDefault(); openDoc(cmdkActive); }
+        });
+
+        /* Easter egg très discret : code Konami -> Mode Overdrive */
+        const konami=['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+        let kbuf=[], eggBusy=false;
+        document.addEventListener('keydown', e=>{
+            kbuf.push(e.key.toLowerCase()); if(kbuf.length>konami.length) kbuf.shift();
+            if(!eggBusy && konami.length===kbuf.length && konami.every((k,i)=>kbuf[i]===k)){
+                kbuf=[]; eggBusy=true;
+                const egg=document.getElementById('egg');
+                body.classList.add('egg'); egg.classList.add('show');
+                setTimeout(()=>egg.classList.remove('show'), 2600);
+                setTimeout(()=>{ body.classList.remove('egg'); eggBusy=false; }, 2900);
+            }
+        });
+        console.log('%c⚡ Centre de Ressources Danfoss %c— fait avec soin par Media Mesures. Astuce : ↑↑↓↓←→←→ B A',
+            'color:#ff2f3a;font-weight:700','color:#9aa3b2');
+    </script>
+</body>
+
+</html>
