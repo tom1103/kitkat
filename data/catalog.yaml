@@ -77,6 +77,11 @@ categories:
     groups:
       - name: ""
         docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: EN, ver: "1.2.2", latest: true, url: "https://assets.danfoss.com/documents/latest/595401/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             versions:
@@ -109,6 +114,12 @@ categories:
     groups:
       - name: ""
         docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/595409/document.pdf" }
+              - { lang: EN, ver: "2.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/595406/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             essential: true
