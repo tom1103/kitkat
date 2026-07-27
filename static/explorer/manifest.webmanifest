@@ -1,0 +1,15 @@
+{
+  "name": "Centre de Ressources Danfoss",
+  "short_name": "Ressources",
+  "description": "Documentations & fiches techniques Danfoss — Media Mesures",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0c11",
+  "theme_color": "#0a0c11",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
