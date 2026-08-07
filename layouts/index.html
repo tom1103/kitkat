@@ -160,13 +160,10 @@
         .sharebar button.primary { background:var(--fav); color:#221600; border-color:transparent; }
 
         .doc__vers { display:flex; gap:6px; flex:none; align-items:center; }
-        .lang { display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 3px; border-radius:999px; border:1px solid var(--border); background:var(--surface-3); transition:all .12s; }
+        .lang { display:inline-flex; align-items:center; padding:3px; border-radius:999px; border:1px solid var(--border); background:var(--surface-3); transition:all .12s; }
         .lang:hover { border-color:var(--fam); transform:translateY(-1px); }
-        .lang__badge { width:22px; height:22px; border-radius:50%; display:grid; place-items:center; font-size:.6rem; font-weight:800; background:var(--surface); color:var(--muted); flex:none; }
-        .lang__ver { font-size:.72rem; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums; }
-        .lang.latest { border-color:color-mix(in srgb,var(--fam) 45%,transparent); background:color-mix(in srgb,var(--fam) 13%,var(--surface-3)); }
-        .lang.latest .lang__badge { background:var(--fam); color:#fff; }
-        .lang.latest .lang__ver { color:var(--text); }
+        .lang__badge { width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:.62rem; font-weight:800; background:color-mix(in srgb,var(--fam) 20%,var(--surface)); color:var(--text); flex:none; }
+        .lang:hover .lang__badge { background:var(--fam); color:#fff; }
         .grid.lang-fr .lang[data-lang="EN"], .grid.lang-en .lang[data-lang="FR"] { display:none; }
 
         .empty { display:none; text-align:center; padding:70px 20px; color:var(--muted); }
@@ -335,7 +332,7 @@
                         {{ $ic := index $icons .type }}{{ if not $ic }}{{ $ic = index $icons "guide" }}{{ end }}
                         {{ $search := lower (printf "%s %s %s %s %s" .name $cat.name $gname $f.label (index $syn .type)) }}
                         {{ $langs := "" }}{{ range .versions }}{{ $langs = printf "%s %s" $langs .lang }}{{ end }}
-                        {{ $copy := .url }}{{ range .versions }}{{ if .latest }}{{ $copy = .url }}{{ end }}{{ end }}
+                        {{ $copy := .url }}{{ if .versions }}{{ $copy = (index .versions 0).url }}{{ end }}
                         <div class="doc{{ if .essential }} ess{{ end }}" data-family="{{ $cat.family }}" data-type="{{ .type }}" data-ess="{{ if .essential }}1{{ else }}0{{ end }}" data-langs="{{ $langs }}" data-copy="{{ $copy }}" data-search="{{ $search }}">
                             <span class="doc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ $ic | safeHTML }}</svg></span>
                             {{ if .url }}
@@ -350,8 +347,8 @@
                             {{ if .versions }}
                             <span class="doc__vers">
                                 {{ range .versions }}
-                                <a class="lang{{ if .latest }} latest{{ end }}" data-lang="{{ .lang }}" href="{{ .url }}" target="_blank" rel="noopener" title="{{ .lang }} · version {{ .ver }}{{ if .latest }} · plus récente{{ end }}">
-                                    <span class="lang__badge">{{ .lang }}</span><span class="lang__ver">{{ .ver }}</span>
+                                <a class="lang" data-lang="{{ .lang }}" href="{{ .url }}" target="_blank" rel="noopener" title="Ouvrir la version {{ .lang }}">
+                                    <span class="lang__badge">{{ .lang }}</span>
                                 </a>
                                 {{ end }}
                             </span>
@@ -371,9 +368,9 @@
         </div>
 
         <div class="legend">
-            <span><span class="mini">FR</span> version la plus récente</span>
-            <span><span class="mini old">EN</span> version antérieure</span>
+            <span><span class="mini">FR</span><span class="mini old">EN</span> langues disponibles</span>
             <span>★ document essentiel</span>
+            <span><svg viewBox="0 0 24 24" width="13" height="13" fill="var(--fav)" stroke="var(--fav)" style="vertical-align:-2px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg> favori</span>
         </div>
 
         <footer><p>&copy; {{ now.Format "2006" }} {{ .Site.Params.footer_text }} · Centre de Ressources Danfoss</p></footer>
@@ -628,7 +625,7 @@
             if(!list.length){ cmdkResults.innerHTML='<div class="cmdk__empty">Aucun résultat pour « '+query+' »</div>'; return; }
             let html='<div class="cmdk__group">'+head+'</div>';
             list.forEach((d,i)=>{
-                const badges=(d.versions||[]).map(v=>'<span class="ci-lang'+(v.latest?' latest':'')+'">'+v.lang+' '+v.ver+'</span>').join('');
+                const badges=(d.versions||[]).map(v=>'<span class="ci-lang">'+v.lang+'</span>').join('');
                 html+='<div class="cmdk__item'+(i===0?' active':'')+(route?' route':'')+'" data-i="'+i+'" style="--c:'+d.color+'">'
                     +'<span class="ci-ic">'+svgIcon(d.type)+'</span>'
                     +'<span class="ci-main"><div class="ci-name">'+hl(d.name,q)+(d.ess?' <span style="color:var(--primary);font-size:.72rem">★</span>':'')+'</div>'
