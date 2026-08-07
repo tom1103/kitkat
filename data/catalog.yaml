@@ -1,5 +1,5 @@
 # Catalogue structure du Centre de Ressources Danfoss (design Explorer).
-# Chaque document PDF liste ses versions FR/EN (langue, version, URL, latest).
+# Chaque document PDF liste ses versions par langue (FR/EN) : { lang, url }.
 # Genere par scratchpad/gen_catalog.py
 
 families:
@@ -12,6 +12,9 @@ families:
   - id: vlt
     label: "Gamme VLT (FC)"
     color: "#3aa0ff"
+  - id: demarreurs
+    label: "Démarreurs (Soft Starters)"
+    color: "#6cc04a"
   - id: options
     label: "Options"
     color: "#b28bff"
@@ -29,39 +32,39 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.3.2", latest: false, url: "https://assets.danfoss.com/documents/latest/571789/document.pdf" }
-              - { lang: EN, ver: "2.4.3", latest: true, url: "https://assets.danfoss.com/documents/latest/597499/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/571789/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/597499/document.pdf" }
           - name: "Manuel de configuration"
             type: guide
             versions:
-              - { lang: FR, ver: "0.6.1", latest: false, url: "https://assets.danfoss.com/documents/latest/560853/document.pdf" }
-              - { lang: EN, ver: "1.7.1", latest: true, url: "https://assets.danfoss.com/documents/latest/597036/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/560853/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/597036/document.pdf" }
           - name: "Manuel d'utilisation STO"
             type: manual
             versions:
-              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
           - name: "Guide d'application industrie"
             type: guide
             essential: true
             versions:
-              - { lang: FR, ver: "0.8.2", latest: false, url: "https://assets.danfoss.com/documents/latest/530712/document.pdf" }
-              - { lang: EN, ver: "1.10.1", latest: true, url: "https://assets.danfoss.com/documents/latest/593500/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/530712/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/593500/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.4.2", latest: false, url: "https://assets.danfoss.com/documents/latest/597300/document.pdf" }
-              - { lang: EN, ver: "1.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/597294/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/597300/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/597294/document.pdf" }
           - name: "Fiche technique ED"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.6.1", latest: false, url: "https://assets.danfoss.com/documents/latest/588092/document.pdf" }
-              - { lang: EN, ver: "1.6.1", latest: true, url: "https://assets.danfoss.com/documents/latest/587808/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/588092/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/587808/document.pdf" }
           - name: "Fiche technique Module Air"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/593649/document.pdf" }
-              - { lang: EN, ver: "1.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/586403/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/593649/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/586403/document.pdf" }
           - name: "Encombrements"
             type: drawings
             essential: true
@@ -81,27 +84,27 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: EN, ver: "1.2.2", latest: true, url: "https://assets.danfoss.com/documents/latest/595401/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/595401/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583616/document.pdf" }
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583610/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/583616/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583610/document.pdf" }
           - name: "Manuel de configuration"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "1.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/594901/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/594901/document.pdf" }
           - name: "Guide d'application"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/582811/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/582811/document.pdf" }
           - name: "Fiche technique ULH"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.5.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583623/document.pdf" }
-              - { lang: EN, ver: "1.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583621/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/583623/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583621/document.pdf" }
           - name: "Encombrements"
             type: drawings
             essential: true
@@ -118,29 +121,29 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/595409/document.pdf" }
-              - { lang: EN, ver: "2.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/595406/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/595409/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/595406/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             essential: true
             versions:
-              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583768/document.pdf" }
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583595/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/583768/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583595/document.pdf" }
           - name: "Manuel de configuration"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "1.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/594900/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/594900/document.pdf" }
           - name: "Fiche technique ULH"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/583600/document.pdf" }
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/583597/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/583600/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583597/document.pdf" }
           - name: "Guide d'installation"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/582842/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/582842/document.pdf" }
           - name: "Encombrements"
             type: drawings
             essential: true
@@ -157,29 +160,29 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.4.1", latest: false, url: "https://assets.danfoss.com/documents/latest/432897/document.pdf" }
-              - { lang: EN, ver: "1.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/581871/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/432897/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/581871/document.pdf" }
           - name: "Manuel de configuration"
             type: guide
             versions:
-              - { lang: FR, ver: "0.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/463896/document.pdf" }
-              - { lang: EN, ver: "0.4.2", latest: true, url: "https://assets.danfoss.com/documents/latest/433324/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/463896/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/433324/document.pdf" }
           - name: "Manuel d'utilisation"
             type: manual
             versions:
-              - { lang: FR, ver: "0.5.1", latest: false, url: "https://assets.danfoss.com/documents/latest/403718/document.pdf" }
-              - { lang: EN, ver: "1.6.1", latest: true, url: "https://assets.danfoss.com/documents/latest/587156/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/403718/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/587156/document.pdf" }
           - name: "Guide d'application"
             type: guide
             essential: true
             versions:
-              - { lang: FR, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/585527/document.pdf" }
-              - { lang: EN, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/560863/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/585527/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/560863/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/428454/document.pdf" }
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/428175/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/428454/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/428175/document.pdf" }
           - name: "Encombrements"
             type: drawings
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic2-series/ic2-micro/#tab-3d-models-and-drawings"
@@ -195,28 +198,28 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/240832/document.pdf" }
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/452842/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/240832/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/452842/document.pdf" }
           - name: "Guide de dimensionnement 0.25-75kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.21.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272178/document.pdf" }
-              - { lang: EN, ver: "0.22.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272132/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/272178/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272132/document.pdf" }
           - name: "Guide de dimensionnement 90-710kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.4.1", latest: false, url: "https://assets.danfoss.com/documents/latest/277405/document.pdf" }
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277391/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/277405/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/277391/document.pdf" }
           - name: "Guide de dimensionnement 315-1200kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.3.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276882/document.pdf" }
-              - { lang: EN, ver: "0.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276825/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276882/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276825/document.pdf" }
           - name: "Guide de programmation"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "0.33.1", latest: true, url: "https://assets.danfoss.com/documents/latest/569514/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/569514/document.pdf" }
           - name: "Liste guide d'application"
             type: list
             essential: true
@@ -230,27 +233,27 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/192226/document.pdf" }
-              - { lang: EN, ver: "1.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/192211/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/192226/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/192211/document.pdf" }
           - name: "Guide de dimensionnement 0.25-90kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.25.1", latest: true, url: "https://assets.danfoss.com/documents/latest/274414/document.pdf" }
-              - { lang: EN, ver: "0.25.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273713/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/274414/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273713/document.pdf" }
           - name: "Guide de dimensionnement 110-400kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.8.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276577/document.pdf" }
-              - { lang: EN, ver: "0.10.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276531/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276577/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276531/document.pdf" }
           - name: "Guide de dimensionnement 355-800kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/270523/document.pdf" }
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/270491/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/270523/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/270491/document.pdf" }
           - name: "Guide de programmation"
             type: guide
             versions:
-              - { lang: EN, ver: "0.22.1", latest: true, url: "https://assets.danfoss.com/documents/latest/535068/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/535068/document.pdf" }
           - name: "Encombrements"
             type: drawings
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-aqua-drive-fc-202/#tab-drawings"
@@ -267,28 +270,28 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/239077/document.pdf" }
-              - { lang: EN, ver: "1.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/239074/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/239077/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/239074/document.pdf" }
           - name: "Guide de dimensionnement 1.1-90kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.18.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272771/document.pdf" }
-              - { lang: EN, ver: "0.20.1", latest: true, url: "https://assets.danfoss.com/documents/latest/523921/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/272771/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/523921/document.pdf" }
           - name: "Guide de dimensionnement 110-400kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.13.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276405/document.pdf" }
-              - { lang: EN, ver: "0.16.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276173/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276405/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276173/document.pdf" }
           - name: "Guide de dimensionnement 110-800kW"
             type: guide
             versions:
-              - { lang: FR, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273456/document.pdf" }
-              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273431/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/273456/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273431/document.pdf" }
           - name: "Guide de programmation"
             type: guide
             essential: true
             versions:
-              - { lang: FR, ver: "0.19.1", latest: true, url: "https://assets.danfoss.com/documents/latest/562083/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/562083/document.pdf" }
           - name: "Encombrements"
             type: drawings
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-hvac-drive-fc-102/#tab-drawings"
@@ -296,6 +299,48 @@ categories:
             type: list
             essential: true
             url: "https://ftp.danfoss.com/public/file/-snXSp3eJEykBjz15LCiMw/Guides%20d'Application_FC102%20VLT%20HVAC%20Drive.pdf"
+  - name: "MCD 600"
+    family: demarreurs
+    groups:
+      - name: ""
+        docs:
+          - name: "Guide de sélection"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/592909/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/587980/document.pdf" }
+          - name: "Manuel d'utilisation"
+            type: manual
+            essential: true
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/274881/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/274857/document.pdf" }
+          - name: "Fiche technique"
+            type: datasheet
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/250233/document.pdf" }
+  - name: "MCD 200 (201/202)"
+    family: demarreurs
+    groups:
+      - name: ""
+        docs:
+          - name: "Guide de sélection"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/592909/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/587980/document.pdf" }
+          - name: "Guide de conception"
+            type: guide
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/277021/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/472761/document.pdf" }
+          - name: "Fiche technique"
+            type: datasheet
+            essential: true
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/284227/document.pdf" }
   - name: "Options FC"
     family: options
     groups:
@@ -304,62 +349,62 @@ categories:
           - name: "MCA101 Profibus"
             type: datasheet
             versions:
-              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273361/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273361/document.pdf" }
           - name: "MCA104 DeviceNet"
             type: datasheet
             versions:
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273364/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273364/document.pdf" }
           - name: "MCA105 CANopen"
             type: datasheet
             versions:
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272282/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272282/document.pdf" }
           - name: "MCA120 Profinet"
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/273343/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273343/document.pdf" }
           - name: "MCA122 Modbus TCP"
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/580445/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/580445/document.pdf" }
           - name: "MCA123 Powerlink"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.2.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276804/document.pdf" }
-              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276798/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276804/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276798/document.pdf" }
           - name: "MCA124 EtherCAT"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.1.1", latest: false, url: "https://assets.danfoss.com/documents/latest/276821/document.pdf" }
-              - { lang: EN, ver: "0.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/276817/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276821/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276817/document.pdf" }
       - name: "Extensions (MCB)"
         docs:
           - name: "MCB152"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277264/document.pdf" }
-              - { lang: EN, ver: "0.1.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277255/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/277264/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/277255/document.pdf" }
       - name: "Sécurité & Monitoring"
         docs:
           - name: "CBM"
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/549965/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/549965/document.pdf" }
           - name: "STO"
             type: datasheet
             versions:
-              - { lang: FR, ver: "0.12.1", latest: false, url: "https://assets.danfoss.com/documents/latest/272672/document.pdf" }
-              - { lang: EN, ver: "0.14.1", latest: true, url: "https://assets.danfoss.com/documents/latest/272633/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/272672/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272633/document.pdf" }
       - name: "Filtrage"
         docs:
           - name: "Filtres de sortie"
             type: datasheet
             essential: true
             versions:
-              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277679/document.pdf" }
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/277639/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/277679/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/277639/document.pdf" }
   - name: "Options iC7"
     family: options
     groups:
@@ -369,41 +414,41 @@ categories:
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590379/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/590379/document.pdf" }
           - name: "EtherNet/IP"
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590380/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/590380/document.pdf" }
           - name: "EtherCAT"
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, ver: "1.2.1", latest: true, url: "https://assets.danfoss.com/documents/latest/590412/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/590412/document.pdf" }
       - name: "Extensions (OC7)"
         docs:
           - name: "Options d'extension fonctionnelle"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "0.12.1", latest: true, url: "https://assets.danfoss.com/documents/latest/570897/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/570897/document.pdf" }
       - name: "Sécurité & Monitoring"
         docs:
           - name: "Guide de sécurité"
             type: guide
             versions:
-              - { lang: EN, ver: "0.3.1", latest: true, url: "https://assets.danfoss.com/documents/latest/353022/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/353022/document.pdf" }
           - name: "Sécurité fonctionnelle (Automation)"
             type: guide
             essential: true
             versions:
-              - { lang: FR, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
-              - { lang: EN, ver: "0.5.1", latest: true, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/563127/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/457444/document.pdf" }
           - name: "Sécurité fonctionnelle (Modules système)"
             type: guide
             essential: true
             versions:
-              - { lang: EN, ver: "1.4.1", latest: true, url: "https://assets.danfoss.com/documents/latest/579725/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/579725/document.pdf" }
   - name: "Logiciels"
     family: outils
     groups:
