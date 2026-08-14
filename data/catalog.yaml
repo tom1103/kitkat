@@ -449,6 +449,27 @@ categories:
             essential: true
             versions:
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/579725/document.pdf" }
+  - name: "Options Démarreurs"
+    family: options
+    groups:
+      - name: "Communication (bus de terrain)"
+        docs:
+          - name: "Profibus"
+            type: manual
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272581/document.pdf" }
+          - name: "DeviceNet"
+            type: manual
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273533/document.pdf" }
+          - name: "Modbus"
+            type: manual
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/274830/document.pdf" }
+          - name: "EtherNet/IP"
+            type: datasheet
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/584590/document.pdf" }
   - name: "Logiciels"
     family: outils
     groups:
