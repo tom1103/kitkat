@@ -72,7 +72,7 @@ categories:
           - name: "Liste guide d'application"
             type: list
             url: "https://ftp.danfoss.com/public/file/rUxna4kkfEqoCx1xGjJvEg/Guides%20d'Application_iC7%20Automation.pdf"
-          - name: "Logiciel iC7 (dernière version)"
+          - name: "Firmware (dernière version)"
             type: software
             url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
   - name: "iC-7 AQUA"
@@ -105,13 +105,17 @@ categories:
             versions:
               - { lang: FR, url: "https://assets.danfoss.com/documents/latest/583623/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583621/document.pdf" }
+          - name: "Guide d'installation"
+            type: guide
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/595464/document.pdf" }
           - name: "Encombrements"
             type: drawings
             essential: true
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-aqua/#tab-3d-models-and-drawings"
-          - name: "Logiciel iC7 (dernière version)"
+          - name: "Firmware (dernière version)"
             type: software
-            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+            url: "https://assets.danfoss.com/software/latest/584773/ID556835586141-0102.zip"
   - name: "iC7-HVACR"
     family: ic7
     groups:
@@ -134,6 +138,11 @@ categories:
             essential: true
             versions:
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/594900/document.pdf" }
+          - name: "Guide d'application"
+            type: guide
+            essential: true
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/580970/document.pdf" }
           - name: "Fiche technique ULH"
             type: datasheet
             versions:
@@ -141,16 +150,15 @@ categories:
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/583597/document.pdf" }
           - name: "Guide d'installation"
             type: guide
-            essential: true
             versions:
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/582842/document.pdf" }
           - name: "Encombrements"
             type: drawings
             essential: true
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-hvacr/#tab-3d-models-and-drawings"
-          - name: "Logiciel iC7 (dernière version)"
+          - name: "Firmware (dernière version)"
             type: software
-            url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+            url: "https://assets.danfoss.com/software/latest/582990/ID556837117144-0101.zip"
   - name: "iC2"
     family: ic2
     groups:
