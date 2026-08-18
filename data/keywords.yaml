@@ -1,0 +1,691 @@
+# ============================================================================
+#  Dictionnaire de recherche du Centre de Ressources Danfoss
+# ============================================================================
+#  Ce fichier n'ajoute AUCUN document : il ajoute du VOCABULAIRE (themes,
+#  termes metier, alarmes) et le relie aux documents deja presents dans
+#  data/catalog.yaml. Il est compile dans la page au build (Hugo) puis indexe
+#  en memoire au chargement -> aucune requete reseau, aucune base de donnees.
+#
+#  4 sections :
+#    products  : noms/alias de gammes et codes produits -> categorie du catalogue
+#    synonyms  : groupes de mots equivalents (expansion de la requete)
+#    topics    : themes techniques -> documents cibles (regles "scope")
+#    alarms    : codes d'alarmes / defauts -> document qui les documente
+#
+#  Regles de "scope" (toutes les cles presentes doivent correspondre) :
+#    family: id de gamme (ic7, ic2, vlt, demarreurs, options, outils)
+#    cat:    nom de categorie (sous-chaine, ex. "FC-302")
+#    group:  nom de groupe    (sous-chaine, ex. "Communication")
+#    type:   type de document (guide, manual, datasheet, brochure, drawings, list, software)
+#    name:   nom du document  (sous-chaine, ex. "programmation")
+#    not:    exclusion (sous-chaine testee sur nom + groupe + categorie)
+#
+#  AVERTISSEMENT : les libelles d'alarmes ci-dessous sont une AIDE A LA
+#  RECHERCHE (retrouver le bon PDF rapidement). Le document officiel Danfoss
+#  reste la seule reference : verifier le libelle exact, la cause et la
+#  procedure dans le guide de programmation de la gamme concernee.
+# ============================================================================
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# 1. Produits & gammes : ce que l'utilisateur tape -> categorie du catalogue
+#    (un terme peut etre un debut de code produit colle depuis un devis)
+# ---------------------------------------------------------------------------
+products:
+  - cat: "FC-302"
+    terms: ["fc-302", "fc302", "fc 302", "fc-301", "fc301", "automationdrive", "automation drive", "vlt automation"]
+  - cat: "FC-202"
+    terms: ["fc-202", "fc202", "fc 202", "aquadrive", "aqua drive", "vlt aqua"]
+  - cat: "FC-102"
+    terms: ["fc-102", "fc102", "fc 102", "hvacdrive", "hvac drive", "vlt hvac"]
+  - cat: "iC7 Automation"
+    terms: ["ic7 automation", "ic7-automation", "ic7 auto", "ic7-30", "ic7-60", "ic7-mp"]
+  - cat: "iC-7 AQUA"
+    terms: ["ic7 aqua", "ic-7 aqua", "ic7aqua", "ic7-aqua"]
+  - cat: "iC7-HVACR"
+    terms: ["ic7 hvac", "ic7-hvac", "ic7 hvacr", "ic7-hvacr", "ic7 clim", "ic7 froid"]
+  - cat: "iC2"
+    terms: ["ic2", "ic-2", "ic2 micro", "ic2-30", "micro drive", "microdrive"]
+  - cat: "MCD 600"
+    terms: ["mcd 600", "mcd600", "mcd-600"]
+  - cat: "MCD 200 (201/202)"
+    terms: ["mcd 200", "mcd200", "mcd 201", "mcd201", "mcd 202", "mcd202"]
+  - cat: "Options FC"
+    terms: ["mca", "mcb", "option fc", "options fc", "carte option vlt"]
+  - cat: "Options iC7"
+    terms: ["oc7", "option ic7", "options ic7", "carte option ic7"]
+  - cat: "Logiciels"
+    terms: ["logiciel", "software", "telechargement", "download", "outil pc"]
+  - cat: "Librairies"
+    terms: ["librairie", "library", "bibliotheque", "gsd", "gsdml", "eds", "esi"]
+
+# ---------------------------------------------------------------------------
+# 2. Synonymes generiques : chaque mot d'un groupe "vaut" les autres
+# ---------------------------------------------------------------------------
+synonyms:
+  - ["variateur", "vfd", "drive", "convertisseur", "vitesse variable", "onduleur"]
+  - ["demarreur", "soft starter", "softstarter", "demarrage progressif", "gradateur"]
+  - ["defaut", "alarme", "erreur", "fault", "alarm", "error", "trip", "declenchement", "warning", "avertissement", "panne"]
+  - ["parametre", "parameter", "reglage", "setting", "programmation", "programming"]
+  - ["moteur", "motor", "machine"]
+  - ["cable", "cablage", "wiring", "raccordement", "borne", "terminal", "schema"]
+  - ["dimensionnement", "sizing", "design", "selection", "choix", "calcul"]
+  - ["manuel", "manual", "notice", "documentation", "guide", "handbook"]
+  - ["securite", "safety", "safe"]
+  - ["mise en service", "commissioning", "demarrage", "startup", "start-up", "quick start", "prise en main"]
+  - ["temperature", "thermique", "surchauffe", "overtemperature"]
+  - ["puissance", "power", "kw", "hp"]
+  - ["courant", "current", "ampere", "amperage", "intensite"]
+  - ["tension", "voltage", "volt"]
+  - ["frequence", "frequency", "hz", "hertz"]
+  - ["communication", "bus", "reseau", "network", "fieldbus", "bus de terrain", "protocole"]
+  - ["encombrement", "dimension", "plan", "cote", "drawing", "cad", "3d", "dxf", "step"]
+  - ["mise a jour", "update", "upgrade", "firmware", "micrologiciel", "version"]
+
+# ---------------------------------------------------------------------------
+# 3. Themes techniques
+# ---------------------------------------------------------------------------
+topics:
+
+  # --- Mise en service / parametrage ---------------------------------------
+  - id: mise-en-service
+    label: "Mise en service & premier démarrage"
+    hint: "Manuels de configuration / guides de programmation"
+    terms: ["mise en service", "commissioning", "premier demarrage", "quick start", "demarrage rapide",
+            "prise en main", "installer", "installation", "startup guide", "assistant de mise en service",
+            "smart start", "initialisation", "reset usine", "retour usine", "factory reset", "initialiser"]
+    scope:
+      - { type: guide, name: "manuel de configuration" }
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "guide d'installation" }
+      - { type: manual, name: "manuel d'utilisation", not: "sto" }
+
+  - id: parametres
+    label: "Paramètres & programmation"
+    hint: "Guides de programmation / manuels de configuration"
+    terms: ["parametre", "parametrage", "parameter", "liste des parametres", "parameter list", "groupe de parametres",
+            "1-20", "1-24", "3-41", "4-10", "14-01", "menu rapide", "quick menu", "main menu", "menu principal",
+            "jeu de parametres", "set-up", "multi set-up", "copie de parametres", "clonage",
+            "sauvegarde parametres", "backup", "restauration", "mot de passe", "password", "verrouillage clavier"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { name: "MCT-10" }
+      - { name: "My Drive Insight" }
+
+  - id: lcp-clavier
+    label: "Panneau de commande (LCP / clavier)"
+    hint: "Manuels de configuration & guides de programmation"
+    terms: ["lcp", "clavier", "keypad", "panneau de commande", "control panel", "afficheur", "display",
+            "lcp102", "lcp101", "hand on", "auto on", "off reset", "touche reset", "ecran", "navigation clavier"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { type: manual, name: "manuel d'utilisation", not: "sto" }
+
+  - id: ama-autotune
+    label: "AMA / adaptation automatique au moteur"
+    hint: "Guides de programmation (groupe 1-2x)"
+    terms: ["ama", "adaptation automatique", "auto tuning", "autotune", "auto-tune", "identification moteur",
+            "motor identification", "plaque moteur", "nameplate", "1-29", "resistance stator", "inductance",
+            "id run", "calibration moteur"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+
+  # --- Moteurs -------------------------------------------------------------
+  - id: moteur-pm
+    label: "Moteurs PM / SynRM / asynchrone"
+    hint: "Guides de programmation & manuels de configuration"
+    terms: ["moteur pm", "aimant permanent", "permanent magnet", "pmsm", "synrm", "reluctance", "synchrone",
+            "asynchrone", "induction", "vvc+", "flux vector", "boucle ouverte", "boucle fermee",
+            "open loop", "closed loop", "commande scalaire", "servo"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { type: guide, name: "guide de dimensionnement" }
+
+  - id: protection-moteur
+    label: "Protection thermique moteur (ETR, PTC, PT100)"
+    hint: "Guides de programmation / dimensionnement"
+    terms: ["etr", "protection thermique", "thermistance", "thermistor", "ptc", "kty", "pt100", "pt1000",
+            "sonde moteur", "klixon", "surcharge moteur", "motor overload", "1-90", "protection moteur",
+            "temperature moteur", "motor temperature", "mcb112"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { cat: "MCD 600" }
+
+  - id: couple
+    label: "Couple, limites & surcharge"
+    hint: "Guides de programmation & dimensionnement"
+    terms: ["couple", "torque", "limite de couple", "torque limit", "4-16", "4-17", "couple constant",
+            "couple variable", "surcharge", "overload", "surcouple", "boost", "couple de demarrage",
+            "starting torque", "compensation de glissement", "slip compensation"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: guide, name: "manuel de configuration" }
+
+  - id: vitesse-rampes
+    label: "Vitesse, rampes & références"
+    hint: "Guides de programmation"
+    terms: ["rampe", "ramp", "acceleration", "deceleration", "3-41", "3-42", "temps de rampe", "rampe en s",
+            "s-ramp", "jog", "vitesse fixe", "preset reference", "consigne", "reference minimale",
+            "potentiometre digital", "vitesse maxi", "vitesse mini", "4-12", "4-14", "sens de rotation",
+            "marche arriere", "reversible", "roue libre", "coast"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+
+  - id: pid
+    label: "Régulation PID & boucle fermée"
+    hint: "Guides de programmation & guides d'application"
+    terms: ["pid", "regulation", "boucle fermee", "closed loop", "process pid", "consigne pid",
+            "setpoint", "retour", "feedback", "gain proportionnel", "temps d'integration", "derivee",
+            "anti windup", "autotune pid", "capteur", "transmetteur", "4-20ma", "0-10v", "pression",
+            "debit", "niveau"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "guide d'application" }
+      - { type: guide, name: "manuel de configuration" }
+
+  # --- E/S & options -------------------------------------------------------
+  - id: entrees-sorties
+    label: "Entrées / sorties & bornier"
+    hint: "Guides de programmation & fiches techniques"
+    terms: ["entree logique", "entree numerique", "digital input", "borne 18", "borne 19", "borne 27", "borne 29",
+            "borne 32", "borne 33", "entree analogique", "analog input", "borne 53", "borne 54", "sortie analogique",
+            "borne 42", "sortie relais", "relay", "relais 1", "relais 2", "borne 12", "borne 13", "24v",
+            "x30", "x44", "x46", "bornier", "cablage commande", "control terminals", "pnp", "npn",
+            "borne 37", "pulse input", "entree impulsion"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { name: "MCB152" }
+      - { type: guide, name: "options d'extension" }
+
+  - id: encodeur
+    label: "Encodeur / retour de vitesse"
+    hint: "Options d'extension & guides de programmation"
+    terms: ["encodeur", "encoder", "codeur", "resolver", "retour vitesse", "speed feedback", "ssi", "sincos",
+            "incremental", "mcb102", "mcb103", "mcb152", "hiperface", "endat"]
+    scope:
+      - { family: options, group: "Extensions" }
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "options d'extension" }
+
+  # --- Securite ------------------------------------------------------------
+  - id: sto-securite
+    label: "STO / sécurité fonctionnelle"
+    hint: "Manuels STO, guides de sécurité, SISTEMA"
+    terms: ["sto", "safe torque off", "arret securise", "securite fonctionnelle",
+            "functional safety", "sil", "sil2", "sil3", "pl d", "pl e", "categorie 3", "iso 13849",
+            "iec 61508", "iec 62061", "pfh", "pfd", "mttfd", "arret d'urgence", "emergency stop",
+            "ss1", "ss2", "sls", "safe stop", "borne 37", "safety option", "mcb140", "mcb141", "mcb150", "mcb151",
+            "sistema", "analyse de risque", "niveau de performance", "safe input", "profisafe"]
+    scope:
+      - { name: "STO" }
+      - { name: "sécurité" }
+      - { name: "SISTEMA" }
+      - { group: "Sécurité & Monitoring" }
+
+  - id: cbm-monitoring
+    label: "Surveillance conditionnelle (CBM) & maintenance"
+    hint: "Fiches CBM & options monitoring"
+    terms: ["cbm", "condition based monitoring", "surveillance conditionnelle", "maintenance predictive",
+            "predictive maintenance", "vibration", "usure", "roulement", "bearing", "etat de sante",
+            "monitoring", "duree de vie", "lifetime", "condensateur", "journal des defauts", "historique",
+            "fault log", "trend", "enregistrement"]
+    scope:
+      - { name: "CBM" }
+      - { group: "Sécurité & Monitoring" }
+      - { name: "My Drive Insight" }
+
+  # --- Bus de terrain ------------------------------------------------------
+  - id: bus-profibus
+    label: "PROFIBUS DP"
+    hint: "MCA101 / option démarreur / fichiers GSD"
+    terms: ["profibus", "profibus dp", "mca101", "gsd", "dp-v1", "adresse profibus", "profidrive",
+            "ppo", "terminaison profibus", "cable profibus"]
+    scope:
+      - { name: "profibus" }
+      - { name: "Fichiers de configuration bus de terrain" }
+
+  - id: bus-profinet
+    label: "PROFINET"
+    hint: "MCA120 / OC7 PROFINET / fichiers GSDML"
+    terms: ["profinet", "mca120", "gsdml", "profinet io", "nom d'appareil", "device name", "lldp", "mrp",
+            "profisafe", "tia portal", "siemens", "s7-1500"]
+    scope:
+      - { name: "profinet" }
+      - { name: "Fichiers de configuration bus de terrain" }
+      - { name: "Librairies PLC" }
+
+  - id: bus-modbus
+    label: "Modbus RTU / Modbus TCP"
+    hint: "MCA122 / option démarreur Modbus / guides de programmation"
+    terms: ["modbus", "modbus rtu", "modbus tcp", "mca122", "rs485", "fc protocol", "protocole fc",
+            "registre", "register", "holding register", "esclave", "slave id", "8-30", "8-31",
+            "parite", "baud", "9600", "19200", "38400", "terminaison rs485"]
+    scope:
+      - { name: "modbus" }
+      - { type: guide, name: "guide de programmation" }
+      - { name: "Fichiers de configuration bus de terrain" }
+
+  - id: bus-ethernetip
+    label: "EtherNet/IP"
+    hint: "OC7 EtherNet/IP / option démarreur / fichiers EDS"
+    terms: ["ethernet ip", "ethernet/ip", "ethernetip", "eds", "cip", "rockwell", "allen bradley",
+            "studio 5000", "rslogix", "logix"]
+    scope:
+      - { name: "ethernet" }
+      - { name: "Fichiers de configuration bus de terrain" }
+      - { name: "Librairies PLC" }
+
+  - id: bus-ethercat
+    label: "EtherCAT"
+    hint: "MCA124 / OC7 EtherCAT / fichiers ESI"
+    terms: ["ethercat", "mca124", "esi", "coe", "twincat", "beckhoff", "distributed clocks"]
+    scope:
+      - { name: "ethercat" }
+      - { name: "Fichiers de configuration bus de terrain" }
+
+  - id: bus-canopen
+    label: "CANopen / DeviceNet"
+    hint: "MCA105 / MCA104 / option démarreur DeviceNet"
+    terms: ["canopen", "can open", "mca105", "devicenet", "mca104", "sdo", "pdo", "cob-id", "bus can"]
+    scope:
+      - { name: "canopen" }
+      - { name: "devicenet" }
+      - { name: "Fichiers de configuration bus de terrain" }
+
+  - id: bus-autres
+    label: "Powerlink, BACnet & autres protocoles"
+    hint: "MCA123 / guides de programmation"
+    terms: ["powerlink", "mca123", "ethernet powerlink", "bacnet", "bacnet ms/tp", "bacnet ip", "lonworks",
+            "metasys", "apogee", "gtb", "gtc", "supervision"]
+    scope:
+      - { name: "powerlink" }
+      - { cat: "FC-102" }
+      - { cat: "iC7-HVACR" }
+
+  - id: bus-general
+    label: "Bus de terrain (généralités)"
+    hint: "Options de communication & fichiers de configuration"
+    terms: ["bus de terrain", "fieldbus", "communication", "carte reseau",
+            "carte communication", "mot de controle", "control word", "status word", "mot d'etat",
+            "consigne bus", "8-01", "8-02", "8-10", "timeout bus", "8-04", "topologie", "switch", "ip fixe",
+            "dhcp", "adresse ip", "masque de sous reseau"]
+    scope:
+      - { group: "Communication" }
+      - { name: "Fichiers de configuration bus de terrain" }
+      - { name: "Librairies PLC" }
+      - { type: guide, name: "guide de programmation" }
+
+  - id: automate-plc
+    label: "Automates & librairies PLC"
+    hint: "Librairies PLC, fichiers de configuration"
+    terms: ["automate", "plc", "codesys", "tia portal", "step7", "twincat", "unity pro", "schneider",
+            "librairie", "library", "bloc fonction", "function block", "faceplate", "exemple de projet",
+            "sample project", "integration"]
+    scope:
+      - { name: "Librairies PLC" }
+      - { name: "Fichiers de configuration bus de terrain" }
+      - { family: outils }
+
+  # --- Freinage ------------------------------------------------------------
+  - id: freinage
+    label: "Freinage (résistance, hacheur, freinage CC)"
+    hint: "Guides de dimensionnement & programmation"
+    terms: ["freinage", "braking", "resistance de freinage", "brake resistor", "hacheur de freinage",
+            "brake chopper", "freinage cc", "dc brake", "injection cc", "freinage dynamique", "2-10", "2-11",
+            "brake igbt", "energie de freinage", "controle du frein", "dissipation",
+            "freinage par recuperation", "regeneration", "regeneratif", "retour d'energie",
+            "over voltage control", "controle de surtension"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+
+  - id: frein-mecanique
+    label: "Frein mécanique & levage"
+    hint: "Guides de programmation & guides d'application"
+    terms: ["frein mecanique", "mechanical brake", "commande de frein", "brake control", "2-20", "2-24", "levage",
+            "hoist", "hoisting", "grue", "crane", "palan", "treuil", "charge suspendue", "glissement du frein",
+            "brake sliding", "couple de maintien"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "guide d'application" }
+      - { type: list, name: "liste guide d'application" }
+
+  # --- Reseau / alimentation ----------------------------------------------
+  - id: harmoniques
+    label: "Harmoniques & qualité réseau"
+    hint: "Guides de dimensionnement & filtres de sortie"
+    terms: ["harmonique", "harmonics", "thd", "thdi", "thdv", "ieee 519", "en 61000-3-12",
+            "filtre actif", "aaf", "afe", "front end actif", "self reseau", "reactance",
+            "inductance de ligne", "line reactor", "12 pulses", "18 pulses", "facteur de puissance",
+            "cos phi", "distorsion", "qualite reseau", "pollution harmonique"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { name: "Filtres de sortie" }
+      - { name: "MyDrive Suite" }
+
+  - id: cem-emc
+    label: "CEM / EMC & câble moteur"
+    hint: "Guides de dimensionnement, filtres de sortie & fiches techniques"
+    terms: ["cem", "emc", "compatibilite electromagnetique", "perturbation", "classe c1", "classe c2",
+            "classe c3", "classe c4", "en 61800-3", "filtre rfi", "filtre cem", "14-50", "blindage", "shield",
+            "tresse", "longueur de cable", "cable moteur", "motor cable", "presse etoupe",
+            "mise a la terre", "earthing", "grounding", "equipotentialite", "courant de fuite",
+            "reseau it", "regime it", "differentiel", "courant de palier", "bearing current", "du/dt", "dv/dt",
+            "filtre sinus", "sine wave filter", "filtre mode commun", "self de sortie"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { name: "Filtres de sortie" }
+      - { type: guide, name: "manuel de configuration" }
+      - { type: datasheet, name: "fiche technique" }
+
+  - id: alimentation
+    label: "Alimentation, protection & installation électrique"
+    hint: "Guides de dimensionnement & fiches techniques"
+    terms: ["alimentation", "mains", "phase secteur", "perte de phase", "phase loss", "desequilibre",
+            "imbalance", "sous tension", "undervoltage", "surtension", "overvoltage", "coupure reseau",
+            "power loss", "micro coupure", "fusible", "fuse", "disjoncteur", "sectionneur",
+            "contacteur", "protection amont", "courant de court circuit", "sccr", "ul",
+            "400v", "480v", "525v", "690v", "230v", "triphase", "monophase",
+            "bus cc", "dc link", "liaison cc", "precharge", "inrush", "soft charge"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: datasheet, name: "fiche technique" }
+      - { type: guide, name: "guide de conception" }
+      - { type: guide, name: "manuel de configuration" }
+
+  # --- Thermique / mecanique ----------------------------------------------
+  - id: derating
+    label: "Déclassement (derating), altitude & température"
+    hint: "Guides de dimensionnement & fiches techniques"
+    terms: ["derating", "declassement", "altitude", "temperature ambiante", "45c", "50c", "55c",
+            "frequence de decoupage", "switching frequency", "14-01", "pwm", "bruit acoustique", "modulation",
+            "sfavm", "60 avm", "courant de sortie reduit", "surdimensionnement", "reduction de courant"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: datasheet, name: "fiche technique" }
+      - { type: guide, name: "guide de conception" }
+
+  - id: refroidissement
+    label: "Refroidissement, indice IP & armoire"
+    hint: "Guides de dimensionnement, encombrements, fiches techniques"
+    terms: ["refroidissement", "cooling", "ventilateur", "fan", "dissipateur", "heatsink", "backchannel",
+            "canal arriere", "air de refroidissement", "debit d'air", "m3/h", "pertes", "dissipation",
+            "puissance dissipee", "rendement", "efficiency", "eco design", "armoire",
+            "coffret", "enclosure", "ip00", "ip20", "ip21", "ip54", "ip55", "ip66", "nema", "type 12",
+            "kit ip", "condensation", "climatisation armoire", "refroidissement liquide", "module air"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: datasheet, name: "fiche technique" }
+      - { type: drawings }
+      - { type: guide, name: "guide de conception" }
+
+  - id: encombrements
+    label: "Encombrements, plans & CAO"
+    hint: "Encombrements & fiches techniques"
+    terms: ["encombrement", "dimension", "plan", "drawing", "cad", "3d", "step", "dxf", "dwg", "eplan",
+            "poids", "weight", "hauteur", "largeur", "profondeur", "percage", "fixation", "montage",
+            "cote a cote", "side by side", "espace libre", "degagement", "taille de boitier",
+            "chassis a2", "chassis a3", "chassis b1", "chassis c1", "d1h", "d2h", "e1h", "f1", "f2", "f3"]
+    scope:
+      - { type: drawings }
+      - { type: datasheet, name: "fiche technique" }
+      - { type: guide, name: "guide de dimensionnement" }
+
+  # --- Applications --------------------------------------------------------
+  - id: appli-pompage
+    label: "Pompage & eau"
+    hint: "Documentation AQUA & guides d'application"
+    terms: ["pompe", "pump", "pompage", "eau", "water", "aqua", "cascade", "cascade controller", "multi pompe",
+            "pompe de relevage", "surpresseur", "forage", "marche a sec", "dry run", "manque d'eau",
+            "no flow", "sans debit", "sleep mode", "mode veille", "remplissage de conduite", "pipe fill",
+            "coup de belier", "water hammer", "deragging", "nettoyage pompe", "station de relevage",
+            "assainissement", "irrigation", "aeration", "compensation de debit", "courbe de pompe", "clapet"]
+    scope:
+      - { cat: "iC-7 AQUA" }
+      - { cat: "FC-202" }
+      - { type: guide, name: "guide d'application" }
+      - { type: list, name: "liste guide d'application" }
+
+  - id: appli-hvac
+    label: "CVC / HVACR & ventilation"
+    hint: "Documentation FC-102, iC7-HVACR & guides d'application"
+    terms: ["hvac", "cvc", "chauffage", "ventilation", "climatisation", "froid", "refrigeration", "chiller",
+            "groupe froid", "cta", "centrale de traitement d'air", "extracteur",
+            "tour aerorefrigerante", "courroie", "broken belt", "courroie cassee", "pressostat", "co2",
+            "qualite d'air", "compresseur", "pompe a chaleur",
+            "condenseur", "evaporateur", "vitesse mini ventilateur", "resonance", "by-pass de frequence"]
+    scope:
+      - { cat: "FC-102" }
+      - { cat: "iC7-HVACR" }
+      - { type: guide, name: "guide d'application" }
+      - { type: list, name: "liste guide d'application" }
+
+  - id: appli-industrie
+    label: "Applications industrie (convoyeur, enrouleur, extrudeuse…)"
+    hint: "Guides d'application industrie"
+    terms: ["convoyeur", "conveyor", "bande transporteuse", "enrouleur", "derouleur", "winder", "unwinder",
+            "bobineuse", "extrudeuse", "extruder", "malaxeur", "mixer", "agitateur", "broyeur", "concasseur",
+            "centrifugeuse", "essoreuse", "presse", "scie", "machine outil", "textile",
+            "papeterie", "cimenterie", "carriere", "agroalimentaire", "bois", "plastique",
+            "synchronisation", "maitre esclave", "master follower", "arbre electrique", "positionnement",
+            "profil de vitesse", "multi moteur", "tension de bande"]
+    scope:
+      - { type: guide, name: "guide d'application" }
+      - { type: list, name: "liste guide d'application" }
+      - { cat: "iC7 Automation" }
+
+  - id: demarreur-progressif
+    label: "Démarreurs progressifs (MCD)"
+    hint: "Guides & manuels MCD 200 / MCD 600"
+    terms: ["demarreur", "soft starter", "mcd", "demarrage progressif", "rampe de courant", "current ramp",
+            "limitation de courant", "current limit", "kickstart", "tvr", "tension reduite",
+            "etoile triangle", "star delta", "demarrage direct", "by-pass", "bypass",
+            "contacteur de by-pass", "arret progressif", "soft stop", "adaptive control",
+            "controle adaptatif", "nombre de demarrages", "starts per hour",
+            "temps de demarrage", "excess start time", "in-delta", "en ligne"]
+    scope:
+      - { family: demarreurs }
+      - { cat: "Options Démarreurs" }
+
+  # --- Logiciels & outils --------------------------------------------------
+  - id: logiciels
+    label: "Logiciels PC & firmware"
+    hint: "MyDrive Insight, MCT-10, firmware"
+    terms: ["logiciel", "software", "mct 10", "mct-10", "mct10", "mydrive", "my drive insight", "mydrive suite",
+            "mydrive ecosmart", "mydrive harmonics", "mydrive select", "motion control tool",
+            "telechargement", "download", "licence", "usb", "cable usb",
+            "firmware", "micrologiciel", "mise a jour", "update", "version logicielle",
+            "oscilloscope", "trace", "comparaison de parametres", "hors ligne", "offline"]
+    scope:
+      - { family: outils }
+      - { type: software }
+
+  - id: code-type
+    label: "Code type & configurateur"
+    hint: "Guides de dimensionnement & fiches techniques"
+    terms: ["code type", "type code", "typecode", "code produit", "reference", "code article",
+            "numero de commande", "ordering code", "configurateur", "configurator", "chaine de code",
+            "numero de serie", "serial number", "plaque signaletique", "identification variateur"]
+    scope:
+      - { type: guide, name: "guide de dimensionnement" }
+      - { type: datasheet, name: "fiche technique" }
+      - { type: guide, name: "guide de selection" }
+      - { type: guide, name: "guide de conception" }
+
+  - id: certificats
+    label: "Certificats & conformité"
+    hint: "Fiches techniques, brochures, guides de dimensionnement"
+    terms: ["certificat", "certificate", "conformite", "declaration", "marquage ce", "ukca", "ul", "csa",
+            "marine", "dnv", "lloyd", "atex", "eac", "rohs", "reach", "iec 61800",
+            "en 61800-5-1", "norme", "standard", "homologation", "eco design", "ie2", "ies2",
+            "efficacite energetique"]
+    scope:
+      - { type: datasheet, name: "fiche technique" }
+      - { type: brochure }
+      - { type: guide, name: "guide de dimensionnement" }
+      - { name: "sécurité" }
+
+  - id: horloge-actions
+    label: "Horloge temps réel & actions temporisées"
+    hint: "Guides de programmation"
+    terms: ["horloge", "rtc", "clock", "date et heure", "actions temporisees", "timed actions",
+            "smart logic", "smart logic controller", "comparateur", "regle logique",
+            "compteur", "temporisateur", "timer", "calendrier"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+
+  - id: depannage
+    label: "Dépannage & diagnostic"
+    hint: "Chapitre dépannage des guides de programmation / manuels"
+    terms: ["defaut", "defauts", "alarme", "alarmes", "avertissement", "erreur", "panne", "fault", "alarm",
+            "warning", "trip", "code defaut", "code d'erreur", "liste des alarmes", "liste des defauts",
+            "depannage", "troubleshooting", "diagnostic", "ne demarre pas", "ne tourne pas",
+            "pas de tension", "bloque", "reset", "acquittement", "reinitialiser", "redemarrage automatique",
+            "auto reset", "14-20", "14-21", "declenchement verrouille", "trip lock", "reparation",
+            "piece de rechange", "spare part", "remplacement", "megohmmetre", "isolement", "controle"]
+    scope:
+      - { type: guide, name: "guide de programmation" }
+      - { type: guide, name: "manuel de configuration" }
+      - { type: manual, name: "manuel d'utilisation", not: "sto" }
+      - { name: "My Drive Insight" }
+
+# ---------------------------------------------------------------------------
+# 4. Alarmes & defauts
+#    scope = document qui contient la liste des alarmes de la gamme.
+#    Les libelles servent a retrouver le document : verifier le detail, la
+#    cause et la procedure dans le PDF officiel.
+# ---------------------------------------------------------------------------
+alarms:
+  - id: vlt-fc
+    label: "VLT FC-102 / FC-202 / FC-302"
+    section: "chapitre « Avertissements et alarmes » du guide de programmation"
+    scope:
+      - { family: vlt, type: guide, name: "guide de programmation" }
+    codes:
+      - { n: 1,  fr: "Tension 10 V basse", en: "10 V low", terms: ["borne 50"] }
+      - { n: 2,  fr: "Erreur zéro live", en: "Live zero error", terms: ["signal absent", "4-20ma perdu", "6-01"] }
+      - { n: 3,  fr: "Pas de moteur", en: "No motor", terms: ["moteur non connecte", "1-80"] }
+      - { n: 4,  fr: "Perte de phase secteur", en: "Mains phase loss", terms: ["desequilibre reseau", "14-12"] }
+      - { n: 5,  fr: "Tension bus CC élevée (avertissement)", en: "DC link voltage high" }
+      - { n: 6,  fr: "Tension bus CC basse (avertissement)", en: "DC link voltage low" }
+      - { n: 7,  fr: "Surtension bus CC", en: "DC overvoltage", terms: ["surtension", "deceleration trop rapide"] }
+      - { n: 8,  fr: "Sous-tension bus CC", en: "DC undervoltage", terms: ["sous tension", "coupure reseau"] }
+      - { n: 9,  fr: "Surcharge onduleur", en: "Inverter overloaded", terms: ["surcharge variateur"] }
+      - { n: 10, fr: "Surtempérature moteur ETR (surcharge calculée)", en: "Motor ETR over temperature", terms: ["1-90", "surcharge moteur"] }
+      - { n: 11, fr: "Surtempérature thermistance moteur", en: "Motor thermistor over temperature", terms: ["ptc", "sonde moteur"] }
+      - { n: 12, fr: "Limite de couple atteinte", en: "Torque limit", terms: ["4-16", "4-17"] }
+      - { n: 13, fr: "Surintensité", en: "Overcurrent", terms: ["pic de courant"] }
+      - { n: 14, fr: "Défaut de terre", en: "Earth (ground) fault", terms: ["defaut terre", "masse", "isolement moteur"] }
+      - { n: 15, fr: "Matériel incompatible", en: "Hardware mismatch" }
+      - { n: 16, fr: "Court-circuit", en: "Short circuit", terms: ["court circuit moteur", "phase a phase"] }
+      - { n: 17, fr: "Dépassement du temps de mot de contrôle", en: "Control word timeout", terms: ["8-04", "timeout bus", "communication perdue"] }
+      - { n: 20, fr: "Erreur d'entrée de température", en: "Temperature input error" }
+      - { n: 21, fr: "Erreur de paramètre", en: "Parameter error" }
+      - { n: 22, fr: "Frein mécanique de levage", en: "Hoist mechanical brake", terms: ["frein levage"] }
+      - { n: 23, fr: "Défaut ventilateur interne", en: "Internal fan fault" }
+      - { n: 24, fr: "Défaut ventilateur externe", en: "External fan fault" }
+      - { n: 25, fr: "Résistance de freinage court-circuitée", en: "Brake resistor short-circuited" }
+      - { n: 26, fr: "Limite de puissance de la résistance de freinage", en: "Brake resistor power limit", terms: ["2-12", "2-13"] }
+      - { n: 27, fr: "Hacheur de freinage court-circuité", en: "Brake chopper short-circuited", terms: ["igbt frein"] }
+      - { n: 28, fr: "Échec du test de frein", en: "Brake check failed", terms: ["2-15"] }
+      - { n: 29, fr: "Température du dissipateur", en: "Heatsink temperature", terms: ["surchauffe", "radiateur"] }
+      - { n: 30, fr: "Phase moteur U manquante", en: "Motor phase U missing" }
+      - { n: 31, fr: "Phase moteur V manquante", en: "Motor phase V missing" }
+      - { n: 32, fr: "Phase moteur W manquante", en: "Motor phase W missing" }
+      - { n: 33, fr: "Défaut de charge (inrush)", en: "Inrush fault", terms: ["precharge", "soft charge"] }
+      - { n: 34, fr: "Défaut de communication bus de terrain", en: "Fieldbus communication fault", terms: ["profibus", "profinet"] }
+      - { n: 35, fr: "Défaut d'option", en: "Option fault", terms: ["carte option"] }
+      - { n: 36, fr: "Défaut secteur", en: "Mains failure", terms: ["coupure reseau", "14-10"] }
+      - { n: 37, fr: "Déséquilibre de phase", en: "Phase imbalance" }
+      - { n: 38, fr: "Défaut interne", en: "Internal fault", terms: ["code interne"] }
+      - { n: 39, fr: "Capteur de dissipateur", en: "Heatsink sensor" }
+      - { n: 40, fr: "Surcharge sortie logique borne 27", en: "Overload of digital output terminal 27" }
+      - { n: 41, fr: "Surcharge sortie logique borne 29", en: "Overload of digital output terminal 29" }
+      - { n: 42, fr: "Surcharge sortie logique X30/6 ou X30/7", en: "Overload of digital output on X30" }
+      - { n: 45, fr: "Défaut de terre 2", en: "Earth fault 2" }
+      - { n: 46, fr: "Alimentation carte de puissance", en: "Power card supply" }
+      - { n: 47, fr: "Alimentation 24 V basse", en: "24 V supply low" }
+      - { n: 48, fr: "Alimentation 1,8 V basse", en: "1.8 V supply low" }
+      - { n: 49, fr: "Limite de vitesse", en: "Speed limit", terms: ["4-11", "4-13"] }
+      - { n: 50, fr: "Échec de calibrage AMA", en: "AMA calibration failed" }
+      - { n: 51, fr: "AMA : vérifier Unom et Inom", en: "AMA check Unom and Inom", terms: ["1-20", "1-22"] }
+      - { n: 52, fr: "AMA : Inom trop bas", en: "AMA low Inom" }
+      - { n: 53, fr: "AMA : moteur trop gros", en: "AMA motor too big" }
+      - { n: 54, fr: "AMA : moteur trop petit", en: "AMA motor too small" }
+      - { n: 55, fr: "AMA : paramètre hors plage", en: "AMA parameter out of range" }
+      - { n: 56, fr: "AMA interrompue par l'utilisateur", en: "AMA interrupted by user" }
+      - { n: 57, fr: "AMA : dépassement de temps", en: "AMA timeout" }
+      - { n: 58, fr: "AMA : défaut interne", en: "AMA internal fault" }
+      - { n: 59, fr: "Limite de courant", en: "Current limit", terms: ["4-18"] }
+      - { n: 60, fr: "Verrouillage externe", en: "External interlock" }
+      - { n: 61, fr: "Erreur de suivi / de retour", en: "Feedback (tracking) error", terms: ["encodeur", "4-30", "4-31"] }
+      - { n: 62, fr: "Fréquence de sortie à la limite maximale", en: "Output frequency at maximum limit" }
+      - { n: 64, fr: "Limite de tension", en: "Voltage limit" }
+      - { n: 65, fr: "Surtempérature carte de commande", en: "Control board over-temperature" }
+      - { n: 66, fr: "Température du dissipateur basse", en: "Heatsink temperature low", terms: ["temperature basse"] }
+      - { n: 67, fr: "La configuration des options a changé", en: "Option configuration has changed" }
+      - { n: 68, fr: "Arrêt de sécurité activé (STO)", en: "Safe Stop activated", terms: ["sto", "borne 37", "safe torque off"] }
+      - { n: 69, fr: "Température carte de puissance", en: "Power card temperature" }
+      - { n: 70, fr: "Configuration variateur non autorisée", en: "Illegal FC configuration" }
+      - { n: 71, fr: "Arrêt de sécurité PTC 1", en: "PTC 1 safe stop", terms: ["mcb112"] }
+      - { n: 72, fr: "Défaillance dangereuse", en: "Dangerous failure", terms: ["sto", "securite"] }
+      - { n: 73, fr: "Redémarrage automatique après arrêt de sécurité", en: "Safe stop auto restart" }
+      - { n: 76, fr: "Configuration de l'unité de puissance", en: "Power unit setup" }
+      - { n: 77, fr: "Mode déclassé", en: "Derated mode", terms: ["derating", "14-59"] }
+      - { n: 79, fr: "Configuration de puissance non autorisée", en: "Illegal power section configuration" }
+      - { n: 80, fr: "Variateur initialisé aux valeurs par défaut", en: "Drive initialized to default value", terms: ["reset usine", "14-22"] }
+      - { n: 81, fr: "CSIV corrompu", en: "CSIV corrupt" }
+      - { n: 82, fr: "Erreur de paramètre CSIV", en: "CSIV parameter error" }
+      - { n: 83, fr: "Combinaison d'options non autorisée", en: "Illegal option combination" }
+      - { n: 84, fr: "Pas d'option de sécurité", en: "No safety option" }
+      - { n: 88, fr: "Détection d'option", en: "Option detection" }
+      - { n: 89, fr: "Glissement du frein mécanique", en: "Mechanical brake sliding" }
+      - { n: 90, fr: "Surveillance du retour", en: "Feedback monitor" }
+      - { n: 91, fr: "Réglages incorrects de l'entrée analogique 54", en: "Analog input 54 wrong settings", terms: ["switch a54"] }
+      - { n: 99, fr: "Rotor bloqué", en: "Locked rotor", terms: ["30-22", "moteur bloque"] }
+      - { n: 104, fr: "Défaut ventilateur de brassage", en: "Mixing fan fault" }
+      - { n: 122, fr: "Rotation moteur inattendue", en: "Motor rotation unexpected" }
+      - { n: 123, fr: "Modification du moteur", en: "Motor modification" }
+      - { n: 243, fr: "IGBT de freinage", en: "Brake IGBT" }
+      - { n: 244, fr: "Température du dissipateur", en: "Heatsink temperature" }
+      - { n: 245, fr: "Capteur de dissipateur", en: "Heatsink sensor" }
+      - { n: 246, fr: "Alimentation carte de puissance", en: "Power card supply" }
+      - { n: 247, fr: "Température carte de puissance", en: "Power card temperature" }
+      - { n: 248, fr: "Configuration de puissance non autorisée", en: "Illegal power section configuration" }
+      - { n: 250, fr: "Nouvelle pièce de rechange", en: "New spare part" }
+      - { n: 251, fr: "Nouveau code type", en: "New type code" }
+
+  # Demarreurs progressifs : libelles de declenchement (sans numerotation,
+  # la numerotation exacte est propre a chaque modele -> voir le manuel).
+  - id: mcd
+    label: "Démarreurs MCD"
+    section: "chapitre « Dépannage / Trip codes » du manuel"
+    scope:
+      - { family: demarreurs }
+    codes:
+      - { fr: "Surcharge moteur", en: "Motor overload" }
+      - { fr: "Temps de démarrage excessif", en: "Excess start time" }
+      - { fr: "Thermistance moteur", en: "Motor thermistor" }
+      - { fr: "Déséquilibre de courant", en: "Current imbalance" }
+      - { fr: "Fréquence réseau hors plage", en: "Frequency" }
+      - { fr: "Ordre des phases", en: "Phase sequence" }
+      - { fr: "Surintensité instantanée", en: "Instantaneous overcurrent" }
+      - { fr: "Perte d'alimentation / phase réseau", en: "Power loss / phase loss" }
+      - { fr: "Sous-intensité", en: "Undercurrent" }
+      - { fr: "Surtempérature du dissipateur", en: "Heatsink overtemperature" }
+      - { fr: "Raccordement moteur", en: "Motor connection" }
+      - { fr: "Entrée de déclenchement externe", en: "Input trip" }
+      - { fr: "Communication réseau (bus de terrain)", en: "Network communication" }
+      - { fr: "Communication démarreur", en: "Starter communication" }
+      - { fr: "Défaut interne", en: "Internal fault" }

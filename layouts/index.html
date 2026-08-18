@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}" data-theme="dark">
+<html lang="{{ .Site.LanguageCode }}" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Title }}</title>
     <meta name="description" content="{{ .Site.Params.description }}">
-    <meta name="theme-color" content="#0a0c11">
+    <meta name="theme-color" content="#f4f5f8">
     <link rel="icon" type="image/png" href="{{ " favicon.png" | relURL }}">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon.svg">
@@ -81,6 +81,15 @@
         .hero-search:focus-within { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-soft), var(--shadow); }
         .hero-search svg.lupe { width:22px; height:22px; color:var(--muted); flex:none; }
         .hero-search input { flex:1; background:none; border:none; outline:none; color:var(--text); font-size:1.05rem; font-family:inherit; min-width:0; }
+        /* Bandeau « recherche intelligente » (alarme / thème / gamme reconnus) */
+        .smart { display:none; align-items:flex-start; gap:10px; margin:12px auto 0; max-width:640px; padding:10px 14px;
+            border-radius:12px; background:var(--surface-2); border:1px solid var(--border); color:var(--muted);
+            font-size:.85rem; line-height:1.45; text-align:left; }
+        .smart.on { display:flex; }
+        .smart b { color:var(--text); font-weight:600; }
+        .smart i { font-style:normal; color:var(--muted-2); }
+        .smart .sm-ic { display:grid; place-items:center; width:22px; height:22px; border-radius:7px; flex:none;
+            background:var(--primary-soft); color:var(--primary); font-weight:800; font-size:.78rem; }
 
         .filters { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:26px 0 22px; }
         .chip { display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-weight:600; font-size:.87rem; transition:all .15s; }
@@ -197,6 +206,13 @@
         .ci-lang { font-size:.62rem; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
         .ci-lang.latest { background:var(--c); color:#fff; border-color:transparent; }
         .cmdk__item.route .ci-ic { background:color-mix(in srgb,var(--c) 22%,var(--surface-2)); color:var(--c); }
+        .cmdk__banner { margin:8px 8px 0; padding:10px 12px; border-radius:11px; background:var(--surface-2);
+            border:1px solid var(--border); color:var(--muted); font-size:.82rem; line-height:1.45;
+            display:flex; align-items:flex-start; gap:10px; }
+        .cmdk__banner b { color:var(--text); font-weight:600; }
+        .cmdk__banner i { font-style:normal; color:var(--muted-2); }
+        .cmdk__banner .sm-ic { display:grid; place-items:center; width:22px; height:22px; border-radius:7px; flex:none;
+            background:var(--primary-soft); color:var(--primary); font-weight:800; font-size:.78rem; }
         .cmdk__empty { padding:40px 16px; text-align:center; color:var(--muted); }
         .cmdk__foot { display:flex; gap:16px; padding:10px 16px; border-top:1px solid var(--border); color:var(--muted-2); font-size:.76rem; }
         .cmdk__foot span { display:inline-flex; align-items:center; gap:6px; }
@@ -258,7 +274,7 @@
             Rechercher…<span class="kbd">Ctrl K</span>
         </button>
         <button class="icon-btn" id="share-view" title="Copier le lien de cette vue (recherche + filtres)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
         </button>
         <button class="icon-btn" id="theme-toggle" title="Thème clair / sombre">
             <svg id="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -271,9 +287,10 @@
             <p>Variateurs iC7, iC2, VLT (FC), options et logiciels — {{ .Site.Params.footer_text }}</p>
             <label class="hero-search">
                 <svg class="lupe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="grid-search" placeholder="Filtrer, ou coller un code produit : « FC-302P1K1… », « IC7-… », « défaut iC7 »…" autocomplete="off">
+                <input type="text" id="grid-search" placeholder="Un défaut, un thème, un code : « alarme 14 », « surtension », « profinet », « FC-302P1K1… »" autocomplete="off">
                 <span class="kbd">Ctrl K</span>
             </label>
+            <div class="smart" id="smart"></div>
         </div>
 
         <div class="filters" id="filters">
@@ -389,7 +406,7 @@
         <div class="cmdk" role="dialog" aria-label="Recherche">
             <div class="cmdk__in">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="cmdk-input" placeholder="Rechercher, ou coller un code produit / défaut…" autocomplete="off">
+                <input type="text" id="cmdk-input" placeholder="Alarme, thème, gamme, code produit… (ex. « défaut de terre »)" autocomplete="off">
                 <span class="kbd">Esc</span>
             </div>
             <div class="cmdk__results" id="cmdk-results"></div>
@@ -401,6 +418,7 @@
     <div class="toast" id="toast"></div>
 
     <script id="catalog-data" type="application/json">{{ site.Data.catalog | jsonify }}</script>
+    <script id="keywords-data" type="application/json">{{ site.Data.keywords | jsonify }}</script>
     <script>
         let CATALOG = JSON.parse(document.getElementById('catalog-data').textContent);
         if (typeof CATALOG === 'string') CATALOG = JSON.parse(CATALOG);
@@ -452,21 +470,245 @@
         function toggleFav(id){ favs.has(id)?favs.delete(id):favs.add(id); store.set('favs',[...favs]); refreshFavMarks(); updateShareSel(); if(favOnly) applyFilters(); }
         function updateShareSel(){ const b=document.getElementById('share-sel'); b.style.display=favs.size?'inline-flex':'none'; document.getElementById('share-sel-txt').textContent='Partager ma sélection ('+favs.size+')'; }
 
-        /* Détection de code produit / défaut -> gamme */
-        function detectRoute(raw){
-            const q = norm(raw);
-            if(!q) return null;
-            const fault = /(defaut|alarme|fault|alarm|erreur|error|trip|warning|avertissement)/.test(q);
-            let prod=null, famId=null;
-            if(/fc.?301|fc.?302|fc30[12]|automationdrive/.test(q)){ prod='FC-302'; famId='vlt'; }
-            else if(/fc.?202|aqua.?drive/.test(q)){ prod='FC-202'; famId='vlt'; }
-            else if(/fc.?102|hvac.?drive/.test(q)){ prod='FC-102'; famId='vlt'; }
-            else if(/ic7|ic-7|ic 7/.test(q)){ famId='ic7'; if(/aqua/.test(q)) prod='iC-7 AQUA'; else if(/hvac/.test(q)) prod='iC7-HVACR'; else prod='iC7 Automation'; }
-            else if(/ic2|ic-2|ic 2/.test(q)){ famId='ic2'; prod='iC2'; }
-            if(!famId) return null;
-            // exiger un indice de "code" (chiffre) OU mot défaut, pour ne pas gêner la recherche texte simple
-            if(!fault && !/\d/.test(q) && q.length < 4) return null;
-            return { prod, famId, fault };
+        /* ==========================================================================
+           Moteur de recherche — dictionnaire compilé dans la page (data/keywords.yaml)
+           Tout est indexé en mémoire au chargement : aucune requête réseau, aucune
+           base de données (compatible GitHub Pages), coût par frappe ~1 ms.
+           ========================================================================== */
+        let KW = JSON.parse(document.getElementById('keywords-data').textContent);
+        if (typeof KW === 'string') KW = JSON.parse(KW);
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+        /* Synonymes des types de documents (« fiche technique » -> datasheet, etc.) */
+        const TYPE_SYN = { brochure:'brochure presentation', guide:'guide manuel',
+            manual:'manuel notice utilisation', datasheet:'fiche technique datasheet caracteristiques',
+            drawings:'encombrements plans dessins 3d cad modeles', list:'liste guides application',
+            software:'logiciel software firmware outil telechargement' };
+        DOCS.forEach(d => { d.nName=norm(d.name); d.nPath=norm(d.cat+' '+d.group+' '+d.famLabel);
+            d.text += ' '+norm(TYPE_SYN[d.type]||''); d.kw=''; });
+
+        /* Une règle « scope » cible des documents : toutes ses clés doivent correspondre. */
+        function ruleMatch(d, r){
+            if(r.family && d.family!==r.family) return false;
+            if(r.type && d.type!==r.type) return false;
+            if(r.cat && norm(d.cat).indexOf(norm(r.cat))<0) return false;
+            if(r.group && norm(d.group).indexOf(norm(r.group))<0) return false;
+            if(r.name && d.nName.indexOf(norm(r.name))<0) return false;
+            if(r.not && (d.nName+' '+d.nPath).indexOf(norm(r.not))>=0) return false;
+            return true;
+        }
+        function resolveScope(scope){
+            const out=[]; if(!scope||!scope.length) return out;
+            DOCS.forEach((d,i)=>{ if(scope.some(r=>ruleMatch(d,r))) out.push(i); }); return out;
+        }
+
+        /* Thèmes, gammes et alarmes -> listes d'indices de documents */
+        const TOPICS = (KW.topics||[]).map(t=>({ id:t.id, label:t.label||t.id, hint:t.hint||'',
+            terms:(t.terms||[]).map(norm).filter(Boolean), docs:resolveScope(t.scope) }))
+            .filter(t=>t.terms.length && t.docs.length);
+        const TOPIC_BY_ID={}; TOPICS.forEach(t=>TOPIC_BY_ID[t.id]=t);
+        const PRODUCTS = (KW.products||[]).map(p=>({ cat:p.cat, terms:(p.terms||[]).map(norm).filter(Boolean),
+            docs:resolveScope([{ cat:p.cat }]) })).filter(p=>p.terms.length && p.docs.length);
+        const ALARMS=[];
+        (KW.alarms||[]).forEach(g=>{
+            const docs=resolveScope(g.scope); if(!docs.length) return;
+            (g.codes||[]).forEach(c=>ALARMS.push({ n:(c.n===0||c.n)?c.n:null, fr:c.fr||'', en:c.en||'',
+                gamme:g.label||'', section:g.section||'', docs:docs,
+                label:norm((c.fr||'')+' '+(c.en||'')),                        // libellé seul
+                text:norm([c.fr,c.en,(c.terms||[]).join(' ')].join(' ')) }));  // libellé + mots associés
+        });
+        /* Libellés découpés en mots : « surtension » doit trouver l'alarme 7, mais
+           « démarre » ne doit pas trouver « communication démarreur ». */
+        const wordSet = s => new Set(s.split(/[^a-z0-9+\/]+/).filter(Boolean));
+        ALARMS.forEach(a=>{ a.labelW=wordSet(a.label); a.textW=wordSet(a.text); });
+
+        /* Synonymes : mots simples (expansion de token) et locutions */
+        const SYN={}, PHRASES=[];
+        (KW.synonyms||[]).forEach(grp=>{
+            const g=(grp||[]).map(norm).filter(Boolean);
+            g.forEach(w=>{ const alts=g.filter(x=>x!==w);
+                if(w.indexOf(' ')<0) SYN[w]=(SYN[w]||[]).concat(alts.filter(a=>a.indexOf(' ')<0));
+                else PHRASES.push({ p:w, alts:alts }); });
+        });
+
+        /* Le vocabulaire du dictionnaire est agrégé sur les documents qu'il cible :
+           un mot-clé de thème ou un libellé d'alarme devient donc « cherchable ». */
+        TOPICS.forEach(t=>{ const blob=' '+norm(t.label)+' '+t.terms.join(' ');
+            t.docs.forEach(i=>{ DOCS[i].kw+=blob; }); });
+        ALARMS.forEach(a=>{ const blob=' '+a.text+(a.n!==null?' alarme '+a.n+' defaut '+a.n+' a'+a.n:'');
+            a.docs.forEach(i=>{ DOCS[i].kw+=blob; }); });
+        /* Le vocabulaire est stocké en ensemble de mots : test O(1) au lieu d'un
+           indexOf sur plusieurs kilo-octets (la recherche reste sous la milliseconde). */
+        DOCS.forEach(d=>{ d.kwSet=new Set(d.kw.split(/[^a-z0-9+\/-]+/).filter(Boolean)); });
+
+        const FAULTW=/^(defaut|defauts|alarme|alarmes|alarm|alarms|erreur|erreurs|error|errors|fault|faults|trip|warning|avertissement|panne|code|codes|declenchement)$/;
+        const STOP=new Set(['de','du','des','la','le','les','un','une','et','ou','en','au','aux','pour','sur',
+            'dans','avec','par','d','l','the','of','for','with','my','mon','ma','mes','ce','cette','se']);
+        const isCode = t => t.length>=6 && /\d/.test(t) && /[a-z]/.test(t);
+
+        /* Numéros d'alarme : « alarme 14 », « défaut n°4 », « A14 », « 29 alarme » */
+        function alarmNumbers(q, tokens){
+            const out=[]; let m;
+            const re=/(?:defauts?|alarmes?|alarms?|erreurs?|errors?|faults?|trip|warning|avertissement|code)\s*n?[°o]?\s*(\d{1,3})/g;
+            while((m=re.exec(q))) out.push(+m[1]);
+            const hasFaultWord = tokens.some(t=>FAULTW.test(t));
+            tokens.forEach(t=>{
+                const s=/^[aw](\d{1,3})$/.exec(t);
+                if(s && (tokens.length===1 || hasFaultWord)) out.push(+s[1]);
+                if(/^\d{1,3}$/.test(t) && hasFaultWord) out.push(+t);
+            });
+            return out.filter((v,i)=>out.indexOf(v)===i);
+        }
+
+        /* Analyse d'une requête -> documents classés + ce qui a été reconnu.
+           Sémantique : chaque mot tapé doit être « satisfait » par au moins un canal
+           (nom, catégorie, type, thème, alarme, gamme) — puis on additionne les poids. */
+        function analyze(raw){
+            const q=norm(raw||'').trim(); if(!q) return null;
+            const all=q.split(/[^a-z0-9+\/]+/).filter(Boolean);
+            if(!all.length) return null;
+            /* les mots vides ne doivent pas élargir la recherche (« défaut DE terre ») */
+            const tokens=all.filter(t=>!STOP.has(t)).length ? all.filter(t=>!STOP.has(t)) : all;
+
+            /* variantes par mot : singulier/pluriel puis synonymes simples puis locutions */
+            const variants=tokens.map(t=>{
+                const v=[t];
+                if(t.length>=5 && t.charAt(t.length-1)==='s') v.push(t.slice(0,-1));
+                (SYN[t]||[]).forEach(s=>{ if(v.indexOf(s)<0) v.push(s); });
+                return v;
+            });
+            PHRASES.forEach(ph=>{
+                if(q.indexOf(ph.p)<0) return;
+                const words=ph.p.split(' ');
+                tokens.forEach((t,i)=>{ if(words.indexOf(t)>=0) ph.alts.forEach(a=>{ if(variants[i].indexOf(a)<0) variants[i].push(a); }); });
+            });
+
+            /* gamme / code produit collé : on retient l'alias le plus long présent */
+            let product=null;
+            PRODUCTS.forEach(p=>p.terms.forEach(t=>{
+                if(t.length>=2 && q.indexOf(t)>=0 && (!product || t.length>product.term.length)) product={ p:p, term:t };
+            }));
+
+            /* thèmes : mot exact (3), début de terme (2), sous-chaîne (1) */
+            const topicHits=[];
+            TOPICS.forEach(t=>{
+                let w=0; const cov={};
+                for(let k=0;k<t.terms.length;k++){
+                    const term=t.terms[k];
+                    if(term.indexOf(' ')>=0){
+                        if(q.indexOf(term)>=0){ w=Math.max(w,3);
+                            const ws=term.split(' '); tokens.forEach((tk,i)=>{ if(ws.indexOf(tk)>=0) cov[i]=1; }); }
+                        continue;
+                    }
+                    for(let i=0;i<tokens.length;i++){
+                        const vs=variants[i];
+                        for(let x=0;x<vs.length;x++){
+                            const v=vs[x]; if(v.length<2) continue;
+                            if(v===term){ w=Math.max(w,3); cov[i]=1; }
+                            else if(v.length>=3 && term.indexOf(v)===0){ w=Math.max(w,2); cov[i]=1; }   // début de terme
+                            else if(term.length>=4 && v.indexOf(term)===0){ w=Math.max(w,2); cov[i]=1; } // forme allongée
+                            else if(v.length>=5 && term.indexOf(v)>=0){ w=Math.max(w,1); cov[i]=1; }
+                        }
+                    }
+                }
+                if(w) topicHits.push({ t:t, w:w, cov:cov });
+            });
+            topicHits.sort((a,b)=>b.w-a.w);
+
+            /* alarmes : par numéro, sinon par libellé tapé en clair (« surtension »).
+               Sans mot « défaut/alarme », on n'accepte que le libellé lui-même : les mots
+               associés (ex. « profinet » sur l'alarme 34) ne doivent pas détourner la recherche. */
+            const nums=alarmNumbers(q,tokens);
+            const faultWord=tokens.some(t=>FAULTW.test(t));
+            const wordIdx=[]; tokens.forEach((t,i)=>{ if(t.length>=4 && !FAULTW.test(t)) wordIdx.push(i); });
+            let alarmHits=[];
+            if(nums.length) alarmHits=ALARMS.filter(a=>a.n!==null && nums.indexOf(a.n)>=0);
+            if(!alarmHits.length && wordIdx.length){
+                /* on compare aux mots réellement tapés (pas aux synonymes) : un libellé
+                   d'alarme est un texte précis, l'expansion créerait de faux positifs. */
+                const match=(a,field)=>wordIdx.every(i=>{
+                    const t=tokens[i], s=a[field];
+                    return s.has(t) || s.has(t+'s') || (t.charAt(t.length-1)==='s' && s.has(t.slice(0,-1)));
+                });
+                alarmHits=ALARMS.filter(a=>match(a, faultWord?'textW':'labelW'));
+                /* repli sur les mots associés seulement si la requête est assez précise
+                   (≥ 2 mots) : « profinet » seul ne doit pas mener à l'alarme 34. */
+                if(!alarmHits.length && !faultWord && wordIdx.length>=2)
+                    alarmHits=ALARMS.filter(a=>match(a,'textW'));
+                if(alarmHits.length>8) alarmHits=[];   // trop générique : on laisse parler les thèmes
+            }
+            /* un numéro ou le mot « défaut » -> l'alarme prime ; un simple libellé -> à peine
+               au-dessus des thèmes, pour ne pas écraser un document dont le nom correspond. */
+            const alarmW = (nums.length||faultWord) ? 7 : 4.5;
+
+            /* score par document, mot par mot */
+            const per=[];
+            for(let i=0;i<tokens.length;i++){
+                const m=new Map(), vs=variants[i], tk=tokens[i];
+                for(let j=0;j<DOCS.length;j++){
+                    const d=DOCS[j]; let w=0;
+                    for(let x=0;x<vs.length && w<6;x++){
+                        const v=vs[x]; if(v.length<2) continue;
+                        if(d.nName.indexOf(v)===0) w=6;                       // début du nom du document
+                        else if(d.nName.indexOf(v)>=0) w=Math.max(w,5);       // nom du document
+                        else if(d.nPath.indexOf(v)>=0) w=Math.max(w,4);       // catégorie / groupe / gamme
+                        else if(d.text.indexOf(v)>=0) w=Math.max(w,3);        // type de document
+                        else if(d.kwSet.has(v)) w=Math.max(w,2);              // dictionnaire
+                    }
+                    if(w) m.set(j,w);
+                }
+                topicHits.forEach(th=>{ if(!th.cov[i]) return;
+                    th.t.docs.forEach(j=>{ const w=1+th.w; if((m.get(j)||0)<w) m.set(j,w); }); });
+                if(product && (product.term.indexOf(tk)>=0 || tk.indexOf(product.term)>=0 || isCode(tk)))
+                    product.p.docs.forEach(j=>{ if((m.get(j)||0)<4) m.set(j,4); });
+                if(alarmHits.length){
+                    const rel = FAULTW.test(tk) || /^\d{1,3}$/.test(tk) || /^[aw]\d{1,3}$/.test(tk)
+                        || alarmHits.some(a=>a.text.indexOf(tk)>=0);
+                    if(rel) alarmHits.forEach(a=>a.docs.forEach(j=>{ if((m.get(j)||0)<alarmW) m.set(j,alarmW); }));
+                }
+                /* numéro inconnu du dictionnaire : on renvoie vers le chapitre dépannage */
+                if(nums.length && !alarmHits.length && TOPIC_BY_ID['depannage'] && (/^\d{1,3}$/.test(tk)||FAULTW.test(tk)))
+                    TOPIC_BY_ID['depannage'].docs.forEach(j=>{ if((m.get(j)||0)<3) m.set(j,3); });
+                per.push(m);
+            }
+
+            /* intersection des mots + bonus « gamme reconnue » et « essentiel » */
+            const hits=new Map();
+            const prodSet=product ? new Set(product.p.docs) : null;
+            per[0].forEach((w,j)=>{
+                let s=w;
+                for(let i=1;i<per.length;i++){ const x=per[i].get(j); if(!x){ s=0; break; } s+=x; }
+                if(s) hits.set(j, s+(prodSet&&prodSet.has(j)?2:0)+(DOCS[j].ess?0.5:0));
+            });
+            const order=[...hits.keys()].sort((a,b)=>(hits.get(b)-hits.get(a))||(a-b));
+            return { q:q, tokens:tokens, hits:hits, order:order, product:product, faultWord:faultWord,
+                     topics:topicHits.slice(0,3), alarms:alarmHits.slice(0,6), nums:nums };
+        }
+
+        /* Bandeau explicatif : ce que la recherche a reconnu */
+        function bannerHTML(A){
+            if(!A) return '';
+            /* mot tapé qui apparaît dans beaucoup de libellés (« freinage »…) : c'est un
+               thème, pas un défaut précis — on n'affiche l'alarme que si elle est ciblée. */
+            const showAlarm = A.alarms.length && (A.nums.length || A.faultWord || A.alarms.length<=2);
+            if(showAlarm){
+                const g=A.alarms[0];
+                const list=A.alarms.map(a=>'<b>'+(a.n!==null?'Alarme '+a.n+' · ':'')+esc(a.fr)+'</b>'
+                    +(a.en?' <i>('+esc(a.en)+')</i>':'')).join(' &nbsp;·&nbsp; ');
+                return '<span class="sm-ic">!</span><span>'+list+'<br>'+esc(g.gamme)
+                    +(g.section?' — '+esc(g.section):'')+'</span>';
+            }
+            if(A.nums.length){
+                return '<span class="sm-ic">?</span><span>Code <b>'+A.nums.join(', ')+'</b> non répertorié dans le dictionnaire — '
+                    +'voir la liste des alarmes du guide de programmation / manuel de configuration de la gamme.</span>';
+            }
+            if(A.topics.length && A.topics[0].w>=2){   // un simple bout de mot ne fait pas un thème
+                const t=A.topics[0].t;
+                return '<span class="sm-ic">#</span><span><b>'+esc(t.label)+'</b>'
+                    +(t.hint?' — '+esc(t.hint):'')+'</span>';
+            }
+            if(A.product) return '<span class="sm-ic">&rarr;</span><span>Gamme reconnue : <b>'+esc(A.product.p.cat)+'</b></span>';
+            return '';
         }
 
         /* Thème */
@@ -488,34 +730,39 @@
         cats.forEach(c=>{ const b=c.querySelector('.cat__count'); if(b) b.dataset.total=b.textContent; });
 
         function applyFilters(){
-            const route = detectRoute(gridQuery);
-            const tk = route ? [] : norm(gridQuery.trim()).split(/\s+/).filter(Boolean);
+            const A = analyze(gridQuery);
             grid.classList.remove('lang-fr','lang-en'); if(lang==='fr') grid.classList.add('lang-fr'); if(lang==='en') grid.classList.add('lang-en');
             let visible=0;
+            DOCS.forEach((d,i)=>{
+                let ok=true;
+                if(activeFamily!=='all' && d.family!==activeFamily) ok=false;
+                if(ok && essOnly && !d.ess) ok=false;
+                if(ok && favOnly && !favs.has(d.id)) ok=false;
+                if(ok && sharedSel && !sharedSel.includes(d.id)) ok=false;
+                if(ok && selTypes.size && !selTypes.has(d.type)) ok=false;
+                if(ok && lang!=='all'){
+                    const dl=(d.versions||[]).map(v=>String(v.lang).toUpperCase());
+                    if(dl.length && dl.indexOf(lang.toUpperCase())<0) ok=false;
+                }
+                if(ok && A && !A.hits.has(i)) ok=false;
+                if(d.el) d.el.style.display= ok?'':'none';
+                if(ok) visible++;
+            });
+            const filtered = essOnly||favOnly||sharedSel||selTypes.size||lang!=='all'||!!A;
             cats.forEach(cat=>{
-                let famOk = activeFamily==='all' || cat.dataset.family===activeFamily;
-                if(route){ famOk = route.prod ? (cat.querySelector('h2').textContent===route.prod) : (cat.dataset.family===route.famId); }
-                if(!famOk){ cat.style.display='none'; return; }
                 let cv=0;
                 cat.querySelectorAll('.grp').forEach(grp=>{
                     let gv=0;
-                    grp.querySelectorAll('.doc').forEach(doc=>{
-                        let ok=true;
-                        if(essOnly && doc.dataset.ess!=='1') ok=false;
-                        if(ok && favOnly && !favs.has(doc.dataset.id)) ok=false;
-                        if(ok && sharedSel && !sharedSel.includes(doc.dataset.id)) ok=false;
-                        if(ok && selTypes.size && !selTypes.has(doc.dataset.type)) ok=false;
-                        if(ok && lang!=='all'){ const dl=doc.dataset.langs.toUpperCase(); if(dl.trim() && !dl.includes(lang.toUpperCase())) ok=false; }
-                        if(ok && tk.length) ok = tk.every(t=>norm(doc.dataset.search).includes(t));
-                        doc.style.display= ok?'':'none'; if(ok){gv++;cv++;visible++;}
-                    });
-                    grp.style.display= gv?'':'none';
+                    grp.querySelectorAll('.doc').forEach(doc=>{ if(doc.style.display!=='none') gv++; });
+                    grp.style.display= gv?'':'none'; cv+=gv;
                 });
                 cat.style.display= cv?'':'none';
-                const b=cat.querySelector('.cat__count'); if(b) b.textContent=(essOnly||favOnly||sharedSel||selTypes.size||tk.length||lang!=='all')?cv:(b.dataset.total||b.textContent);
+                const b=cat.querySelector('.cat__count'); if(b) b.textContent= filtered?cv:(b.dataset.total||b.textContent);
             });
-            if(route){ countEl.textContent = (route.prod||FAM[route.famId].label)+' · '+visible+' doc'+(visible>1?'s':''); }
-            else countEl.textContent = visible+(visible>1?' documents':' document');
+            countEl.textContent = visible+(visible>1?' documents':' document');
+            /* bandeau : alarme / thème / gamme reconnus */
+            const sm=document.getElementById('smart'), html=bannerHTML(A);
+            sm.innerHTML=html; sm.classList.toggle('on', !!html);
             body.classList.toggle('no-results', visible===0);
             document.getElementById('empty-msg').textContent = 'Aucun document ne correspond'+(gridQuery?' à « '+gridQuery+' »':'')+'.';
             syncURL();
@@ -603,30 +850,28 @@
         /* Command palette */
         const cmdk=document.getElementById('cmdk'), cmdkInput=document.getElementById('cmdk-input'), cmdkResults=document.getElementById('cmdk-results');
         let cmdkItems=[], cmdkActive=0;
-        const scoreDoc=(d,q)=>{ const n=norm(d.name); if(n.startsWith(q))return 0; if(n.includes(' '+q)||n.includes('-'+q))return 1; if(n.includes(q))return 2; return 3; };
         const hl=(t,q)=>{ if(!q)return t; const i=norm(t).indexOf(q); if(i<0)return t; return t.slice(0,i)+'<mark>'+t.slice(i,i+q.length)+'</mark>'+t.slice(i+q.length); };
         function renderCmdk(query){
-            const q=norm(query.trim()), tk=q.split(/\s+/).filter(Boolean);
-            const route = detectRoute(query);
-            let list, head;
-            if(route){
-                list = DOCS.filter(d => route.prod ? d.cat===route.prod : d.family===route.famId);
-                if(route.fault){ list.sort((a,b)=> (/(programmation|utilisation|configuration)/.test(norm(b.name))?1:0) - (/(programmation|utilisation|configuration)/.test(norm(a.name))?1:0)); }
-                head = (route.prod||FAM[route.famId].label)+(route.fault?' · défauts & alarmes → guide':'')+' · '+list.length+' doc'+(list.length>1?'s':'');
-            } else if(!tk.length){
+            const A=analyze(query);
+            let list, head, banner='', q='';
+            if(!A){
                 const rec = recents.map(id=>byId[id]).filter(Boolean);
                 list = rec.length ? rec.slice(0,8) : DOCS.filter(d=>d.ess).slice(0,8);
                 head = rec.length ? 'Récemment consultés' : 'Documents essentiels';
             } else {
-                list = DOCS.filter(d=>tk.every(t=>d.text.includes(t))).sort((a,b)=>scoreDoc(a,q)-scoreDoc(b,q)).slice(0,40);
+                list = A.order.slice(0,40).map(i=>DOCS[i]);
+                banner = bannerHTML(A);
+                q = A.tokens[0];
                 head = list.length+' résultat'+(list.length>1?'s':'');
             }
+            const bnr = banner ? '<div class="cmdk__banner">'+banner+'</div>' : '';
             cmdkItems=list; cmdkActive=0;
-            if(!list.length){ cmdkResults.innerHTML='<div class="cmdk__empty">Aucun résultat pour « '+query+' »</div>'; return; }
-            let html='<div class="cmdk__group">'+head+'</div>';
+            if(!list.length){ cmdkResults.innerHTML=bnr+'<div class="cmdk__empty">Aucun résultat pour « '+esc(query)+' »</div>'; return; }
+            const routed = !!(A && (A.alarms.length || A.product));
+            let html=bnr+'<div class="cmdk__group">'+head+'</div>';
             list.forEach((d,i)=>{
                 const badges=(d.versions||[]).map(v=>'<span class="ci-lang">'+v.lang+'</span>').join('');
-                html+='<div class="cmdk__item'+(i===0?' active':'')+(route?' route':'')+'" data-i="'+i+'" style="--c:'+d.color+'">'
+                html+='<div class="cmdk__item'+(i===0?' active':'')+(routed?' route':'')+'" data-i="'+i+'" style="--c:'+d.color+'">'
                     +'<span class="ci-ic">'+svgIcon(d.type)+'</span>'
                     +'<span class="ci-main"><div class="ci-name">'+hl(d.name,q)+(d.ess?' <span style="color:var(--primary);font-size:.72rem">★</span>':'')+'</div>'
                     +'<div class="ci-path">'+d.cat+(d.group?' › '+d.group:'')+' · '+d.famLabel+'</div></span>'

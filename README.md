@@ -20,5 +20,37 @@ Le portail est organisé par gammes de produits pour faciliter l'accès aux info
 - **My Drive Insight** & **MCT-10** : Liens directs vers les dernières versions des outils de paramétrage.
 - **Librairies PLC** : Ressources pour l'intégration dans les contrôleurs logiques.
 
+## Recherche par thème et par alarme
+
+La recherche ne se limite pas au nom des documents : un dictionnaire métier
+(`data/keywords.yaml`) relie le vocabulaire technique aux documents du catalogue.
+On peut donc taper un défaut lu sur l'afficheur (« alarme 14 », « A29 »,
+« surtension », « défaut de terre »), un thème (« harmoniques », « STO »,
+« PROFINET », « marche à sec », « derating ») ou coller un code produit
+(« FC-302P1K1T5E20H2 ») : un bandeau indique ce qui a été reconnu et les
+documents correspondants sont filtrés/classés.
+
+Le dictionnaire est **compilé dans la page au build** puis indexé en mémoire :
+aucune base de données, aucune requête réseau (compatible GitHub Pages),
+~0,1 à 3 ms par frappe.
+
+### Enrichir le dictionnaire
+
+Tout se passe dans `data/keywords.yaml` (l'en-tête du fichier documente les règles) :
+
+| Section | Rôle |
+|---|---|
+| `products` | alias de gammes et débuts de codes produits → catégorie du catalogue |
+| `synonyms` | groupes de mots équivalents (`variateur` = `vfd` = `drive`…) |
+| `topics` | thèmes techniques : `terms` (ce qu'on tape) → `scope` (documents ciblés) |
+| `alarms` | codes de défauts et leurs libellés FR/EN → document qui les documente |
+
+Un `scope` cible les documents par `family`, `cat`, `group`, `type`, `name`
+(sous-chaîne) et `not` (exclusion). Ajouter un thème = ajouter un bloc à
+`topics` ; aucun code à modifier.
+
+> Les libellés d'alarmes sont une **aide à la recherche** : le PDF Danfoss
+> reste la référence pour la cause exacte et la procédure.
+
 ---
 *Ce portail est maintenu par MEDIA MESURES pour garantir un accès rapide et structuré aux ressources techniques officielles.*
