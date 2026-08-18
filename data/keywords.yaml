@@ -20,10 +20,13 @@
 #    name:   nom du document  (sous-chaine, ex. "programmation")
 #    not:    exclusion (sous-chaine testee sur nom + groupe + categorie)
 #
-#  AVERTISSEMENT : les libelles d'alarmes ci-dessous sont une AIDE A LA
-#  RECHERCHE (retrouver le bon PDF rapidement). Le document officiel Danfoss
-#  reste la seule reference : verifier le libelle exact, la cause et la
-#  procedure dans le guide de programmation de la gamme concernee.
+#  Les libelles d'alarmes/evenements de la section 4 sont RELEVES DANS LES
+#  GUIDES OFFICIELS Danfoss (chapitre indique par `section` de chaque groupe) :
+#  guides de programmation FC-102/202/302, guides d'application iC2 et iC7,
+#  manuel d'utilisation MCD 600. Le libelle FR des VLT et de l'iC2 est le texte
+#  affiche sur le panneau de commande (abrege) ; `terms` ajoute les mots
+#  complets utiles a la recherche.
+#  Le PDF reste la reference pour la cause exacte et la procedure a appliquer.
 # ============================================================================
 
 version: 1
@@ -33,6 +36,14 @@ version: 1
 #    (un terme peut etre un debut de code produit colle depuis un devis)
 # ---------------------------------------------------------------------------
 products:
+  # gammes entieres (family) : utile quand l'utilisateur ne precise pas l'application
+  - family: ic7
+    terms: ["ic7", "ic-7", "ic 7", "serie ic7", "series ic7"]
+  - family: vlt
+    terms: ["vlt", "fc-30", "fc-20", "fc-10", "serie fc"]
+  - family: demarreurs
+    terms: ["mcd", "demarreur progressif", "soft starter", "softstarter"]
+  # categories precises
   - cat: "FC-302"
     terms: ["fc-302", "fc302", "fc 302", "fc-301", "fc301", "automationdrive", "automation drive", "vlt automation"]
   - cat: "FC-202"
@@ -561,131 +572,675 @@ topics:
       - { name: "My Drive Insight" }
 
 # ---------------------------------------------------------------------------
-# 4. Alarmes & defauts
-#    scope = document qui contient la liste des alarmes de la gamme.
-#    Les libelles servent a retrouver le document : verifier le detail, la
-#    cause et la procedure dans le PDF officiel.
+# 4. Alarmes, defauts et evenements
+#    Libelles releves dans les guides officiels Danfoss (voir `section`) :
+#      - VLT FC-102/202/302 : guide de programmation, liste des codes
+#        d'alarme/avertissement (le libelle FR est le texte affiche sur le LCP)
+#      - iC2-Micro : guide d'application, evenements d'avertissement et de defaut
+#      - iC7 : guide d'application, tableau recapitulatif des evenements
+#        (numero d'evenement + groupe hexadecimal + type : avertissement,
+#        defaut, defaut bloquant)
+#      - MCD 600 : manuel d'utilisation, messages de declenchement
+#    `terms` = mots de recherche supplementaires (les libelles LCP sont abreges).
+#    Le PDF reste la reference pour la cause exacte et la procedure.
 # ---------------------------------------------------------------------------
 alarms:
-  - id: vlt-fc
+  - id: vlt-commun
     label: "VLT FC-102 / FC-202 / FC-302"
-    section: "chapitre « Avertissements et alarmes » du guide de programmation"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
     scope:
       - { family: vlt, type: guide, name: "guide de programmation" }
     codes:
-      - { n: 1,  fr: "Tension 10 V basse", en: "10 V low", terms: ["borne 50"] }
-      - { n: 2,  fr: "Erreur zéro live", en: "Live zero error", terms: ["signal absent", "4-20ma perdu", "6-01"] }
-      - { n: 3,  fr: "Pas de moteur", en: "No motor", terms: ["moteur non connecte", "1-80"] }
-      - { n: 4,  fr: "Perte de phase secteur", en: "Mains phase loss", terms: ["desequilibre reseau", "14-12"] }
-      - { n: 5,  fr: "Tension bus CC élevée (avertissement)", en: "DC link voltage high" }
-      - { n: 6,  fr: "Tension bus CC basse (avertissement)", en: "DC link voltage low" }
-      - { n: 7,  fr: "Surtension bus CC", en: "DC overvoltage", terms: ["surtension", "deceleration trop rapide"] }
-      - { n: 8,  fr: "Sous-tension bus CC", en: "DC undervoltage", terms: ["sous tension", "coupure reseau"] }
-      - { n: 9,  fr: "Surcharge onduleur", en: "Inverter overloaded", terms: ["surcharge variateur"] }
-      - { n: 10, fr: "Surtempérature moteur ETR (surcharge calculée)", en: "Motor ETR over temperature", terms: ["1-90", "surcharge moteur"] }
-      - { n: 11, fr: "Surtempérature thermistance moteur", en: "Motor thermistor over temperature", terms: ["ptc", "sonde moteur"] }
-      - { n: 12, fr: "Limite de couple atteinte", en: "Torque limit", terms: ["4-16", "4-17"] }
-      - { n: 13, fr: "Surintensité", en: "Overcurrent", terms: ["pic de courant"] }
-      - { n: 14, fr: "Défaut de terre", en: "Earth (ground) fault", terms: ["defaut terre", "masse", "isolement moteur"] }
-      - { n: 15, fr: "Matériel incompatible", en: "Hardware mismatch" }
-      - { n: 16, fr: "Court-circuit", en: "Short circuit", terms: ["court circuit moteur", "phase a phase"] }
-      - { n: 17, fr: "Dépassement du temps de mot de contrôle", en: "Control word timeout", terms: ["8-04", "timeout bus", "communication perdue"] }
-      - { n: 20, fr: "Erreur d'entrée de température", en: "Temperature input error" }
-      - { n: 21, fr: "Erreur de paramètre", en: "Parameter error" }
-      - { n: 22, fr: "Frein mécanique de levage", en: "Hoist mechanical brake", terms: ["frein levage"] }
-      - { n: 23, fr: "Défaut ventilateur interne", en: "Internal fan fault" }
-      - { n: 24, fr: "Défaut ventilateur externe", en: "External fan fault" }
-      - { n: 25, fr: "Résistance de freinage court-circuitée", en: "Brake resistor short-circuited" }
-      - { n: 26, fr: "Limite de puissance de la résistance de freinage", en: "Brake resistor power limit", terms: ["2-12", "2-13"] }
-      - { n: 27, fr: "Hacheur de freinage court-circuité", en: "Brake chopper short-circuited", terms: ["igbt frein"] }
-      - { n: 28, fr: "Échec du test de frein", en: "Brake check failed", terms: ["2-15"] }
-      - { n: 29, fr: "Température du dissipateur", en: "Heatsink temperature", terms: ["surchauffe", "radiateur"] }
-      - { n: 30, fr: "Phase moteur U manquante", en: "Motor phase U missing" }
-      - { n: 31, fr: "Phase moteur V manquante", en: "Motor phase V missing" }
-      - { n: 32, fr: "Phase moteur W manquante", en: "Motor phase W missing" }
-      - { n: 33, fr: "Défaut de charge (inrush)", en: "Inrush fault", terms: ["precharge", "soft charge"] }
-      - { n: 34, fr: "Défaut de communication bus de terrain", en: "Fieldbus communication fault", terms: ["profibus", "profinet"] }
-      - { n: 35, fr: "Défaut d'option", en: "Option fault", terms: ["carte option"] }
-      - { n: 36, fr: "Défaut secteur", en: "Mains failure", terms: ["coupure reseau", "14-10"] }
-      - { n: 37, fr: "Déséquilibre de phase", en: "Phase imbalance" }
-      - { n: 38, fr: "Défaut interne", en: "Internal fault", terms: ["code interne"] }
-      - { n: 39, fr: "Capteur de dissipateur", en: "Heatsink sensor" }
-      - { n: 40, fr: "Surcharge sortie logique borne 27", en: "Overload of digital output terminal 27" }
-      - { n: 41, fr: "Surcharge sortie logique borne 29", en: "Overload of digital output terminal 29" }
-      - { n: 42, fr: "Surcharge sortie logique X30/6 ou X30/7", en: "Overload of digital output on X30" }
-      - { n: 45, fr: "Défaut de terre 2", en: "Earth fault 2" }
-      - { n: 46, fr: "Alimentation carte de puissance", en: "Power card supply" }
-      - { n: 47, fr: "Alimentation 24 V basse", en: "24 V supply low" }
-      - { n: 48, fr: "Alimentation 1,8 V basse", en: "1.8 V supply low" }
-      - { n: 49, fr: "Limite de vitesse", en: "Speed limit", terms: ["4-11", "4-13"] }
-      - { n: 50, fr: "Échec de calibrage AMA", en: "AMA calibration failed" }
-      - { n: 51, fr: "AMA : vérifier Unom et Inom", en: "AMA check Unom and Inom", terms: ["1-20", "1-22"] }
-      - { n: 52, fr: "AMA : Inom trop bas", en: "AMA low Inom" }
-      - { n: 53, fr: "AMA : moteur trop gros", en: "AMA motor too big" }
-      - { n: 54, fr: "AMA : moteur trop petit", en: "AMA motor too small" }
-      - { n: 55, fr: "AMA : paramètre hors plage", en: "AMA parameter out of range" }
-      - { n: 56, fr: "AMA interrompue par l'utilisateur", en: "AMA interrupted by user" }
-      - { n: 57, fr: "AMA : dépassement de temps", en: "AMA timeout" }
-      - { n: 58, fr: "AMA : défaut interne", en: "AMA internal fault" }
-      - { n: 59, fr: "Limite de courant", en: "Current limit", terms: ["4-18"] }
-      - { n: 60, fr: "Verrouillage externe", en: "External interlock" }
-      - { n: 61, fr: "Erreur de suivi / de retour", en: "Feedback (tracking) error", terms: ["encodeur", "4-30", "4-31"] }
-      - { n: 62, fr: "Fréquence de sortie à la limite maximale", en: "Output frequency at maximum limit" }
-      - { n: 64, fr: "Limite de tension", en: "Voltage limit" }
-      - { n: 65, fr: "Surtempérature carte de commande", en: "Control board over-temperature" }
-      - { n: 66, fr: "Température du dissipateur basse", en: "Heatsink temperature low", terms: ["temperature basse"] }
-      - { n: 67, fr: "La configuration des options a changé", en: "Option configuration has changed" }
-      - { n: 68, fr: "Arrêt de sécurité activé (STO)", en: "Safe Stop activated", terms: ["sto", "borne 37", "safe torque off"] }
-      - { n: 69, fr: "Température carte de puissance", en: "Power card temperature" }
-      - { n: 70, fr: "Configuration variateur non autorisée", en: "Illegal FC configuration" }
-      - { n: 71, fr: "Arrêt de sécurité PTC 1", en: "PTC 1 safe stop", terms: ["mcb112"] }
-      - { n: 72, fr: "Défaillance dangereuse", en: "Dangerous failure", terms: ["sto", "securite"] }
-      - { n: 73, fr: "Redémarrage automatique après arrêt de sécurité", en: "Safe stop auto restart" }
-      - { n: 76, fr: "Configuration de l'unité de puissance", en: "Power unit setup" }
-      - { n: 77, fr: "Mode déclassé", en: "Derated mode", terms: ["derating", "14-59"] }
-      - { n: 79, fr: "Configuration de puissance non autorisée", en: "Illegal power section configuration" }
-      - { n: 80, fr: "Variateur initialisé aux valeurs par défaut", en: "Drive initialized to default value", terms: ["reset usine", "14-22"] }
-      - { n: 81, fr: "CSIV corrompu", en: "CSIV corrupt" }
-      - { n: 82, fr: "Erreur de paramètre CSIV", en: "CSIV parameter error" }
-      - { n: 83, fr: "Combinaison d'options non autorisée", en: "Illegal option combination" }
-      - { n: 84, fr: "Pas d'option de sécurité", en: "No safety option" }
-      - { n: 88, fr: "Détection d'option", en: "Option detection" }
-      - { n: 89, fr: "Glissement du frein mécanique", en: "Mechanical brake sliding" }
-      - { n: 90, fr: "Surveillance du retour", en: "Feedback monitor" }
-      - { n: 91, fr: "Réglages incorrects de l'entrée analogique 54", en: "Analog input 54 wrong settings", terms: ["switch a54"] }
-      - { n: 99, fr: "Rotor bloqué", en: "Locked rotor", terms: ["30-22", "moteur bloque"] }
-      - { n: 104, fr: "Défaut ventilateur de brassage", en: "Mixing fan fault" }
-      - { n: 122, fr: "Rotation moteur inattendue", en: "Motor rotation unexpected" }
-      - { n: 123, fr: "Modification du moteur", en: "Motor modification" }
-      - { n: 243, fr: "IGBT de freinage", en: "Brake IGBT" }
-      - { n: 244, fr: "Température du dissipateur", en: "Heatsink temperature" }
-      - { n: 245, fr: "Capteur de dissipateur", en: "Heatsink sensor" }
-      - { n: 246, fr: "Alimentation carte de puissance", en: "Power card supply" }
-      - { n: 247, fr: "Température carte de puissance", en: "Power card temperature" }
-      - { n: 248, fr: "Configuration de puissance non autorisée", en: "Illegal power section configuration" }
-      - { n: 250, fr: "Nouvelle pièce de rechange", en: "New spare part" }
-      - { n: 251, fr: "Nouveau code type", en: "New type code" }
+      - { n: 1, fr: "10 V bas", en: "10 Volts Low", terms: "tension 10v basse borne 50" }
+      - { n: 2, en: "Live Zero Error", terms: "erreur zero live signal 4-20ma absent 6-01" }
+      - { n: 3, fr: "0 moteur conn", en: "No Motor", terms: "pas de moteur non connecte 1-80" }
+      - { n: 4, fr: "Perte phase s", en: "Mains Phase Loss", terms: "perte de phase secteur reseau desequilibre 14-12" }
+      - { n: 5, fr: "Tens.DC Bus Hte", en: "DC Link Voltage High", terms: "tension bus cc elevee" }
+      - { n: 6, fr: "Tens.CCbus bas", en: "DC Link Voltage Low", terms: "tension bus cc basse" }
+      - { n: 7, fr: "Surtension CC", en: "DC Overvoltage", terms: "surtension bus cc deceleration trop rapide freinage" }
+      - { n: 8, fr: "Soustension CC", en: "DC Under Voltage", terms: "sous-tension bus cc coupure reseau" }
+      - { n: 9, fr: "Surch.onduleur", en: "Inverter Overload", terms: "surcharge onduleur variateur" }
+      - { n: 10, fr: "Surch.ETR mot", en: "Motor ETR Overtemperature", terms: "surtemperature moteur etr surcharge thermique 1-90" }
+      - { n: 11, fr: "Surt.therm.mot", en: "Motor Thermistor Overtemperature", terms: "surtemperature thermistance moteur ptc sonde" }
+      - { n: 12, fr: "Limite couple", en: "Torque Limit", terms: "limite de couple 4-16 4-17" }
+      - { n: 13, fr: "Surcourant", en: "Overcurrent", terms: "surintensite surcourant pic de courant" }
+      - { n: 14, fr: "Défaut terre", en: "Earth (Ground) Fault", terms: "defaut de terre masse isolement moteur" }
+      - { n: 15, fr: "HW incomp", en: "Hardware Mismatch", terms: "materiel incompatible hardware" }
+      - { n: 16, fr: "Court-circuit", en: "Short Circuit", terms: "court-circuit moteur phase a phase" }
+      - { n: 17, fr: "Dép.tps.mot ctrl", en: "Control Word Timeout", terms: "depassement temps mot de controle timeout bus communication perdue 8-04" }
+      - { n: 20, fr: "Err. entrée t°", en: "Temp. Input Error", terms: "erreur entree de temperature" }
+      - { n: 21, fr: "Erreur par", en: "Parameter Error", terms: "erreur de parametre" }
+      - { n: 23, fr: "Ventil. int", en: "Internal Fan Fault", terms: "defaut ventilateur interne 14-53" }
+      - { n: 24, fr: "Ventil. ext", en: "External Fan Fault", terms: "defaut ventilateur externe 14-53" }
+      - { n: 25, fr: "Court-circuit résistance de freinage", en: "Brake Resistor Short Circuit", terms: "court-circuit resistance de freinage" }
+      - { n: 26, fr: "Limite puissance résistance freinage", en: "Brake Resistor Power Limit", terms: "limite de puissance resistance de freinage 2-12 2-13" }
+      - { n: 27, fr: "Brake Chopper Fault", en: "Brake IGBT/Brake Chopper Short-circuited", terms: "hacheur de freinage court-circuite igbt" }
+      - { n: 28, fr: "Échec test frein", en: "Brake Check", terms: "echec test de frein 2-15" }
+      - { n: 29, en: "Heat Sink Temp", terms: "temperature dissipateur radiateur surchauffe" }
+      - { n: 30, fr: "Phase U abs", en: "Motor Phase U Missing", terms: "phase moteur u manquante absente" }
+      - { n: 31, fr: "Phase V abs", en: "Motor Phase V Missing", terms: "phase moteur v manquante absente" }
+      - { n: 32, fr: "Phase W abs", en: "Motor Phase W Missing", terms: "phase moteur w manquante absente" }
+      - { n: 33, fr: "Erreur charge", en: "Inrush Fault", terms: "defaut de charge precharge soft charge" }
+      - { n: 34, fr: "Défaut com.bus", en: "Fieldbus Fault", terms: "defaut communication bus de terrain profibus profinet" }
+      - { n: 35, fr: "Erreur option", en: "Option Fault", terms: "defaut option carte" }
+      - { n: 36, fr: "Panne secteur", en: "Mains Failure", terms: "panne secteur coupure reseau 14-10" }
+      - { n: 38, fr: "Erreur interne", en: "Internal Fault", terms: "defaut interne" }
+      - { n: 39, fr: "Capteur radiatr", en: "Heat Sink Sensor", terms: "capteur dissipateur radiateur" }
+      - { n: 40, fr: "Surcharge T27", en: "Overload T27", terms: "surcharge sortie digitale borne 27" }
+      - { n: 41, fr: "Surcharge T29", en: "Overload T29", terms: "surcharge sortie digitale borne 29" }
+      - { n: 42, fr: "Surcharge X30/6-7", en: "Ovrld X30/6-7", terms: "surcharge sortie digitale x30" }
+      - { n: 43, fr: "Alim. ext", en: "Ext. Supply", terms: "alimentation externe 24v" }
+      - { n: 45, fr: "Défaut terre 2", en: "Earth (Ground) Fault 2", terms: "defaut de terre 2 masse" }
+      - { n: 46, fr: "Alim. carte puis", en: "Power card supply / Gate drive voltage fault", terms: "alimentation carte de puissance commande de gachette" }
+      - { n: 47, fr: "Alim.24 V bas", en: "24 V Supply Low", terms: "alimentation 24v basse" }
+      - { n: 48, fr: "Alim 1,8 V bas", en: "1.8 V Supply Low", terms: "alimentation 1.8v basse" }
+      - { n: 49, fr: "LIMITE VIT", en: "Speed Limit", terms: "limite de vitesse 4-11 4-13" }
+      - { n: 50, fr: "Étalonnage AMA", en: "AMA Calibration", terms: "echec etalonnage ama" }
+      - { n: 51, fr: "AMA Vérif. Unom et Inom", en: "AMA check Unom and Inom", terms: "ama verifier unom inom 1-20 1-22" }
+      - { n: 52, fr: "AMA I nom. bas", en: "AMA Low Inom", terms: "ama courant nominal trop bas" }
+      - { n: 53, fr: "AMA Moteur trop gros", en: "AMA Big Motor", terms: "ama moteur trop gros" }
+      - { n: 54, fr: "AMA Moteur trop petit", en: "AMA Small Motor", terms: "ama moteur trop petit" }
+      - { n: 55, fr: "AMA hors gam", en: "AMA Parameter Range", terms: "ama parametre hors plage" }
+      - { n: 56, fr: "Interrup. AMA", en: "AMA Interrupted", terms: "ama interrompue par l'utilisateur" }
+      - { n: 57, fr: "AMA dépas.tps", en: "AMA Timeout", terms: "ama depassement de temps timeout" }
+      - { n: 58, fr: "AMA déf. Int", en: "AMA Internal Fault", terms: "ama defaut interne" }
+      - { n: 59, fr: "Limite courant", en: "Current Limit", terms: "limite de courant 4-18" }
+      - { n: 60, fr: "Verrouillage ext", en: "External Interlock", terms: "verrouillage externe interlock" }
+      - { n: 61, fr: "Err. traînée", en: "Feedback Error", terms: "erreur de retour encodeur trainee 4-30 4-31" }
+      - { n: 62, fr: "Lim.fréq. sortie", en: "Output Frequency Limit", terms: "limite frequence de sortie" }
+      - { n: 63, fr: "Frein méca. bas", en: "Mechanical Brake Low", terms: "frein mecanique bas courant" }
+      - { n: 64, fr: "LIMITE TENSION", en: "Voltage Limit", terms: "limite de tension" }
+      - { n: 65, fr: "Ctrl T° carte", en: "Control Card Over Temperature", terms: "surtemperature carte de commande" }
+      - { n: 66, fr: "Temp rad. basse", en: "Heat Sink Temperature Low", terms: "temperature dissipateur basse" }
+      - { n: 67, fr: "Modif. option", en: "Option Module Configuration Has Changed", terms: "configuration option modifiee" }
+      - { n: 68, fr: "Arrêt sécurité", en: "Safe Stop Activated", terms: "arret de securite sto safe torque off borne 37" }
+      - { n: 69, fr: "T° carte puis", en: "Power Card Temperature", terms: "temperature carte de puissance" }
+      - { n: 70, fr: "ConfigFCprohibé", en: "Illegal FC Configuration", terms: "configuration variateur interdite" }
+      - { n: 71, fr: "Arrêt de sécu PTC 1", en: "PTC 1 Safe Stop", terms: "arret de securite ptc 1 mcb112" }
+      - { n: 72, fr: "Panne danger", en: "Dangerous Failure", terms: "panne dangereuse sto securite" }
+      - { n: 73, fr: "Arrêt redém. auto", en: "Safe Stop Auto Restart", terms: "redemarrage automatique arret de securite" }
+      - { n: 76, fr: "Config alim", en: "Power Unit Setup", terms: "configuration unite de puissance" }
+      - { n: 77, fr: "M puiss. réduit", en: "Reduced Power Mode", terms: "mode puissance reduite derating 14-59" }
+      - { n: 79, fr: "ConfigPSprohib", en: "Illegal Power Section Configuration", terms: "configuration puissance interdite" }
+      - { n: 80, en: "Drive Initialized to Default Value", terms: "variateur initialise valeurs usine reset 14-22" }
+      - { n: 81, fr: "CSIV corrompu", en: "CSIV Corrupt" }
+      - { n: 82, fr: "Err.par. CSIV", en: "CSIV Parameter Error" }
+      - { n: 90, fr: "Surv. codeur", en: "Feedback Monitor", terms: "surveillance retour codeur" }
+      - { n: 91, en: "Analog Input 54 Wrong Settings", terms: "reglages entree analogique 54 pt100 switch a54" }
+      - { n: 98, fr: "Déf.horloge", en: "Clock Fault", terms: "defaut horloge rtc" }
+      - { n: 99, fr: "Rotor verrouill", en: "Locked Rotor", terms: "rotor bloque verrouille 30-22" }
+      - { n: 104, en: "Mixing Fan Fault", terms: "ventilateur de brassage" }
+      - { n: 144, en: "Inrush Supply" }
+      - { n: 145, en: "External SCR Disable" }
+      - { n: 146, en: "Mains Voltage" }
+      - { n: 147, en: "Mains Frequency" }
+      - { n: 148, en: "System Temp" }
+      - { n: 163, en: "ATEX ETR Cur.Lim.Warning", terms: "atex etr limite de courant avertissement" }
+      - { n: 164, en: "ATEX ETR Cur.Lim.Alarm", terms: "atex etr limite de courant alarme" }
+      - { n: 165, en: "ATEX ETR Freq.Lim.Warning", terms: "atex etr limite de frequence avertissement" }
+      - { n: 166, en: "ATEX ETR Freq.Lim.Alarm", terms: "atex etr limite de frequence alarme" }
+      - { n: 200, fr: "M incendie actif", en: "Emergency Mode", terms: "mode incendie fire mode actif" }
+      - { n: 201, fr: "M incend. a été actif", en: "Emerg. M Was Active", terms: "mode incendie a ete actif" }
+      - { n: 202, fr: "Hors lim.incendi", en: "Emerg. M Limits Exceeded", terms: "hors limites mode incendie" }
+      - { n: 220, en: "Configuration File Version not Supported" }
+      - { n: 243, fr: "Frein IGBT", en: "Brake IGBT", terms: "igbt de freinage" }
+      - { n: 244, fr: "Temp. radiateur", en: "Heat Sink Temperature", terms: "temperature dissipateur" }
+      - { n: 245, fr: "Capteur radiatr", en: "Heat Sink Sensor", terms: "capteur dissipateur" }
+      - { n: 246, fr: "Alim. carte puis", en: "Power Card Supply", terms: "alimentation carte de puissance" }
+      - { n: 247, fr: "T° carte puis", en: "Power Card Temperature", terms: "temperature carte de puissance" }
+      - { n: 248, fr: "ConfigPSprohib", en: "Illegal Power Section Configuration", terms: "configuration puissance interdite" }
+      - { n: 249, fr: "T° basse redres", en: "Rect. Low Temperature", terms: "temperature basse redresseur" }
+      - { n: 250, fr: "Nouvelle pièce", en: "New Spare Part", terms: "nouvelle piece de rechange" }
+      - { n: 251, fr: "Nouv. code type", en: "New Typecode", terms: "nouveau code type" }
+      - { n: 280, en: "Emcy M Service Warning" }
+      - { n: 281, en: "Emcy OPR unexpected" }
+      - { n: 421, en: "FPC Temp" }
+      - { n: 423, en: "FPC Updating" }
+      - { n: 424, en: "FPC Update Successful" }
+      - { n: 425, en: "FPC Update Failure" }
+      - { n: 426, en: "FPC Config" }
+      - { n: 427, en: "FPC Supply" }
+      - { n: 432, en: "Inrush Mode Error" }
+      - { n: 500, en: "Motor Stator Winding Warning 2", terms: "enroulement stator moteur cbm" }
+      - { n: 501, en: "Load Envelope Warning 2", terms: "enveloppe de charge cbm" }
+      - { n: 502, en: "Vibration Monitoring Warning 2", terms: "surveillance vibration cbm" }
+      - { n: 506, en: "Load Envelope Low Warning 2" }
+      - { n: 510, en: "Motor Stator Winding Alarm", terms: "enroulement stator moteur cbm" }
+      - { n: 511, en: "Load Envelope Alarm" }
+      - { n: 512, en: "Sensor 1 Monitoring Alarm" }
+      - { n: 513, en: "Sensor 2 Monitoring Warning 1" }
+      - { n: 514, fr: "Sensor 3 Monitoring Alarm", en: "Sensor 3 Monitoring Warning 1" }
+      - { n: 515, en: "Sensor 4 Monitoring Alarm" }
+      - { n: 516, en: "Load Envelope Low Alarm" }
+      - { n: 520, en: "Stator Thld At Max/Min" }
+      - { n: 521, en: "Load Thld At Max/Min" }
+      - { n: 522, en: "Sensor 1 Thld At Max/Min" }
+      - { n: 523, en: "Sensor 2 Thld At Max/Min" }
+      - { n: 524, en: "Sensor 3 Thld At Max/Min" }
+      - { n: 525, en: "Sensor 4 Thld At Max/Min" }
+      - { n: 550, en: "Sensor 1 Low Monitoring Alarm" }
+      - { n: 551, en: "Sensor 2 Low Monitoring Alarm" }
+      - { n: 552, en: "Sensor 3 Low Monitoring Alarm" }
+      - { n: 553, en: "Sensor 4 Low Monitoring Alarm" }
 
-  # Demarreurs progressifs : libelles de declenchement (sans numerotation,
-  # la numerotation exacte est propre a chaque modele -> voir le manuel).
-  - id: mcd
-    label: "Démarreurs MCD"
-    section: "chapitre « Dépannage / Trip codes » du manuel"
+  - id: vlt-202-102
+    label: "VLT FC-202 (AQUA Drive) / FC-102 (HVAC Drive)"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
     scope:
-      - { family: demarreurs }
+      - { cat: "FC-202", type: guide, name: "guide de programmation" }
+      - { cat: "FC-102", type: guide, name: "guide de programmation" }
     codes:
-      - { fr: "Surcharge moteur", en: "Motor overload" }
-      - { fr: "Temps de démarrage excessif", en: "Excess start time" }
-      - { fr: "Thermistance moteur", en: "Motor thermistor" }
-      - { fr: "Déséquilibre de courant", en: "Current imbalance" }
-      - { fr: "Fréquence réseau hors plage", en: "Frequency" }
-      - { fr: "Ordre des phases", en: "Phase sequence" }
-      - { fr: "Surintensité instantanée", en: "Instantaneous overcurrent" }
-      - { fr: "Perte d'alimentation / phase réseau", en: "Power loss / phase loss" }
-      - { fr: "Sous-intensité", en: "Undercurrent" }
-      - { fr: "Surtempérature du dissipateur", en: "Heatsink overtemperature" }
-      - { fr: "Raccordement moteur", en: "Motor connection" }
-      - { fr: "Entrée de déclenchement externe", en: "Input trip" }
-      - { fr: "Communication réseau (bus de terrain)", en: "Network communication" }
-      - { fr: "Communication démarreur", en: "Starter communication" }
-      - { fr: "Défaut interne", en: "Internal fault" }
+      - { n: 18, en: "Start Failed" }
+      - { n: 92, fr: "Abs. de débit", en: "No Flow", terms: "absence de debit no flow marche a vide" }
+      - { n: 93, fr: "Pompe à sec", en: "Dry Pump", terms: "pompe a sec marche a sec dry pump" }
+      - { n: 94, fr: "Fin de courbe", en: "End of Curve", terms: "fin de courbe end of curve" }
+      - { n: 95, fr: "Courroie cassée", en: "Broken Belt", terms: "courroie cassee broken belt" }
+      - { n: 96, fr: "Démar. retardé", en: "Start Delayed", terms: "demarrage retarde" }
+      - { n: 97, fr: "Arrêt retardé", en: "Stop Delayed", terms: "arret retarde" }
+
+  - id: vlt-302-102
+    label: "VLT FC-301 / FC-302 (AutomationDrive) / FC-102 (HVAC Drive)"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
+    scope:
+      - { cat: "FC-302", type: guide, name: "guide de programmation" }
+      - { cat: "FC-102", type: guide, name: "guide de programmation" }
+    codes:
+      - { n: 22, en: "Hoist Mechanical Brake", terms: "frein mecanique de levage 2-2" }
+      - { n: 88, en: "Option Detection", terms: "detection option" }
+      - { n: 122, en: "Mot. Rotat. Unexp", terms: "rotation moteur inattendue" }
+      - { n: 154, fr: "Surcharge s.dig", en: "D.out Overload", terms: "surcharge sortie digitale" }
+
+  - id: vlt-302-202
+    label: "VLT FC-301 / FC-302 (AutomationDrive) / FC-202 (AQUA Drive)"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
+    scope:
+      - { cat: "FC-302", type: guide, name: "guide de programmation" }
+      - { cat: "FC-202", type: guide, name: "guide de programmation" }
+    codes:
+      - { n: 37, en: "Phase Imbalance", terms: "desequilibre de phase" }
+      - { n: 217, en: "Protection Mode" }
+      - { n: 218, en: "Stall Limit" }
+      - { n: 260, en: "AMA Complete" }
+      - { n: 507, en: "Cavitation Warning 2" }
+      - { n: 517, en: "Cavitation Alarm" }
+      - { n: 527, en: "Cavitation Thld At Max/Min" }
+      - { n: 531, en: "Sine-wave Filter Warning 2", terms: "filtre sinus cbm" }
+      - { n: 541, en: "Sine-wave Filter Alarm", terms: "filtre sinus cbm" }
+      - { n: 549, en: "Sine-wave Filter Out of Range Measurement" }
+
+  - id: vlt-102
+    label: "VLT FC-102 (HVAC Drive)"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
+    scope:
+      - { cat: "FC-102", type: guide, name: "guide de programmation" }
+    codes:
+      - { n: 203, fr: "Moteur manqnt", terms: "moteur manquant" }
+      - { n: 204, fr: "Rotor verrouill", terms: "rotor bloque" }
+
+  - id: vlt-302
+    label: "VLT FC-301 / FC-302 (AutomationDrive)"
+    section: "chapitre « Liste des codes d'alarme/avertissement » du guide de programmation"
+    scope:
+      - { cat: "FC-302", type: guide, name: "guide de programmation" }
+    codes:
+      - { n: 74, en: "PTC Thermistor", terms: "thermistance ptc" }
+      - { n: 75, en: "Illegal Profile Sel" }
+      - { n: 78, en: "Tracking Error" }
+      - { n: 83, en: "Illegal Option Combination", terms: "combinaison options interdite" }
+      - { n: 84, en: "No Safety Option", terms: "pas d'option de securite" }
+      - { n: 89, en: "Hoist Brake Sliding", terms: "glissement frein de levage" }
+      - { n: 123, en: "Motor Mod. Changed", terms: "modification du moteur" }
+      - { n: 157, en: "Power Limit Mot" }
+      - { n: 158, en: "Power Limit Gen" }
+      - { n: 210, en: "Position Tracking" }
+      - { n: 211, en: "Position Limit" }
+      - { n: 212, en: "Homing not Done" }
+      - { n: 213, en: "Homing Timeout" }
+      - { n: 214, en: "No Sensor Input" }
+      - { n: 215, en: "Start Fwd/Rev" }
+      - { n: 216, en: "Touch Timeout" }
+      - { n: 430, en: "PWM Disabled" }
+
+  - id: ic2
+    label: "iC2-Micro"
+    section: "chapitre « Événements d'avertissement et de défaut » du guide d'application"
+    scope:
+      - { cat: "iC2", type: guide, name: "guide d'application" }
+      - { cat: "iC2", name: "manuel de configuration" }
+      - { cat: "iC2", name: "manuel d'utilisation" }
+    codes:
+      - { n: 2, fr: "Déf.zéro signal", terms: "signal absent borne 33 34 zero live 4-20ma" }
+      - { n: 3, fr: "Pas de moteur", terms: "moteur non connecte" }
+      - { n: 4, fr: "Perte de phase réseau", terms: "phase secteur desequilibre alimentation" }
+      - { n: 7, fr: "Surtension CC", terms: "surtension bus cc" }
+      - { n: 8, fr: "Soustension CC", terms: "sous-tension bus cc" }
+      - { n: 9, fr: "Surcharge onduleur", terms: "surcharge variateur 100%" }
+      - { n: 10, fr: "Surtempérature moteur ETR", terms: "surcharge thermique moteur etr" }
+      - { n: 11, fr: "Surtempérature thermistance moteur", terms: "thermistance ptc sonde moteur" }
+      - { n: 12, fr: "Limite de couple", terms: "limite couple moteur regenerateur" }
+      - { n: 13, fr: "Surcourant", terms: "surintensite courant de pointe" }
+      - { n: 14, fr: "Défaut terre", terms: "defaut de terre masse fuite" }
+      - { n: 16, fr: "Court-circuit", terms: "court-circuit moteur bornes" }
+      - { n: 17, fr: "Tempo. mot ctrl", terms: "timeout mot de controle communication" }
+      - { n: 18, fr: "Échec au démar.", terms: "echec au demarrage moteur bloque" }
+      - { n: 25, fr: "Court-circuit rés. frein.", terms: "court-circuit resistance de freinage" }
+      - { n: 26, fr: "Frein surcharge", terms: "surcharge resistance de freinage" }
+      - { n: 27, fr: "Court-circuit IGBT frein / hacheur de freinage", terms: "hacheur de freinage transistor" }
+      - { n: 28, fr: "Contrôle freinage", terms: "resistance de freinage non connectee test de frein" }
+      - { n: 30, fr: "Perte de phase U", terms: "phase moteur u absente" }
+      - { n: 31, fr: "Perte de phase V", terms: "phase moteur v absente" }
+      - { n: 32, fr: "Perte de phase W", terms: "phase moteur w absente" }
+      - { n: 36, fr: "Défaut réseau", terms: "perte de puissance reseau alimentation" }
+      - { n: 38, fr: "Défaut interne", terms: "contacter le fournisseur" }
+      - { n: 40, fr: "Surcharge T15", terms: "surcharge borne 15 court-circuit" }
+      - { n: 46, fr: "Défaut de tension de commande de gâchette", terms: "gate drive" }
+      - { n: 47, fr: "Alim. 24 V bas.", terms: "alimentation 24v surchargee" }
+      - { n: 50, fr: "L'étalonnage AMA a échoué", terms: "ama etalonnage" }
+      - { n: 51, fr: "AMA, vérifier Unom et Inom", terms: "ama tension courant moteur" }
+      - { n: 52, fr: "AMA Inom bas", terms: "ama courant moteur trop bas" }
+      - { n: 53, fr: "AMA gros moteur", terms: "ama puissance moteur trop importante" }
+      - { n: 54, fr: "AMA petit moteur", terms: "ama puissance moteur trop faible" }
+      - { n: 55, fr: "Plage de paramètres AMA", terms: "ama parametres hors plage" }
+      - { n: 56, fr: "AMA interrompue", terms: "ama interrompue" }
+      - { n: 57, fr: "Dépas. tps AMA", terms: "ama depassement de temps timeout" }
+      - { n: 58, fr: "AMA interne", terms: "ama defaut interne" }
+      - { n: 59, fr: "Limite de courant", terms: "surcharge limite de courant" }
+      - { n: 60, fr: "Verrouillage externe", terms: "verrouillage externe interlock" }
+      - { n: 61, fr: "Erreur retour", terms: "erreur de retour feedback" }
+      - { n: 63, fr: "Frein mécanique bas", terms: "frein mecanique courant d'activation" }
+      - { n: 69, fr: "T carte puis.", terms: "temperature carte de puissance" }
+      - { n: 80, fr: "Init. variateur", terms: "initialisation reglages usine" }
+      - { n: 87, fr: "Freinage CC auto", terms: "freinage cc automatique reseau it" }
+      - { n: 95, fr: "Détection perte de charge", terms: "perte de charge" }
+      - { n: 99, fr: "Rotor bloqué", terms: "rotor bloque" }
+      - { n: 126, fr: "Moteur en rotation", terms: "moteur pm tourne pendant ama" }
+      - { n: 127, fr: "FCEM trop élevée", terms: "force contre electromotrice moteur pm" }
+
+  - id: ic7-commun
+    label: "iC7 (toutes applications)"
+    section: "chapitre « Tableau récapitulatif des événements » du guide d'application"
+    scope:
+      - { family: ic7, name: "guide d'application" }
+      - { family: ic7, name: "manuel de configuration" }
+    codes:
+      - { n: 4097, grp: "0x2311", fr: "Surcharge onduleur", en: "Inverter Overload", kind: "avertissement / défaut", terms: "surcharge onduleur" }
+      - { n: 4099, grp: "0x4110", fr: "Temp. ambiante élevée", en: "Ambient Temp. High", kind: "avertissement" }
+      - { n: 4102, grp: "0x4320", fr: "Temp. ambiante basse", en: "Heat Sink Temperature Low", kind: "avertissement / défaut" }
+      - { n: 4103, grp: "0x4310", fr: "Limit de temp. onduleur", en: "Inverter Temp. Limit", kind: "avertissement" }
+      - { n: 4104, grp: "0x4310", fr: "Temp. onduleur élevée 1", en: "Inverter Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4105, grp: "0x4310", fr: "Température élevée 2 onduleur", en: "Inverter Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4106, grp: "0x4220", fr: "Temp. basse hâcheur de freinage", en: "Brake Chopper Temp. Low", kind: "avertissement / défaut" }
+      - { n: 4107, grp: "0x4210", fr: "Limit de temp. hâcheur de freinage", en: "Brake Chopper Temp. Limit", kind: "avertissement" }
+      - { n: 4108, grp: "0x4210", fr: "Temp. haute hâcheur de freinage 1", en: "Brake Chopper Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4109, grp: "0x4210", fr: "Temp. haute hâcheur de freinage 2", en: "Brake Chopper Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4110, grp: "0x4310", fr: "Temp. IGBT élevée", en: "IGBT Temp. High", kind: "défaut" }
+      - { n: 4112, grp: "0x4320", fr: "Temp. redresseur basse", en: "Rectifier Temp. Low", kind: "avertissement / défaut" }
+      - { n: 4113, grp: "0x4310", fr: "Limit de temp. redresseur", en: "Rectifier Temp. Limit", kind: "avertissement" }
+      - { n: 4114, grp: "0x4310", fr: "Temp. redresseur élevée 1", en: "Rectifier Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4115, grp: "0x4310", fr: "Temp. redresseur élevée 2", en: "Rectifier Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4116, grp: "0x4320", fr: "Température basse module de puissance", en: "Power Unit Temp. Low", kind: "avertissement / défaut" }
+      - { n: 4117, grp: "0x4310", fr: "Limit de temp. module de puissance", en: "Power Unit Temp. Limit", kind: "avertissement" }
+      - { n: 4118, grp: "0x4310", fr: "Température élevée module de puissance 1", en: "Power Unit Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4119, grp: "0x4310", fr: "Température élevée module de puissance 2", en: "Power Unit Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4120, grp: "0x43FE", fr: "Temp. carte de commande basse", en: "Control Board Temp. Low", kind: "avertissement / défaut" }
+      - { n: 4121, grp: "0x43FE", fr: "Limite temp. carte de commande", en: "Control Board Temp. Limit", kind: "avertissement" }
+      - { n: 4122, grp: "0x43FE", fr: "Température carte de commande élevée 1", en: "Control Board Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4123, grp: "0x43FE", fr: "Température carte de commande élevée 2", en: "Control Board Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4124, grp: "0x43FF", fr: "Déséquilibre de température du hacheur de freinage", en: "Brake Chopper Temperature Imbalance", kind: "avertissement" }
+      - { n: 4125, grp: "0x4310", fr: "Temp. IGBT élevée", en: "IGBT Temp. High", kind: "défaut" }
+      - { n: 4126, grp: "0x43FF", fr: "Déséquilibre de température IGBT", en: "IGBT Temperature Imbalance", kind: "avertissement" }
+      - { n: 4127, grp: "0x43FF", fr: "Déséquilibre de température IGBT", en: "IGBT Temperature Imbalance", kind: "avertissement" }
+      - { n: 4128, grp: "0x70FF", fr: "Panne du ventilateur de contrôle", en: "Control Fan Failure", kind: "avertissement" }
+      - { n: 4129, grp: "0x70FF", fr: "Panne ventilateur principal", en: "Main Fan Failure", kind: "avertissement" }
+      - { n: 4130, grp: "0x70FF", fr: "Panne du ventilateur interne", en: "Internal Fan Failure", kind: "avertissement" }
+      - { n: 4131, grp: "0x43FF", fr: "Déséquilibre de température IGBT de feinage", en: "Temperature Imbalance Brake IGBT", kind: "avertissement / défaut" }
+      - { n: 4132, grp: "0x43FF", fr: "Delta température IGBT", en: "IGBT temperature delta", kind: "avertissement / défaut" }
+      - { n: 4133, grp: "0x70FF", fr: "Défaut vitesse ventilateur LCL", en: "LCL Fan Speed Fault", kind: "défaut" }
+      - { n: 4134, grp: "0x6100", fr: "Réglage de l’heure système", en: "System Time Adjust", kind: "information" }
+      - { n: 4135, grp: "0x6100", fr: "Erreur matérielle horloge temps réel", en: "Real Time Clock Hardware Error", kind: "avertissement" }
+      - { n: 4136, grp: "0x42FE", fr: "Tmax1Lcl", en: "Tmax1Lc l", kind: "avertissement / défaut" }
+      - { n: 4144, grp: "0x3211", fr: "Tension du bus CC élevée 2", en: "DC-link Voltage High 2", kind: "avertissement / défaut" }
+      - { n: 4145, grp: "0x3212", fr: "Tension bus CC haute 1", en: "DC-link Voltage High 1", kind: "avertissement / défaut" }
+      - { n: 4146, grp: "0x3221", fr: "Tension bus CC faible", en: "DC-link Voltage Low", kind: "avertissement / défaut" }
+      - { n: 4147, grp: "0x32FF", fr: "Ondulation tension bus CC", en: "DC-link Voltage Ripple", kind: "avertissement / défaut" }
+      - { n: 4148, grp: "0x32FF", fr: "Déséquilibre du bus CC", en: "DC-link Imbalance", kind: "avertissement / défaut" }
+      - { n: 4149, grp: "0x54FF", fr: "Court-circuit du bus CC", en: "DC-link Short Circuit", kind: "défaut bloquant" }
+      - { n: 4150, grp: "0x54FF", fr: "Court-circuit du condensateur CC", en: "DC Capacitor Short Circuit", kind: "défaut" }
+      - { n: 4151, grp: "0x54FF", fr: "Court-circuit du bus CC 2", en: "DC-link Short Circuit 2", kind: "information / défaut bloquant" }
+      - { n: 4152, grp: "0x5480", fr: "Erreur déclenchement dans Afe", en: "Shoot Through Fault In Afe", kind: "défaut" }
+      - { n: 4160, grp: "0x3130", fr: "Absence de phase réseau", en: "Missing Grid Phase", kind: "avertissement / défaut", terms: "absence de phase reseau perte de phase secteur" }
+      - { n: 4161, grp: "0x3140", fr: "Fréquence du réseau hors plage", en: "Grid Frequency Out of Range", kind: "avertissement / défaut", terms: "surtension reseau" }
+      - { n: 4162, grp: "0x3110", fr: "Pics de tension réseau", en: "Grid Voltage Spikes", kind: "avertissement / défaut", terms: "pics de tension reseau" }
+      - { n: 4163, grp: "0x3130", fr: "Déséquilibre du réseau", en: "Grid Imbalance", kind: "avertissement / défaut" }
+      - { n: 4164, grp: "0x3110", fr: "Tension réseau élevée", en: "Grid Voltage High", kind: "avertissement / défaut" }
+      - { n: 4165, grp: "0x3120", fr: "Tension réseau basse", en: "Grid Voltage Low", kind: "avertissement / défaut" }
+      - { n: 4166, grp: "0x3140", fr: "Erreur de synchronisation réseau", en: "Grid Synchronization Error", kind: "avertissement / défaut" }
+      - { n: 4175, grp: "0x23FF", fr: "Moteur déconnecté", en: "Motor Disconnected", kind: "avertissement / défaut", terms: "moteur deconnecte" }
+      - { n: 4176, grp: "0x23FF", fr: "Absence de phase moteur", en: "Missing Motor Phase", kind: "avertissement / défaut", terms: "absence de phase moteur" }
+      - { n: 4177, grp: "0x7120", fr: "Surcharge thermique moteur", en: "Motor Thermal Overload", kind: "avertissement / défaut" }
+      - { n: 4178, grp: "0x7120", fr: "Vitesse du moteur élevée", en: "Motor Speed High", kind: "avertissement / défaut" }
+      - { n: 4179, grp: "0x7120", fr: "Courant AMA bas", en: "AMA Current Low", kind: "avertissement" }
+      - { n: 4180, grp: "0x7120", fr: "Erreur de détection angle du rotor", en: "Rotor Angle Detection Error", kind: "avertissement / défaut" }
+      - { n: 4181, grp: "0x7120", fr: "Faible saillance du moteur pour le mode d’injection haute fréquence", en: "Low Motor Saliency For High Frequency Injection Mode", kind: "avertissement / défaut" }
+      - { n: 4182, grp: "0x7122", fr: "Perte de synchronisation moteur", en: "Motor Sync Loss", kind: "avertissement / défaut" }
+      - { n: 4192, grp: "0x8611", fr: "Erreur suivi de position", en: "Position Following Error", kind: "avertissement" }
+      - { n: 4193, grp: "0x8612", fr: "Limite de position positive", en: "Positive Position Limit", kind: "avertissement / défaut" }
+      - { n: 4194, grp: "0x8612", fr: "Ordre de position rejeté", en: "Position Command Rejected", kind: "avertissement" }
+      - { n: 4195, grp: "0x8612", fr: "Limite fin de course matérielle positive", en: "Positive Hardware End Limit", kind: "avertissement / défaut" }
+      - { n: 4196, grp: "0x8612", fr: "Limite de position négative", en: "Negative Position Limit", kind: "avertissement / défaut" }
+      - { n: 4197, grp: "0x8612", fr: "Limite fin de course matérielle négative", en: "Negative Hardware End Limit", kind: "avertissement / défaut" }
+      - { n: 4200, grp: "0x42FF", fr: "Temp. option de puissance élevée 1", en: "Power Option Temp. High 1", kind: "avertissement / défaut" }
+      - { n: 4201, grp: "0x42FF", fr: "Temp. option de puissance élevée 2", en: "Power Option Temp. High 2", kind: "avertissement / défaut" }
+      - { n: 4202, grp: "0x42FF", fr: "Temp. option de puissance basse", en: "Power Option Temp. Low", kind: "avertissement / défaut" }
+      - { n: 4203, grp: "0x42FF", fr: "Limit de temp. option de puissance", en: "Power Option Temp. Limit", kind: "avertissement" }
+      - { n: 4204, grp: "0x42FF", fr: "Déséqu. 1 temp. option de puissance", en: "Power Option Temp. Imbal. 1", kind: "avertissement / défaut" }
+      - { n: 4205, grp: "0x42FF", fr: "Déséqu. 2 temp. option de puissance", en: "Power Option Temp. Imbal. 2", kind: "avertissement / défaut" }
+      - { n: 4206, grp: "0x42FF", fr: "Déséque. temp. option de puissance Limite", en: "Power Option Temp. Imbal. Limit", kind: "avertissement" }
+      - { n: 4207, grp: "0x7300", fr: "Configuration du capteur", en: "Sensor Configuration", kind: "défaut" }
+      - { n: 4208, grp: "0x5100", fr: "Quitter le mode entretien", en: "Service Mode Exit", kind: "défaut bloquant" }
+      - { n: 4256, grp: "0x8100", fr: "Conflit d’adresse", en: "Address Conflict", kind: "avertissement" }
+      - { n: 4257, grp: "0x8100", fr: "Défaut du câble Ethernet", en: "Ethernet Cable Fault", kind: "avertissement" }
+      - { n: 4258, grp: "0x8100", fr: "Configuration bus de terrain non valide", en: "Invalid Fieldbus Configuration", kind: "information / avertissement" }
+      - { n: 4260, grp: "0x8100", fr: "Contrôleur redondant manquant", en: "Redundant Controller Missing", kind: "avertissement" }
+      - { n: 4261, grp: "0x8100", fr: "Non-concordance topologie bus de terrain", en: "Fieldbus Topology Mismatch", kind: "avertissement" }
+      - { n: 4263, grp: "0x8100", fr: "État de la liaison Ethernet modifié", en: "Ethernet Link Status Change d", kind: "information" }
+      - { n: 4265, grp: "0x8100", fr: "Erreur de redondance Ethernet", en: "Ethernet Redundancy Error", kind: "avertissement" }
+      - { n: 4266, grp: "0x8100", fr: "Redondance câble X1", en: "X1 Cable Redundancy", kind: "avertissement" }
+      - { n: 4267, grp: "0x8100", fr: "Redondance câble X2", en: "X2 Cable Redundancy", kind: "avertissement" }
+      - { n: 4268, grp: "0x8100", fr: "FieldbusStartUp", kind: "information" }
+      - { n: 4269, grp: "0x8100", fr: "Protocole de synchronisation réseau", en: "Network Time Protocol", kind: "information" }
+      - { n: 4270, grp: "0x81FD", fr: "Aucune connexion Modbus TCP", en: "No Modbus TCP Connection", kind: "information" }
+      - { n: 4271, grp: "0x81FD", fr: "Aucune connexion PROFI-NET", en: "No PROFINE T Connection", kind: "information" }
+      - { n: 4272, grp: "0x81FD", fr: "Aucune connexion EtherNet/IP", en: "No EtherNet/IP Connection", kind: "information" }
+      - { n: 4273, grp: "0x81FD", fr: "Aucune connexion Ether-CAT", en: "No Ether-CAT Connection", kind: "information" }
+      - { n: 4274, grp: "0x81FE", fr: "Perte I/O Modbus TCP", en: "Loss of Modbus TCP I/O", kind: "avertissement" }
+      - { n: 4275, grp: "0x81FE", fr: "Perte d’E/S PROFINET", en: "Loss of PROFINE T I/O", kind: "avertissement" }
+      - { n: 4276, grp: "0x81FE", fr: "Perte d’E/S Ethernet/IP", en: "Loss of EtherNet /IP I/O", kind: "avertissement" }
+      - { n: 4277, grp: "0x81FE", fr: "Perte de la connexion EtherCAT", en: "Loss of Ether-CAT Connection", kind: "avertissement" }
+      - { n: 4278, grp: "0x81FF", fr: "Temporisation des données de process primaires", en: "Primary Process Data Timeout", kind: "défaut" }
+      - { n: 4279, grp: "0x81FF", fr: "Temporisation données de process secondaire", en: "Secondary Process Data Timeout", kind: "défaut" }
+      - { n: 4280, grp: "0x8100", fr: "Le contrôleur ne fonctionne pas", en: "Controller Not in Run", kind: "avertissement" }
+      - { n: 4281, grp: "0x8100", fr: "Changement de configuration de l’interface", en: "Interface Configuration Change", kind: "information" }
+      - { n: 4282, grp: "0x81FD", fr: "Aucune connexion Modbus RTU", en: "No Modbus RTU Connection", kind: "information" }
+      - { n: 4283, grp: "0x81FE", fr: "Perte de connexion Modbus RTU", en: "Loss of Modbus RTU Connection", kind: "avertissement" }
+      - { n: 4304, grp: "0x6100", fr: "Licence manquante", en: "License Missing", kind: "avertissement" }
+      - { n: 4349, grp: "0x6100", fr: "Erreur d’authenticité", en: "Authenticity Error", kind: "défaut" }
+      - { n: 4350, grp: "0x6320", fr: "Erreur de configuration", en: "Configuration Error", kind: "avertissement / défaut" }
+      - { n: 4351, grp: "0x6100", fr: "Défaut système", en: "System Fault", kind: "défaut" }
+      - { n: 4352, grp: "0x2330", fr: "Défaut de terre 0", en: "Ground Fault 0", kind: "avertissement / défaut", terms: "defaut de terre masse" }
+      - { n: 4353, grp: "0x2330", fr: "Défaut de terre 1", en: "Ground Fault 1", kind: "avertissement / défaut", terms: "defaut de terre masse" }
+      - { n: 4354, grp: "0x2330", fr: "Défaut de terre 2", en: "Ground Fault 2", kind: "avertissement / défaut bloquant", terms: "defaut de terre masse" }
+      - { n: 4355, grp: "0x2330", fr: "Défaut de terre 21", en: "Ground Fault 21", kind: "avertissement / défaut bloquant", terms: "defaut de terre masse" }
+      - { n: 4356, grp: "0x2340", fr: "Court-circuit de l’onduleur", en: "Inverter Short Circuit", kind: "avertissement / défaut bloquant", terms: "court-circuit onduleur" }
+      - { n: 4357, grp: "0x6100", fr: "Panne du micrologiciel", en: "Firmwar e Crash", kind: "défaut" }
+      - { n: 4368, grp: "0x2311", fr: "Courant de sortie haut 0", en: "Output Current High 0", kind: "avertissement / défaut" }
+      - { n: 4369, grp: "0x2311", fr: "Courant de sortie haut 1", en: "Output Current High 1", kind: "avertissement / défaut" }
+      - { n: 4370, grp: "0x2340", fr: "Courant de sortie haut 2", en: "Output Current High 2", kind: "avertissement / défaut bloquant" }
+      - { n: 4371, grp: "0x23FE", fr: "Déséq. courant", en: "Current Imbalance", kind: "avertissement" }
+      - { n: 4372, grp: "0x20FF", fr: "Injection de courant de courte durée", en: "Short term current injection", kind: "avertissement / défaut", terms: "injection de courant" }
+      - { n: 4373, grp: "0x2222", fr: "Surcourant bus CC", en: "DC-link Overcurrent", kind: "avertissement / défaut" }
+      - { n: 4374, grp: "0x2212", fr: "Résonance du bus CC", en: "DC-link Resonance", kind: "avertissement / défaut" }
+      - { n: 4375, grp: "0x2311", fr: "Limitation de courant excessive", en: "Excessive Current Limiting", kind: "avertissement / défaut" }
+      - { n: 4377, grp: "0x2311", fr: "Défaut déclassement intelligent", en: "Smart Derating Fault", kind: "avertissement / défaut" }
+      - { n: 4378, grp: "0x5210", fr: "Défaut capteur de courant", en: "Current Sensor Fault", kind: "défaut" }
+      - { n: 4379, grp: "0x2110", fr: "Courant CM élevé", en: "CM Current High", kind: "avertissement / défaut" }
+      - { n: 4380, grp: "0x2311", fr: "Défaut réglage limite de courant", en: "Current Limit Setting Fault", kind: "défaut" }
+      - { n: 4382, grp: "0x7120", fr: "Rotor bloqué", en: "Blocked Rotor", kind: "avertissement / défaut" }
+      - { n: 4384, grp: "0x2221", fr: "Redresseur surcharge thermique", en: "Thermal Overload Rectifier", kind: "avertissement / défaut" }
+      - { n: 4400, grp: "0x7113", fr: "Surcharge du hâcheur de freinage", en: "Brake Chopper Overload", kind: "avertissement / défaut bloquant" }
+      - { n: 4401, grp: "0x7113", fr: "Temp. élevée résistance de freinage", en: "Brake Resistor Temp. High", kind: "avertissement / défaut" }
+      - { n: 4402, grp: "0x7113", fr: "Résistance de freinage manquante", en: "Brake Resistor Missing", kind: "avertissement / défaut" }
+      - { n: 4403, grp: "0x7111", fr: "Commutateur hâcheur de freinage court-circuité", en: "Brake Ch. Switch Shorted", kind: "avertissement / défaut" }
+      - { n: 4404, grp: "0x7113", fr: "Panne frein", en: "Brake Failure", kind: "avertissement" }
+      - { n: 4417, grp: "0x72FF", fr: "Défaut option de retour", en: "Feedback Option Fault", kind: "défaut" }
+      - { n: 4418, grp: "0x7310", fr: "Mauvais retour vitesse", en: "Bad Speed Feedback", kind: "défaut" }
+      - { n: 4567, grp: "0x6100", fr: "État de la restauration", en: "Restore Status", kind: "information" }
+      - { n: 4568, grp: "0x6100", fr: "Réinit. automatique", en: "Automatic Reset", kind: "information" }
+      - { n: 4600, grp: "0x61FB", fr: "Défaut communication option", en: "Option Communication Fault", kind: "défaut" }
+      - { n: 4601, grp: "0x61FB", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "défaut" }
+      - { n: 4602, grp: "0x61FB", fr: "Défaut communication option", en: "Option Communication Fault", kind: "défaut" }
+      - { n: 4605, grp: "0x61FC", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "défaut" }
+      - { n: 4606, grp: "0x61FC", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "défaut" }
+      - { n: 4607, grp: "0x61FB", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "défaut" }
+      - { n: 4608, grp: "0x61FF", fr: "Panne interne détectée", en: "Internal Failure detected", kind: "défaut" }
+      - { n: 4609, grp: "0x61FF", fr: "Panne d’E/S détectée", en: "IO Failure detected", kind: "défaut" }
+      - { n: 4628, grp: "0x54FE", fr: "Fonction STO activée", en: "STO Activated", kind: "avertissement" }
+      - { n: 4629, grp: "0x54FE", fr: "Défaut STO canal A", en: "STO Fault Ch. A", kind: "défaut" }
+      - { n: 4630, grp: "0x54FE", fr: "Défaut STO canal B", en: "STO Fault Ch. B", kind: "défaut" }
+      - { n: 4631, grp: "0x61FB", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "défaut" }
+      - { n: 4632, grp: "0x61FB", fr: "Erreur de communication interne", en: "Internal Communication Fault", kind: "avertissement" }
+      - { n: 4638, grp: "0x7500", fr: "Perte de connexion entre variateurs", en: "Drive to Drive Connection Lost", kind: "avertissement / défaut" }
+      - { n: 4639, grp: "0x61FC", fr: "Erreur de synchronisation du bus haute vitesse", en: "High Speed Bus Sync Error", kind: "défaut" }
+      - { n: 4640, grp: "0x5112", fr: "Défaut alimentation 24 V", en: "24V Supply Fault", kind: "défaut bloquant" }
+      - { n: 4641, grp: "0x5100", fr: "Mode sauvegarde 24 V", en: "24V Backup Mode", kind: "information" }
+      - { n: 4642, grp: "0x5114", fr: "Alimentation 3,3 V basse", en: "3.3V Supply Low", kind: "défaut" }
+      - { n: 4643, grp: "0x5118", fr: "Alim. 28 V basse", en: "28V Supply Low", kind: "défaut" }
+      - { n: 4644, grp: "0x51FE", fr: "Défaut de tension sur la commande de gâchette", en: "Gate Driver Voltage Fault", kind: "défaut bloquant", terms: "commande de gachette gate drive" }
+      - { n: 4645, grp: "0x51FF", fr: "Défaut d’alimentation de la carte de puissance", en: "Power Board Supply Fault", kind: "défaut bloquant", terms: "alimentation carte de puissance" }
+      - { n: 4646, grp: "0x51FF", fr: "Tension d’alimentation", en: "Power Supply Voltage", kind: "défaut bloquant" }
+      - { n: 4647, grp: "0x54FD", fr: "Fonction désactivée", en: "Function Disabled", kind: "défaut" }
+      - { n: 4648, grp: "0x61FC", fr: "Erreur de bus haute vitesse", en: "High Speed Bus Error", kind: "défaut" }
+      - { n: 4649, grp: "0x2340", fr: "Commande de gâchette désaturée", en: "Desat Gate Driver", kind: "défaut bloquant" }
+      - { n: 4653, grp: "0x51FE", fr: "Défaut de commande de gachette", en: "Gate Driver Fault", kind: "défaut" }
+      - { n: 4654, grp: "0x61FB", fr: "Nœud de contrôle déconnecté", en: "Control Node Disconnected", kind: "avertissement" }
+      - { n: 4790, grp: "0x5530", fr: "Erreur de données de contrôle", en: "Control Data Error", kind: "information" }
+      - { n: 4791, grp: "0x5530", fr: "PUD non valide", en: "Invalid PUD", kind: "défaut" }
+      - { n: 4800, grp: "0x61F7", fr: "Espace de stockage faible", en: "Low Storage Space", kind: "information" }
+      - { n: 4801, grp: "0x61F7", fr: "Stockage enregistreur de données", en: "Data Logger Storage", kind: "avertissement" }
+      - { n: 4802, grp: "0x61F7", fr: "Stockage du journal des événements", en: "Event Logger Storage", kind: "avertissement" }
+      - { n: 4803, grp: "0x5100", fr: "Mode entretien actif", en: "Service Mode Active", kind: "avertissement" }
+      - { n: 4816, grp: "0x6100", fr: "Débordement tâche PLC", en: "PLC Task Overrun", kind: "avertissement" }
+      - { n: 4817, grp: "0x6100", fr: "Erreur d’exécution PLC", en: "PLC Runtime Error", kind: "défaut" }
+      - { n: 4832, grp: "0x6100", fr: "DécouverteDeNœuds", en: "NodeDiscovery", kind: "information" }
+      - { n: 4833, grp: "0x6100", fr: "Mise en service du nœud", en: "Node Commissioning", kind: "avertissement" }
+      - { n: 4834, grp: "0x6100", fr: "Nœud manquant", en: "Node Missing", kind: "information" }
+      - { n: 4840, grp: "0x43FF", fr: "Déséquilibre maximal temp. redresseur", en: "Rectifier Temp. Maximum Imbalance", kind: "avertissement / défaut" }
+      - { n: 4841, grp: "0x43FF", fr: "Déséquilibre temp. redresseur", en: "Rectifier Temp. Imbalance", kind: "avertissement" }
+      - { n: 4851, grp: "0x6100", fr: "Redémarrage nécessaire", en: "Restart Required", kind: "avertissement" }
+      - { n: 4853, grp: "0x6100", fr: "StartupOccurrence", kind: "information" }
+      - { n: 4854, grp: "0x6100", fr: "Réinitialisation à la demande", en: "ResetBy-Demand", kind: "information" }
+      - { n: 4855, grp: "0x6100", fr: "Défaut interne", en: "Internal Fault", kind: "défaut" }
+      - { n: 4856, grp: "0x6100", fr: "Défaut interne", en: "Internal Fault", kind: "défaut" }
+      - { n: 4857, grp: "0x6100", fr: "Mise à jour du logiciel", en: "Software Update", kind: "information" }
+      - { n: 4858, grp: "0x61FC", fr: "Défaut interne", en: "Internal Fault", kind: "avertissement / défaut" }
+      - { n: 4859, grp: "0x61FC", fr: "Défaut interne", en: "Internal Fault", kind: "avertissement / défaut" }
+      - { n: 4860, grp: "0x61FC", fr: "Ajustement de l’heure imprévu", en: "Unexpected Time Adjust", kind: "défaut" }
+      - { n: 4861, grp: "0x61FC", fr: "Défaut synchronisation", en: "Synchronization Fault", kind: "défaut" }
+      - { n: 4862, grp: "0x61FC", fr: "PDS", kind: "défaut" }
+      - { n: 4863, grp: "0x61FC", fr: "Défaut interne", en: "Internal Fault", kind: "défaut" }
+      - { n: 4980, grp: "0x6181", fr: "Une borne d’entrée digitale n’est pas reconnue par le système", en: "A Digital Input terminal is unknown by system", kind: "avertissement" }
+      - { n: 4981, grp: "0x6181", fr: "Une borne de sortie digitale n’est pas reconnue par le système", en: "A Digital Output terminal is unknown by system", kind: "avertissement" }
+      - { n: 4982, grp: "0x6181", fr: "Une borne d’entrée analogique n’est pas reconnue par le système", en: "An Analog Input terminal is unknown by system", kind: "avertissement" }
+      - { n: 4983, grp: "0x6181", fr: "Une borne de sortie analogique n’est pas reconnue par le système", en: "An Analog Output terminal is unknown by system", kind: "avertissement" }
+      - { n: 4984, grp: "0x6181", fr: "Sortie digitale occupée", en: "A Digital Output occupied", kind: "avertissement" }
+      - { n: 4985, grp: "0x6181", fr: "Sortie analogique occupée", en: "An Analog Output occupied", kind: "avertissement" }
+      - { n: 5123, grp: "0xFF01", fr: "Exception externe 1", en: "External Interlock 1", kind: "défaut" }
+      - { n: 5124, grp: "0xFF01", fr: "Exception externe 2", en: "External Interlock 2", kind: "défaut" }
+      - { n: 5132, grp: "0x4280", fr: "Protection thermique 1", en: "Temp. Protection 1", kind: "avertissement / défaut" }
+      - { n: 5133, grp: "0x4280", fr: "Protection thermique 2", en: "Temp. Protection 2", kind: "avertissement / défaut" }
+      - { n: 5134, grp: "0x4280", fr: "Protection thermique 3", en: "Temp. Protection 3", kind: "avertissement / défaut" }
+      - { n: 5135, grp: "0x4280", fr: "Protection thermique 4", en: "Temp. Protection 4", kind: "avertissement / défaut" }
+      - { n: 5136, grp: "0x4280", fr: "Protection thermique 5", en: "Temp. Protection 5", kind: "avertissement / défaut" }
+      - { n: 5137, grp: "0x4280", fr: "Protection thermique 6", en: "Temp. Protection 6", kind: "avertissement / défaut" }
+      - { n: 5141, grp: "0x7580", fr: "Perte de connexion de panneau de commande", en: "Control Panel Connection Lost" }
+      - { n: 5142, grp: "0x7580", fr: "Perte de connexion PC", en: "PC Connection Lost" }
+      - { n: 5157, grp: "0x4281", fr: "Thermistance du moteur", en: "Motor Thermistor", kind: "défaut" }
+      - { n: 5158, grp: "0x4280", fr: "T° moteur", en: "Motor Temperature", kind: "avertissement / défaut" }
+      - { n: 5162, grp: "0x8100", fr: "Source de commande alternative en raison d’une temporisation du bus de terrain", en: "Alternative Control Place due to Fieldbus Timeout", kind: "avertissement" }
+      - { n: 5170, grp: "0x2310", fr: "Temporisation limite de courant", en: "Current Limit Timeout", kind: "défaut", terms: "limite de courant" }
+      - { n: 5171, grp: "0x8331", fr: "Temporisation limite de couple mode moteur", en: "Torque Limit Timeout Motoring", kind: "défaut" }
+      - { n: 5172, grp: "0x8331", fr: "Temporisation limite de couple mode générateur", en: "Torque Limit Timeout Regenerative", kind: "défaut" }
+      - { n: 5173, grp: "0x5400", fr: "Temporisation limite de puissance mode générateur", en: "Power Limit Timeout Regenerative", kind: "défaut" }
+      - { n: 5174, grp: "0x5400", fr: "Temporisation limite de puissance mode moteur", en: "Power Limit Timeout Motoring", kind: "défaut" }
+      - { n: 5200, grp: "0x7120", fr: "AMA active", kind: "avertissement" }
+      - { n: 5201, grp: "0x7120", fr: "Données moteur AMA", en: "AMA Motor Data", kind: "défaut" }
+      - { n: 5202, grp: "0x7120", fr: "Type de moteur AMA", en: "AMA Motor Type", kind: "défaut" }
+      - { n: 5203, grp: "0x7120", fr: "AMA réussie", en: "AMA Successful", kind: "information" }
+      - { n: 5204, grp: "0x7110", fr: "Test de la résistance de freinage actif", en: "Brake Resistor Test Active", kind: "avertissement" }
+      - { n: 5205, grp: "0x7110", fr: "Échec du test de la résistance de freinage", en: "Brake Resistor Test Failed", kind: "défaut" }
+      - { n: 5206, grp: "0x7110", fr: "Test de résistance de freinage réussi", en: "Brake Resistor Test Successful", kind: "information" }
+      - { n: 5210, grp: "0x8400", fr: "Inf. à la vitesse min.", en: "Below Min. Speed", kind: "défaut" }
+      - { n: 5211, grp: "0x8400", fr: "Inf. à la vitesse min.", en: "Below Min. Speed", kind: "avertissement" }
+      - { n: 5220, grp: "0x7080", fr: "État incorrect du retour de freinage", en: "Brake Feedback Wrong State", kind: "avertissement" }
+      - { n: 5221, grp: "0x7080", fr: "Dépassement temps amorçage du frein", en: "Brake Priming Timeout", kind: "avertissement" }
+      - { n: 5222, grp: "0x7080", fr: "Temporisation signal de retour de freinage", en: "Brake Feedback Timeout", kind: "avertissement" }
+      - { n: 5230, grp: "0x9080", fr: "Perte de charge détectée", en: "Lost Load Detected" }
+      - { n: 5240, grp: "0x4380", fr: "Surveillance de refroidissement", en: "Cooling Monitor", kind: "avertissement / défaut" }
+      - { n: 5260, grp: "0x6180", fr: "Simulation d’événement", en: "Event Simulation", kind: "avertissement / défaut" }
+      - { n: 5264, grp: "0x6180", fr: "Simulation d’événement SS2 Inst. 1", en: "Event Simulation SS2 Inst 1", kind: "avertissement" }
+      - { n: 5265, grp: "0x6180", fr: "Simulation d’événement SS2 Inst. 2", en: "Event Simulation SS2 Inst 2", kind: "avertissement" }
+      - { n: 5270, grp: "0xF004", fr: "Estimation de l’inertie active", en: "Inertia Estimation Active", kind: "avertissement" }
+      - { n: 5271, grp: "0xF004", fr: "Échec de l’estimation de l’inertie", en: "Inertia Estimation Failed", kind: "défaut" }
+      - { n: 5272, grp: "0xF004", fr: "Estimation de l’inertie réussie", en: "Inertia Estimation Successful", kind: "information" }
+      - { n: 5290, grp: "0x8400", fr: "Vitesse trop élevée", en: "Speed Too High", kind: "défaut" }
+      - { n: 5291, grp: "0x8400", fr: "Vitesse trop élevée", en: "Speed Too High", kind: "avertissement" }
+      - { n: 5292, grp: "0x8400", fr: "Démarrage inf. à la vitesse min.", en: "Start Below Min. Speed", kind: "défaut" }
+      - { n: 5300, grp: "0x7120", fr: "Données moteur non valides", en: "Invalid Motor Data", kind: "avertissement / défaut" }
+      - { n: 5301, grp: "0x6320", fr: "Config. contrôle non valide.", en: "Invalid Control Config.", kind: "avertissement / défaut" }
+      - { n: 5302, grp: "0x6320", fr: "Démarrage bloqué", en: "Start Blocked", kind: "avertissement / défaut" }
+      - { n: 5400, grp: "0x4480", fr: "Déclass. temp. AHF élevée", en: "AHF High Temp. Derate", kind: "défaut" }
+      - { n: 5401, grp: "0x4480", fr: "Arrêt temp. AHF élevée", en: "AHF High Temp. Stop", kind: "défaut" }
+      - { n: 5701, grp: "0xFF02", fr: "Maintenance préventive 1", en: "Preventive Maintenance 1", kind: "avertissement" }
+      - { n: 5702, grp: "0xFF02", fr: "Maintenance préventive 2", en: "Preventive Maintenance 2", kind: "avertissement" }
+      - { n: 5703, grp: "0xFF02", fr: "Maintenance préventive 3", en: "Preventive Maintenance 3", kind: "avertissement" }
+      - { n: 5704, grp: "0xFF02", fr: "Maintenance préventive 4", en: "Preventive Maintenance 4", kind: "avertissement" }
+      - { n: 5705, grp: "0xFF02", fr: "Maintenance préventive 5", en: "Preventive Maintenance 5", kind: "avertissement" }
+      - { n: 5706, grp: "0xFF02", fr: "Maintenance préventive 6", en: "Preventive Maintenance 6", kind: "avertissement" }
+      - { n: 5707, grp: "0xFF02", fr: "Maintenance préventive 7", en: "Preventive Maintenance 7", kind: "avertissement" }
+      - { n: 5708, grp: "0xFF02", fr: "Maintenance préventive 8", en: "Preventive Maintenance 8", kind: "avertissement" }
+      - { n: 5709, grp: "0xFF02", fr: "Maintenance préventive 9", en: "Preventive Maintenance 9", kind: "avertissement" }
+      - { n: 5710, grp: "0xFF02", fr: "Maintenance préventive 10", en: "Preventive Maintenance 10", kind: "avertissement" }
+      - { n: 5901, grp: "0xFF06", fr: "Erreur d’entrée logique", en: "Logic Input Error", kind: "avertissement" }
+      - { n: 5902, grp: "0xFF06", fr: "Erreur de sortie logique", en: "Logic Output Error", kind: "avertissement" }
+      - { n: 5903, grp: "0xFF06", fr: "Erreur de configuration du bloc logique", en: "Logic Block Configuration Error", kind: "avertissement" }
+      - { n: 5904, grp: "0xFF06", fr: "Erreur d’état logique", en: "Logic State Error", kind: "avertissement" }
+
+  - id: ic7-aqua-hvacr
+    label: "iC7 AQUA / iC7 HVACR"
+    section: "chapitre « Tableau récapitulatif des événements » du guide d'application"
+    scope:
+      - { cat: "iC-7 AQUA" }
+      - { cat: "iC7-HVACR" }
+    codes:
+      - { n: 4198, grp: "0x8612", en: "Zero Pulse Error", kind: "défaut" }
+      - { n: 4284, grp: "0x81FD", en: "No BACnet MS/TP Connection", kind: "information" }
+      - { n: 4285, grp: "0x81FE", en: "BACnet Connection Timeout", kind: "information" }
+      - { n: 4367, grp: "0x2311", en: "Imax User", kind: "avertissement / défaut" }
+      - { n: 4385, grp: "0x8615", en: "Audit Log Stopped", kind: "avertissement" }
+      - { n: 4550, grp: "0x6100", en: "An Analog Input selection fails", kind: "avertissement" }
+      - { n: 4551, grp: "0x6100", en: "An Analog Input data missing", kind: "avertissement" }
+      - { n: 4552, grp: "0x6100", en: "An Analog Input data stopped", kind: "avertissement" }
+      - { n: 4553, grp: "0x6100", en: "An Analog Input unhealthy", kind: "avertissement" }
+      - { n: 4555, grp: "0x6100", en: "An Analog Output selection fails", kind: "avertissement" }
+      - { n: 4556, grp: "0x6100", en: "An Analog Output data missing", kind: "avertissement" }
+      - { n: 4557, grp: "0x6100", en: "An Analog Output data stopped", kind: "avertissement" }
+      - { n: 4558, grp: "0x6100", en: "An Analog Output occupied", kind: "avertissement" }
+      - { n: 4560, grp: "0x6100", en: "A Digital Input selection fails", kind: "avertissement" }
+      - { n: 4561, grp: "0x6100", en: "A Digital Input data missing", kind: "avertissement" }
+      - { n: 4562, grp: "0x6100", en: "A Digital Input data stopped", kind: "avertissement" }
+      - { n: 4563, grp: "0x6100", en: "A Digital Output selection fails", kind: "avertissement" }
+      - { n: 4564, grp: "0x6100", en: "A Digital Output data missing", kind: "avertissement" }
+      - { n: 4565, grp: "0x6100", en: "A Digital Output data stopped", kind: "avertissement" }
+      - { n: 4566, grp: "0x6100", en: "A Digital Output occupied", kind: "avertissement" }
+      - { n: 4701, grp: "0x2110", en: "Input Current High 1", kind: "avertissement / défaut" }
+      - { n: 4710, grp: "0x3211", en: "DC-link Voltage High AFE", kind: "avertissement / défaut" }
+      - { n: 4714, grp: "0x3120", en: "Grid Voltage Transient", kind: "avertissement / défaut" }
+      - { n: 4716, grp: "0x3140", en: "Grid Synchronization Error", kind: "avertissement / défaut" }
+      - { n: 4726, grp: "0x3211", en: "Grid Disturbance Detected", kind: "avertissement" }
+      - { n: 4731, grp: "0x2340", en: "Imax2 Gate Driver", kind: "défaut" }
+      - { n: 4732, grp: "0x2330", en: "Iearth2 Sd", kind: "avertissement / défaut" }
+      - { n: 5155, grp: "0x8081", en: "No Flow", terms: "absence de debit no flow" }
+      - { n: 5156, grp: "0x8081", en: "Dry Run", terms: "marche a sec pompe a sec dry run" }
+      - { n: 6111, grp: "0x8082", en: "End of Curve", terms: "fin de courbe end of curve" }
+
+  - id: ic7-aqua
+    label: "iC7 AQUA"
+    section: "chapitre « Tableau récapitulatif des événements » du guide d'application"
+    scope:
+      - { cat: "iC-7 AQUA" }
+    codes:
+      - { n: 4888, grp: "0x8082", en: "Flow Confirmation", terms: "confirmation de debit" }
+
+  - id: ic7-auto
+    label: "iC7 Automation (Industry)"
+    section: "chapitre « Tableau récapitulatif des événements » du guide d'application"
+    scope:
+      - { cat: "iC7 Automation" }
+    codes:
+      - { n: 4224, grp: "0x5110", fr: "Surcharge sur l’entrée analogique", kind: "défaut" }
+      - { n: 4225, grp: "0x5160", fr: "Surcharge de sortie digitale", kind: "défaut" }
+      - { n: 4226, grp: "0x5112", fr: "Surcharge d’alimentation 24 V", kind: "défaut" }
+      - { n: 4227, grp: "0x511A", fr: "Surcharge d’alimentation 10 V", kind: "défaut" }
+      - { n: 4416, grp: "0x7502", fr: "Entrée analogique zéro signal", kind: "défaut" }
+      - { n: 5100, grp: "0x6100", fr: "Démarrage désactivé dans le sens de référence", kind: "avertissement" }
+      - { n: 5225, grp: "0x7080", fr: "Erreur de glissement du frein", kind: "avertissement" }
+      - { n: 5600, grp: "0x7120", fr: "Test de retour actif", kind: "avertissement" }
+      - { n: 5601, grp: "0x7120", fr: "Test de retour réussi", kind: "information" }
+      - { n: 5602, grp: "0x7120", fr: "Retour résolution/pôles élevé", kind: "défaut" }
+      - { n: 5603, grp: "0x7120", fr: "Retour résolution/pôles faible", kind: "défaut" }
+      - { n: 5604, grp: "0x7012", fr: "Retour du moteur inversé", kind: "défaut" }
+      - { n: 5605, grp: "0x7012", fr: "Aucun retour moteur", kind: "défaut" }
+      - { n: 5606, grp: "0x7120", fr: "Retour peu stable", kind: "défaut" }
+
+  - id: mcd600
+    label: "Démarreur progressif MCD 600"
+    section: "chapitre « Messages de déclenchement » du manuel d'utilisation"
+    scope:
+      - { cat: "MCD 600" }
+    codes:
+      - { fr: "2PH. THYRIS. DEFECT." }
+      - { fr: "Pile/horloge" }
+      - { fr: "Surcharge bipasse" }
+      - { fr: "Courant à l’arrêt" }
+      - { fr: "Déséq. courant" }
+      - { fr: "Err lecture courant Lx (où X est 1, 2 ou 3)" }
+      - { fr: "Capteur de profondeur" }
+      - { fr: "Échec EEPROM" }
+      - { fr: "Tps démar. maxi" }
+      - { fr: "Déf. allum. Px (où X est la phase 1, 2 ou 3)" }
+      - { fr: "I nom. trop élevé" }
+      - { fr: "Capteur de débit" }
+      - { fr: "Contacteur de débit" }
+      - { fr: "Fréquence" }
+      - { fr: "Défaut de terre" }
+      - { fr: "Surtempérature du radiateur" }
+      - { fr: "Haut débit" }
+      - { fr: "Pression haute" }
+      - { fr: "Sécurité entrée A/Sécurité entrée B" }
+      - { fr: "Surcourant inst" }
+      - { fr: "Erreur interne X (où X correspond à un nombre)" }
+      - { fr: "Erreur interne 88" }
+      - { fr: "LCP déconnecté" }
+      - { fr: "Perte phase L1/L2/L3" }
+      - { fr: "L1-T1/L2-T2/L3-T3 en ct-ct" }
+      - { fr: "Tension de commande faible" }
+      - { fr: "Bas débit" }
+      - { fr: "Pression faible" }
+      - { fr: "Eau basse" }
+      - { fr: "Raccord. mot. T1/T2/T3" }
+      - { fr: "Surcharge moteur" }
+      - { fr: "Thermistance du moteur" }
+      - { fr: "Communication réseau" }
+      - { fr: "Pas prêt" }
+      - { fr: "Surintensité" }
+      - { fr: "Puissance excess." }
+      - { fr: "Surtension" }
+      - { fr: "Par hors plage" }
+      - { fr: "Ordre des phases" }
+      - { fr: "Perte réseau" }
+      - { fr: "Capteur pression" }
+      - { fr: "Capacité nominale" }
+      - { fr: "Circuit RTD" }
+      - { fr: "I-TSM thyristor" }
+      - { fr: "Surchauf. thyristors" }
+      - { fr: "Communication démarreur" }
+      - { fr: "Nbr démarr./heure" }
+      - { fr: "Cct sonde therm. (circuit de thermistance)" }
+      - { fr: "Temps – Surcourant" }
+      - { fr: "Courant minimum" }
+      - { fr: "Sous-puissance" }
+      - { fr: "Sous-tension" }
+      - { fr: "Option non acceptée" }
+      - { fr: "Déf. VZC Px (où X correspond à 1, 2 ou 3)" }
+      - { fr: "Détect vit nulle" }
+

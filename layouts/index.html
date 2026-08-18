@@ -507,20 +507,31 @@
             terms:(t.terms||[]).map(norm).filter(Boolean), docs:resolveScope(t.scope) }))
             .filter(t=>t.terms.length && t.docs.length);
         const TOPIC_BY_ID={}; TOPICS.forEach(t=>TOPIC_BY_ID[t.id]=t);
-        const PRODUCTS = (KW.products||[]).map(p=>({ cat:p.cat, terms:(p.terms||[]).map(norm).filter(Boolean),
-            docs:resolveScope([{ cat:p.cat }]) })).filter(p=>p.terms.length && p.docs.length);
+        const PRODUCTS = (KW.products||[]).map(p=>({
+            cat: p.cat || ((FAM[p.family]||{}).label) || p.family,
+            terms:(p.terms||[]).map(norm).filter(Boolean),
+            docs: resolveScope([ p.cat ? { cat:p.cat } : { family:p.family } ])
+        })).filter(p=>p.terms.length && p.docs.length);
         const ALARMS=[];
         (KW.alarms||[]).forEach(g=>{
             const docs=resolveScope(g.scope); if(!docs.length) return;
-            (g.codes||[]).forEach(c=>ALARMS.push({ n:(c.n===0||c.n)?c.n:null, fr:c.fr||'', en:c.en||'',
-                gamme:g.label||'', section:g.section||'', docs:docs,
-                label:norm((c.fr||'')+' '+(c.en||'')),                        // libellé seul
-                text:norm([c.fr,c.en,(c.terms||[]).join(' ')].join(' ')) }));  // libellé + mots associés
+            (g.codes||[]).forEach(c=>{
+                const terms=Array.isArray(c.terms)?c.terms.join(' '):(c.terms||'');
+                /* groupe iC7 « 0x3130 » : cherchable aussi en « 3130h » et « 3130 » */
+                const hex=(c.grp||'').replace(/^0x/i,'');
+                const grpForms=hex?(c.grp+' '+hex+'h '+hex):'';
+                ALARMS.push({ n:(c.n===0||c.n)?c.n:null, fr:c.fr||'', en:c.en||'',
+                    kind:c.kind||'', grp:c.grp||'', gamme:g.label||'', section:g.section||'', docs:docs,
+                    label:norm((c.fr||'')+' '+(c.en||'')),                       // libellé seul
+                    text:norm([c.fr,c.en,terms,c.kind||'',grpForms].join(' ')) });// libellé + mots associés
+            });
         });
+        const ALARM_NUMS=new Set(); ALARMS.forEach(a=>{ if(a.n!==null) ALARM_NUMS.add(a.n); });
         /* Libellés découpés en mots : « surtension » doit trouver l'alarme 7, mais
            « démarre » ne doit pas trouver « communication démarreur ». */
         const wordSet = s => new Set(s.split(/[^a-z0-9+\/]+/).filter(Boolean));
-        ALARMS.forEach(a=>{ a.labelW=wordSet(a.label); a.textW=wordSet(a.text); });
+        ALARMS.forEach(a=>{ a.labelW=wordSet(a.label); a.textW=wordSet(a.text);
+            a.frW=wordSet(norm(a.fr)); a.enW=wordSet(norm(a.en)); });
 
         /* Synonymes : mots simples (expansion de token) et locutions */
         const SYN={}, PHRASES=[];
@@ -546,16 +557,17 @@
             'dans','avec','par','d','l','the','of','for','with','my','mon','ma','mes','ce','cette','se']);
         const isCode = t => t.length>=6 && /\d/.test(t) && /[a-z]/.test(t);
 
-        /* Numéros d'alarme : « alarme 14 », « défaut n°4 », « A14 », « 29 alarme » */
+        /* Numéros d'alarme / d'événement : « alarme 14 », « défaut n°4 », « A14 »,
+           « 29 alarme », et un numéro seul s'il existe au dictionnaire (« 4160 ») */
         function alarmNumbers(q, tokens){
             const out=[]; let m;
-            const re=/(?:defauts?|alarmes?|alarms?|erreurs?|errors?|faults?|trip|warning|avertissement|code)\s*n?[°o]?\s*(\d{1,3})/g;
+            const re=/(?:defauts?|alarmes?|alarms?|erreurs?|errors?|faults?|trip|warning|avertissement|evenements?|event|code)\s*n?[°o]?\s*(\d{1,5})/g;
             while((m=re.exec(q))) out.push(+m[1]);
             const hasFaultWord = tokens.some(t=>FAULTW.test(t));
             tokens.forEach(t=>{
                 const s=/^[aw](\d{1,3})$/.exec(t);
                 if(s && (tokens.length===1 || hasFaultWord)) out.push(+s[1]);
-                if(/^\d{1,3}$/.test(t) && hasFaultWord) out.push(+t);
+                if(/^\d{1,5}$/.test(t) && (hasFaultWord || (t.length>=3 && ALARM_NUMS.has(+t)))) out.push(+t);
             });
             return out.filter((v,i)=>out.indexOf(v)===i);
         }
@@ -588,6 +600,7 @@
             PRODUCTS.forEach(p=>p.terms.forEach(t=>{
                 if(t.length>=2 && q.indexOf(t)>=0 && (!product || t.length>product.term.length)) product={ p:p, term:t };
             }));
+            const prodSet=product ? new Set(product.p.docs) : null;
 
             /* thèmes : mot exact (3), début de terme (2), sous-chaîne (1) */
             const topicHits=[];
@@ -620,9 +633,16 @@
                associés (ex. « profinet » sur l'alarme 34) ne doivent pas détourner la recherche. */
             const nums=alarmNumbers(q,tokens);
             const faultWord=tokens.some(t=>FAULTW.test(t));
-            const wordIdx=[]; tokens.forEach((t,i)=>{ if(t.length>=4 && !FAULTW.test(t)) wordIdx.push(i); });
+            const isProdTok = t => !!product && (product.term.indexOf(t)>=0 || t.indexOf(product.term)>=0 || isCode(t));
+            const wordIdx=[]; tokens.forEach((t,i)=>{ if(t.length>=4 && !FAULTW.test(t) && !isProdTok(t)) wordIdx.push(i); });
             let alarmHits=[];
             if(nums.length) alarmHits=ALARMS.filter(a=>a.n!==null && nums.indexOf(a.n)>=0);
+            /* groupe d'événement iC7 tapé en hexadécimal : « 3130h », « 0x3130 » */
+            if(!alarmHits.length){
+                const forms=new Set(tokens.filter(t=>/^(0x)?[0-9a-f]{3,4}h?$/.test(t))
+                    .map(t=>t.replace(/^0x/,'').replace(/h$/,'')));
+                if(forms.size) alarmHits=ALARMS.filter(a=>a.grp && forms.has(a.grp.replace(/^0x/i,'').toLowerCase()));
+            }
             if(!alarmHits.length && wordIdx.length){
                 /* on compare aux mots réellement tapés (pas aux synonymes) : un libellé
                    d'alarme est un texte précis, l'expansion créerait de faux positifs. */
@@ -635,8 +655,30 @@
                    (≥ 2 mots) : « profinet » seul ne doit pas mener à l'alarme 34. */
                 if(!alarmHits.length && !faultWord && wordIdx.length>=2)
                     alarmHits=ALARMS.filter(a=>match(a,'textW'));
-                if(alarmHits.length>8) alarmHits=[];   // trop générique : on laisse parler les thèmes
+                if(alarmHits.length>15) alarmHits=[];  // trop générique : on laisse parler les thèmes
             }
+            if(alarmHits.length && !nums.length && !faultWord){
+                const hit=(a,set)=>wordIdx.filter(i=>set.has(tokens[i])||set.has(tokens[i]+'s')
+                    ||(tokens[i].slice(-1)==='s'&&set.has(tokens[i].slice(0,-1)))).length;
+                const ratio=a=>Math.max(a.frW.size?hit(a,a.frW)/a.frW.size:0,
+                                        a.enW.size?hit(a,a.enW)/a.enW.size:0);
+                alarmHits=alarmHits.filter(a=>ratio(a)>=0.3);
+            }
+            /* un même code peut exister sur plusieurs gammes : une seule ligne, gammes cumulées */
+            alarmHits=(function(list){
+                const m=new Map(), out=[];
+                list.forEach(a=>{
+                    const k=a.n+'|'+a.label, e=m.get(k);
+                    if(e){ if(e.gammes.indexOf(a.gamme)<0) e.gammes.push(a.gamme);
+                           a.docs.forEach(d=>{ if(e.docs.indexOf(d)<0) e.docs.push(d); });
+                           if(!e.en && a.en) e.en=a.en; if(!e.kind && a.kind) e.kind=a.kind; return; }
+                    const c=Object.assign({},a,{gammes:[a.gamme], docs:a.docs.slice()});
+                    m.set(k,c); out.push(c);
+                });
+                return out;
+            })(alarmHits);
+            if(prodSet) alarmHits.sort((a,b)=>(b.docs.some(d=>prodSet.has(d))?1:0)
+                                             -(a.docs.some(d=>prodSet.has(d))?1:0));
             /* un numéro ou le mot « défaut » -> l'alarme prime ; un simple libellé -> à peine
                au-dessus des thèmes, pour ne pas écraser un document dont le nom correspond. */
             const alarmW = (nums.length||faultWord) ? 7 : 4.5;
@@ -674,7 +716,6 @@
 
             /* intersection des mots + bonus « gamme reconnue » et « essentiel » */
             const hits=new Map();
-            const prodSet=product ? new Set(product.p.docs) : null;
             per[0].forEach((w,j)=>{
                 let s=w;
                 for(let i=1;i<per.length;i++){ const x=per[i].get(j); if(!x){ s=0; break; } s+=x; }
@@ -682,7 +723,7 @@
             });
             const order=[...hits.keys()].sort((a,b)=>(hits.get(b)-hits.get(a))||(a-b));
             return { q:q, tokens:tokens, hits:hits, order:order, product:product, faultWord:faultWord,
-                     topics:topicHits.slice(0,3), alarms:alarmHits.slice(0,6), nums:nums };
+                     topics:topicHits.slice(0,3), alarms:alarmHits.slice(0,4), nums:nums };
         }
 
         /* Bandeau explicatif : ce que la recherche a reconnu */
@@ -690,13 +731,19 @@
             if(!A) return '';
             /* mot tapé qui apparaît dans beaucoup de libellés (« freinage »…) : c'est un
                thème, pas un défaut précis — on n'affiche l'alarme que si elle est ciblée. */
-            const showAlarm = A.alarms.length && (A.nums.length || A.faultWord || A.alarms.length<=2);
+            const showAlarm = A.alarms.length && (A.nums.length || A.faultWord || A.alarms.length<=4);
             if(showAlarm){
-                const g=A.alarms[0];
-                const list=A.alarms.map(a=>'<b>'+(a.n!==null?'Alarme '+a.n+' · ':'')+esc(a.fr)+'</b>'
-                    +(a.en?' <i>('+esc(a.en)+')</i>':'')).join(' &nbsp;·&nbsp; ');
-                return '<span class="sm-ic">!</span><span>'+list+'<br>'+esc(g.gamme)
-                    +(g.section?' — '+esc(g.section):'')+'</span>';
+                const list=A.alarms.map(a=>{
+                    const titre=a.fr||a.en, second=(a.fr&&a.en)?a.en:'';
+                    const num=a.n!==null?((a.grp?'Événement ':'Alarme ')+a.n+' · '):'';
+                    return '<b>'+num+esc(titre)+'</b>'+(second?' <i>('+esc(second)+')</i>':'')
+                        +(a.kind?' <i>— '+esc(a.kind)+'</i>':'')
+                        +(a.grp?' <i>· groupe '+esc(a.grp.replace(/^0x/i,''))+'h</i>':'')
+                        +' <i>· '+esc((a.gammes||[a.gamme]).join(' · '))+'</i>';
+                }).join('<br>');
+                const sects=[]; A.alarms.forEach(a=>{ if(a.section && sects.indexOf(a.section)<0) sects.push(a.section); });
+                const sect=sects.slice(0,2).map(esc).join(' &nbsp;·&nbsp; ');
+                return '<span class="sm-ic">!</span><span>'+list+(sect?'<br>→ '+sect:'')+'</span>';
             }
             if(A.nums.length){
                 return '<span class="sm-ic">?</span><span>Code <b>'+A.nums.join(', ')+'</b> non répertorié dans le dictionnaire — '
