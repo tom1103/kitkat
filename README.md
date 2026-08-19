@@ -54,7 +54,7 @@ Tout se passe dans `data/keywords.yaml` (l'en-tête du fichier documente les rè
 | `synonyms` | groupes de mots équivalents (`variateur` = `vfd` = `drive`…) |
 | `topics` | thèmes techniques : `terms` (ce qu'on tape) → `scope` (documents ciblés) |
 | `alarms` | groupes de codes par gamme : `n`, `fr`, `en`, `kind`, `grp`, `terms` → `scope` |
-| `documents` | vocabulaire propre à chaque PDF, relevé dans son sommaire ou ses tableaux de caractéristiques (généré, voir [scratchpad](scratchpad/README.md)) |
+| `documents` | vocabulaire propre à chaque PDF, relevé dans son sommaire ou ses tableaux de caractéristiques (section générée, comme `alarms`) |
 
 C'est la section `documents` qui fait que « refroidissement iC7 » répond par la
 fiche technique (températures, altitude) et le manuel de configuration (« Débit
