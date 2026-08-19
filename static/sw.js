@@ -4,7 +4,7 @@
      repli sur le cache uniquement hors-ligne (pas de "version figée").
    - Autres ressources même domaine : stale-while-revalidate.
    Les PDF Danfoss (autre domaine) ne sont jamais mis en cache. */
-const CACHE = 'kk-explorer-v2';
+const CACHE = 'kk-explorer-v3';
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.add('./')).catch(() => {}));

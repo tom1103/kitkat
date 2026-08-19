@@ -7,3 +7,6 @@ hugo_stats.json
 
 # Local Claude Code settings (machine-specific)
 .claude/settings.local.json
+
+# Outils locaux de generation du dictionnaire (scripts, PDF telecharges, extractions)
+/scratchpad/

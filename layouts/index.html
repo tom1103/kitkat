@@ -434,6 +434,7 @@
         const svgIcon = t => "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>"+(ICONS[t]||ICONS.guide)+"</svg>";
         const FAM = {}; CATALOG.families.forEach(f => FAM[f.id] = f);
         const norm = s => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'');
+        const stem = w => w.length>=7 ? w.slice(0,6) : w;
         const slug = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 
         /* Index docs (même ordre que le DOM) */
@@ -480,12 +481,31 @@
         const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
         /* Synonymes des types de documents (« fiche technique » -> datasheet, etc.) */
+        /* brochures et listes de liens ne repondent pas a une question technique :
+           elles ne passent devant que si leur nom correspond a la recherche. */
+        const TYPE_MALUS = { brochure:-1.2, list:-1.2, software:-0.4 };
         const TYPE_SYN = { brochure:'brochure presentation', guide:'guide manuel',
             manual:'manuel notice utilisation', datasheet:'fiche technique datasheet caracteristiques',
             drawings:'encombrements plans dessins 3d cad modeles', list:'liste guides application',
             software:'logiciel software firmware outil telechargement' };
-        DOCS.forEach(d => { d.nName=norm(d.name); d.nPath=norm(d.cat+' '+d.group+' '+d.famLabel);
-            d.text += ' '+norm(TYPE_SYN[d.type]||''); d.kw=''; });
+        DOCS.forEach((d,i) => { d.idx=i; d.nName=norm(d.name); d.nPath=norm(d.cat+' '+d.group+' '+d.famLabel);
+            d.text += ' '+norm(TYPE_SYN[d.type]||''); d.kw=''; d.sec=''; d.secN=new Map(); });
+
+        /* Vocabulaire releve dans le PDF lui-meme (sommaire ou intitules de tableaux) :
+           c'est le canal le plus fiable, un document qui traite vraiment du sujet. */
+        (KW.documents||[]).forEach(e=>{
+            const cat=norm(e.cat||''), nom=norm(e.name||''), grp=norm(e.grp||'');
+            const d=DOCS.find(x=>norm(x.cat)===cat && norm(x.name)===nom && (!grp || norm(x.group)===grp));
+            if(!d) return;
+            d.sec=norm(e.kw||'');
+            d.sec.split(/[^a-z0-9+\/]+/).forEach(w=>{
+                if(w.length<3) return;
+                /* on indexe le mot et son radical : « niveaux sonores » doit repondre
+                   a « niveau sonore », « refroidissement » a « refroidi »... */
+                d.secN.set(w,(d.secN.get(w)||0)+1);
+                const r=stem(w); if(r!==w) d.secN.set(r,(d.secN.get(r)||0)+1);
+            });
+        });
 
         /* Une règle « scope » cible des documents : toutes ses clés doivent correspondre. */
         function ruleMatch(d, r){
@@ -556,6 +576,8 @@
         const STOP=new Set(['de','du','des','la','le','les','un','une','et','ou','en','au','aux','pour','sur',
             'dans','avec','par','d','l','the','of','for','with','my','mon','ma','mes','ce','cette','se']);
         const isCode = t => t.length>=6 && /\d/.test(t) && /[a-z]/.test(t);
+        /* code tape avec un prefixe : « A13 », « W29 », « AL13 », « alarme13 », « defaut4160 » */
+        const CODEPFX=/^(?:a|w|al|alm|alarme?|alarm|defaut|def|err|erreur|fault|code|evenement)(\d{1,5})$/;
 
         /* Numéros d'alarme / d'événement : « alarme 14 », « défaut n°4 », « A14 »,
            « 29 alarme », et un numéro seul s'il existe au dictionnaire (« 4160 ») */
@@ -564,10 +586,14 @@
             const re=/(?:defauts?|alarmes?|alarms?|erreurs?|errors?|faults?|trip|warning|avertissement|evenements?|event|code)\s*n?[°o]?\s*(\d{1,5})/g;
             while((m=re.exec(q))) out.push(+m[1]);
             const hasFaultWord = tokens.some(t=>FAULTW.test(t));
-            tokens.forEach(t=>{
-                const s=/^[aw](\d{1,3})$/.exec(t);
-                if(s && (tokens.length===1 || hasFaultWord)) out.push(+s[1]);
-                if(/^\d{1,5}$/.test(t) && (hasFaultWord || (t.length>=3 && ALARM_NUMS.has(+t)))) out.push(+t);
+            tokens.forEach((t,i)=>{
+                /* code colle au prefixe : « A13 », « W29 », « AL13 », « alarme13 », « E4160 » */
+                const s=CODEPFX.exec(t);
+                if(s && (tokens.length<=2 || hasFaultWord)) out.push(+s[1]);
+                /* prefixe separe : « A 13 », « W 29 » */
+                if(/^[aw]$/.test(t) && /^\d{1,5}$/.test(tokens[i+1]||'') && ALARM_NUMS.has(+tokens[i+1])) out.push(+tokens[i+1]);
+                /* numero seul : accepte s'il existe au dictionnaire */
+                if(/^\d{1,5}$/.test(t) && (hasFaultWord || ((t.length>=3 || tokens.length===1) && ALARM_NUMS.has(+t)))) out.push(+t);
             });
             return out.filter((v,i)=>out.indexOf(v)===i);
         }
@@ -681,19 +707,24 @@
                                              -(a.docs.some(d=>prodSet.has(d))?1:0));
             /* un numéro ou le mot « défaut » -> l'alarme prime ; un simple libellé -> à peine
                au-dessus des thèmes, pour ne pas écraser un document dont le nom correspond. */
-            const alarmW = (nums.length||faultWord) ? 7 : 4.5;
+            const alarmW = (nums.length||faultWord) ? 7 : 4.2;
 
             /* score par document, mot par mot */
             const per=[];
             for(let i=0;i<tokens.length;i++){
                 const m=new Map(), vs=variants[i], tk=tokens[i];
+                /* un mot de gamme (« ic7 ») ne doit pas compter comme un sujet :
+                   les sommaires repetent le nom du produit a chaque chapitre. */
+                const gamme=isProdTok(tk);
                 for(let j=0;j<DOCS.length;j++){
                     const d=DOCS[j]; let w=0;
                     for(let x=0;x<vs.length && w<6;x++){
-                        const v=vs[x]; if(v.length<2) continue;
+                        const v=vs[x]; if(v.length<2 && !/^\d$/.test(v)) continue;
                         if(d.nName.indexOf(v)===0) w=6;                       // début du nom du document
                         else if(d.nName.indexOf(v)>=0) w=Math.max(w,5);       // nom du document
                         else if(d.nPath.indexOf(v)>=0) w=Math.max(w,4);       // catégorie / groupe / gamme
+                        else if(!gamme && d.secN.size && (d.secN.get(v)||d.secN.get(stem(v))))
+                            w=Math.max(w, 4.5+Math.min((d.secN.get(v)||d.secN.get(stem(v)))-1,2)*0.3); // sommaire du PDF
                         else if(d.text.indexOf(v)>=0) w=Math.max(w,3);        // type de document
                         else if(d.kwSet.has(v)) w=Math.max(w,2);              // dictionnaire
                     }
@@ -704,22 +735,26 @@
                 if(product && (product.term.indexOf(tk)>=0 || tk.indexOf(product.term)>=0 || isCode(tk)))
                     product.p.docs.forEach(j=>{ if((m.get(j)||0)<4) m.set(j,4); });
                 if(alarmHits.length){
-                    const rel = FAULTW.test(tk) || /^\d{1,3}$/.test(tk) || /^[aw]\d{1,3}$/.test(tk)
-                        || alarmHits.some(a=>a.text.indexOf(tk)>=0);
+                    const rel = FAULTW.test(tk) || /^\d{1,5}$/.test(tk) || CODEPFX.test(tk)
+                        || /^[aw]$/.test(tk) || alarmHits.some(a=>a.text.indexOf(tk)>=0);
                     if(rel) alarmHits.forEach(a=>a.docs.forEach(j=>{ if((m.get(j)||0)<alarmW) m.set(j,alarmW); }));
                 }
                 /* numéro inconnu du dictionnaire : on renvoie vers le chapitre dépannage */
-                if(nums.length && !alarmHits.length && TOPIC_BY_ID['depannage'] && (/^\d{1,3}$/.test(tk)||FAULTW.test(tk)))
+                if(nums.length && !alarmHits.length && TOPIC_BY_ID['depannage'] && (/^\d{1,5}$/.test(tk)||CODEPFX.test(tk)||FAULTW.test(tk)))
                     TOPIC_BY_ID['depannage'].docs.forEach(j=>{ if((m.get(j)||0)<3) m.set(j,3); });
                 per.push(m);
             }
 
             /* intersection des mots + bonus « gamme reconnue » et « essentiel » */
+            /* formulation complete tapee par l'utilisateur (hors gamme) : « debit d'air » */
+            const mots=tokens.filter(t=>!isProdTok(t));
+            const phrase=mots.length>=2 ? mots.join(' ') : '';
             const hits=new Map();
             per[0].forEach((w,j)=>{
                 let s=w;
                 for(let i=1;i<per.length;i++){ const x=per[i].get(j); if(!x){ s=0; break; } s+=x; }
-                if(s) hits.set(j, s+(prodSet&&prodSet.has(j)?2:0)+(DOCS[j].ess?0.5:0));
+                if(s) hits.set(j, s+(prodSet&&prodSet.has(j)?2:0)+(DOCS[j].ess?0.5:0)
+                    +(phrase && DOCS[j].sec.indexOf(phrase)>=0 ? 3 : 0)+(TYPE_MALUS[DOCS[j].type]||0));
             });
             const order=[...hits.keys()].sort((a,b)=>(hits.get(b)-hits.get(a))||(a-b));
             return { q:q, tokens:tokens, hits:hits, order:order, product:product, faultWord:faultWord,
@@ -776,6 +811,23 @@
         let activeFamily='all', essOnly=false, favOnly=false, gridQuery='', selTypes=new Set(), lang='all', sharedSel=null;
         cats.forEach(c=>{ const b=c.querySelector('.cat__count'); if(b) b.dataset.total=b.textContent; });
 
+        /* Réordonne les documents de chaque groupe selon leur score (ordre du
+           catalogue quand la recherche est vide). Le DOM n'est touché que si
+           l'ordre change réellement. */
+        let reordered=false;
+        function reorder(A){
+            if(!A && !reordered) return;
+            grid.querySelectorAll('.grp').forEach(grp=>{
+                const els=Array.from(grp.querySelectorAll('.doc'));
+                if(els.length<2) return;
+                const key=el=>{ const d=byId[el.dataset.id];
+                    return A ? -(A.hits.get(DOCS.indexOf(d))||0) : DOCS.indexOf(d); };
+                const sorted=els.slice().sort((a,b)=>key(a)-key(b)||DOCS.indexOf(byId[a.dataset.id])-DOCS.indexOf(byId[b.dataset.id]));
+                if(sorted.some((el,i)=>el!==els[i])) sorted.forEach(el=>grp.appendChild(el));
+            });
+            reordered=!!A;
+        }
+
         function applyFilters(){
             const A = analyze(gridQuery);
             grid.classList.remove('lang-fr','lang-en'); if(lang==='fr') grid.classList.add('lang-fr'); if(lang==='en') grid.classList.add('lang-en');
@@ -796,6 +848,9 @@
                 if(ok) visible++;
             });
             const filtered = essOnly||favOnly||sharedSel||selTypes.size||lang!=='all'||!!A;
+            /* pendant une recherche, les documents les plus pertinents remontent
+               dans leur groupe (sinon on garde l'ordre du catalogue) */
+            reorder(A);
             cats.forEach(cat=>{
                 let cv=0;
                 cat.querySelectorAll('.grp').forEach(grp=>{
