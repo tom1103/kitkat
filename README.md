@@ -63,6 +63,23 @@ la brochure commerciale : un document qui consacre une section au sujet passe
 devant un document qui ne fait que l'évoquer. Brochures et listes de liens ne
 remontent que si la recherche porte sur leur nom.
 
+### Ouverture à la bonne page
+
+Chaque intitulé relevé porte sa page (`intitulé@page`), et chaque code d'alarme
+la page du paragraphe qui le décrit (`alarmes: "14@831 …"`). Sous chaque résultat,
+la recherche affiche donc **pourquoi** ce document sort et ouvre le PDF au bon
+endroit :
+
+| Recherche | Ce qui s'affiche sous le résultat |
+|---|---|
+| `débit d'air ic7` | Manuel de configuration → *Débit d'air et niveaux sonores* **p. 74** |
+| `alarme 14` | Guide de programmation FC-302 → *Alarme 14 · Défaut terre* **p. 831** |
+| `4160` | Guide d'application iC7 → *Événement 4160 · Absence de phase réseau* **p. 348** |
+| `couple de serrage` | Guide de dimensionnement → *Couple de serrage* **p. 7** |
+
+Les pages ne valent que pour la version du PDF qui a été indexée (`lang:`), donc
+le lien direct n'est proposé que sur cette version-là.
+
 Un `scope` cible les documents par `family`, `cat`, `group`, `type`, `name`
 (sous-chaîne) et `not` (exclusion). Ajouter un thème = ajouter un bloc à
 `topics` ; aucun code à modifier.
