@@ -134,12 +134,20 @@
         .cat__body { padding:8px; display:flex; flex-direction:column; gap:2px; }
         .grp__title { font-size:.74rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-2); font-weight:700; padding:12px 12px 5px; }
 
-        .doc { display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:var(--radius-sm); transition:background .12s; }
+        .doc { display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:9px 11px; border-radius:var(--radius-sm); transition:background .12s; }
         .doc:hover { background:var(--surface-3); }
         .doc__ic { display:grid; place-items:center; width:30px; height:30px; border-radius:8px; background:var(--surface-3); color:var(--muted); flex:none; }
         .doc:hover .doc__ic { color:var(--text); }
         .doc__ic svg { width:16px; height:16px; }
         .doc__name { flex:1; font-size:.9rem; font-weight:500; min-width:0; display:flex; align-items:center; gap:7px; }
+        /* « pourquoi ce document » : la section du PDF qui correspond, cliquable a la bonne page */
+        .doc__hit { flex:0 0 100%; margin:1px 0 0 39px; font-size:.76rem; color:var(--muted);
+            display:flex; align-items:center; gap:7px; text-decoration:none; min-width:0; }
+        .doc__hit:hover { color:var(--primary); }
+        .doc__hit .lbl { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .doc__hit .pg { flex:none; font-size:.7rem; font-weight:600; padding:1px 6px; border-radius:6px;
+            background:var(--surface-3); color:var(--muted-2); }
+        .doc__hit:hover .pg { background:var(--primary-soft); color:var(--primary); }
         a.doc__name:hover { color:var(--primary); }
         .doc.ess .doc__nm::after { content:'★'; color:var(--primary); font-size:.7rem; margin-left:6px; }
 
@@ -202,6 +210,11 @@
         .cmdk__item .ci-main { flex:1; min-width:0; }
         .cmdk__item .ci-name { font-weight:600; font-size:.94rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .cmdk__item .ci-path { font-size:.78rem; color:var(--muted); }
+        .cmdk__item .ci-hit { font-size:.75rem; color:var(--muted-2); margin-top:2px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .cmdk__item .ci-hit .pg { font-weight:600; padding:0 5px; border-radius:5px;
+            background:var(--surface-3); color:var(--muted); }
+        .cmdk__item.active .ci-hit { color:var(--muted); }
         .cmdk__item .ci-vers { display:flex; gap:5px; flex:none; }
         .ci-lang { font-size:.62rem; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
         .ci-lang.latest { background:var(--c); color:#fff; border-color:transparent; }
@@ -489,15 +502,31 @@
             drawings:'encombrements plans dessins 3d cad modeles', list:'liste guides application',
             software:'logiciel software firmware outil telechargement' };
         DOCS.forEach((d,i) => { d.idx=i; d.nName=norm(d.name); d.nPath=norm(d.cat+' '+d.group+' '+d.famLabel);
-            d.text += ' '+norm(TYPE_SYN[d.type]||''); d.kw=''; d.sec=''; d.secN=new Map(); });
+            d.text += ' '+norm(TYPE_SYN[d.type]||''); d.kw=''; d.sec=''; d.secN=new Map();
+            d.secList=[]; d.secLang=''; d.alarmPg=null; });
 
         /* Vocabulaire releve dans le PDF lui-meme (sommaire ou intitules de tableaux) :
-           c'est le canal le plus fiable, un document qui traite vraiment du sujet. */
+           c'est le canal le plus fiable, un document qui traite vraiment du sujet.
+           Chaque intitule porte sa page, ce qui permet d'ouvrir le PDF au bon endroit. */
         (KW.documents||[]).forEach(e=>{
             const cat=norm(e.cat||''), nom=norm(e.name||''), grp=norm(e.grp||'');
             const d=DOCS.find(x=>norm(x.cat)===cat && norm(x.name)===nom && (!grp || norm(x.group)===grp));
             if(!d) return;
-            d.sec=norm(e.kw||'');
+            d.secLang=(e.lang||'').toUpperCase();
+            d.secList=String(e.kw||'').split(' ; ').map(x=>{
+                const m=/^(.*?)@(\d+)$/.exec(x.trim());
+                const t=(m?m[1]:x).trim();
+                const n=norm(t);
+                return { t:t, n:n, w:n.split(/[^a-z0-9+\/]+/).filter(Boolean), p:m?+m[2]:0 };
+            }).filter(x=>x.t);
+            d.sec=d.secList.map(x=>x.n).join(' ; ');
+            /* pages des codes d'alarme decrits dans ce document : « 14@831 16@831 ... » */
+            if(e.alarmes){
+                d.alarmPg=new Map();
+                String(e.alarmes).split(/\s+/).forEach(x=>{
+                    const m=/^(\d{1,5})@(\d+)$/.exec(x); if(m) d.alarmPg.set(+m[1],+m[2]);
+                });
+            }
             d.sec.split(/[^a-z0-9+\/]+/).forEach(w=>{
                 if(w.length<3) return;
                 /* on indexe le mot et son radical : « niveaux sonores » doit repondre
@@ -739,8 +768,9 @@
                         || /^[aw]$/.test(tk) || alarmHits.some(a=>a.text.indexOf(tk)>=0);
                     if(rel) alarmHits.forEach(a=>a.docs.forEach(j=>{ if((m.get(j)||0)<alarmW) m.set(j,alarmW); }));
                 }
-                /* numéro inconnu du dictionnaire : on renvoie vers le chapitre dépannage */
-                if(nums.length && !alarmHits.length && TOPIC_BY_ID['depannage'] && (/^\d{1,5}$/.test(tk)||CODEPFX.test(tk)||FAULTW.test(tk)))
+                /* un numéro reste utile même si le code appartient à une autre gamme
+                   (« défaut 14 ic7 ») : on renvoie vers le chapitre dépannage */
+                if(nums.length && TOPIC_BY_ID['depannage'] && (/^\d{1,5}$/.test(tk)||CODEPFX.test(tk)||FAULTW.test(tk)))
                     TOPIC_BY_ID['depannage'].docs.forEach(j=>{ if((m.get(j)||0)<3) m.set(j,3); });
                 per.push(m);
             }
@@ -749,16 +779,97 @@
             /* formulation complete tapee par l'utilisateur (hors gamme) : « debit d'air » */
             const mots=tokens.filter(t=>!isProdTok(t));
             const phrase=mots.length>=2 ? mots.join(' ') : '';
+            /* Un document qui consacre un paragraphe au code recherche est preferable —
+               mais seulement si l'utilisateur cherche bien un code (numero ou mot
+               « defaut ») : sinon « refroidissement » basculerait sur un evenement. */
+            const decrit=(nums.length||faultWord)
+                ? (nums.length ? nums : alarmHits.map(a=>a.n).filter(n=>n!==null&&n!==undefined))
+                : [];
             const hits=new Map();
             per[0].forEach((w,j)=>{
                 let s=w;
                 for(let i=1;i<per.length;i++){ const x=per[i].get(j); if(!x){ s=0; break; } s+=x; }
                 if(s) hits.set(j, s+(prodSet&&prodSet.has(j)?2:0)+(DOCS[j].ess?0.5:0)
-                    +(phrase && DOCS[j].sec.indexOf(phrase)>=0 ? 3 : 0)+(TYPE_MALUS[DOCS[j].type]||0));
+                    +(phrase && DOCS[j].sec.indexOf(phrase)>=0 ? 3 : 0)+(TYPE_MALUS[DOCS[j].type]||0)
+                    +(decrit && DOCS[j].alarmPg && decrit.some(n=>DOCS[j].alarmPg.has(n)) ? 1 : 0));
             });
             const order=[...hits.keys()].sort((a,b)=>(hits.get(b)-hits.get(a))||(a-b));
-            return { q:q, tokens:tokens, hits:hits, order:order, product:product, faultWord:faultWord,
+            return { q:q, tokens:tokens, mots:mots, hits:hits, order:order, product:product, faultWord:faultWord,
                      topics:topicHits.slice(0,3), alarms:alarmHits.slice(0,4), nums:nums };
+        }
+
+        /* ---- Pourquoi ce document ? (section du PDF qui correspond) ----------
+           On retient l'intitule qui couvre le plus de mots tapes ; a egalite, le
+           plus court, donc le plus precis. */
+        function bestSection(d, A){
+            if(!A) return null;
+            /* un numero d'alarme prime : on renvoie a la page qui la decrit */
+            const codes = A.nums.length ? A.nums
+                : (A.alarms||[]).map(a=>a.n).filter(n=>n!==null&&n!==undefined);
+            if(codes.length && d.alarmPg){
+                for(const n of codes){
+                    const pg=d.alarmPg.get(n);
+                    if(!pg) continue;
+                    const a=(A.alarms||[]).find(x=>x.n===n);
+                    const nom=a ? ((a.grp?'Événement ':'Alarme ')+n+' · '+(a.fr||a.en)) : ('Alarme '+n);
+                    return { t:nom, p:pg };
+                }
+            }
+            if(!d.secList.length) return null;
+            const mots=(A.mots||A.tokens).filter(t=>t.length>=3 && !STOP.has(t));
+            if(!mots.length) return null;
+            /* comparaison mot a mot : « sto » ne doit pas correspondre a « stockage ».
+               On accepte la forme allongee de 2 lettres max (pluriels, accords). */
+            const colle=(mot,t)=> mot===t || (mot.indexOf(t)===0 && mot.length-t.length<=2)
+                || (t.length>=7 && mot.indexOf(stem(t))===0);
+            let best=null, bestScore=0;
+            for(const s of d.secList){
+                let n=0;
+                for(const t of mots){ if(s.w.some(mot=>colle(mot,t))) n++; }
+                if(!n) continue;
+                const sc=n*100 - s.t.length;                 // plus de mots, puis plus court
+                if(sc>bestScore){ bestScore=sc; best=s; }
+            }
+            return best && bestScore>0 ? best : null;
+        }
+
+        /* Lien vers la page exacte du PDF. Les pages relevees ne valent que pour la
+           version indexee (`lang`) : on n'ajoute #page que sur celle-la. */
+        function pageURL(d, page){
+            if(!page) return null;
+            const vs=d.versions||[];
+            if(!vs.length) return d.url ? d.url+'#page='+page : null;
+            const v=vs.find(x=>String(x.lang).toUpperCase()===d.secLang) || (d.secLang?null:vs[0]);
+            return v ? v.url+'#page='+page : null;
+        }
+
+        /* Ligne « → section (p. N) » sous un document, cliquable vers la page du PDF */
+        function showHit(d, sec){
+            let el=d.el.querySelector('.doc__hit');
+            const url=sec ? pageURL(d, sec.p) : null;
+            if(!sec){ if(el) el.remove(); return; }
+            const tag=url?'A':'SPAN';
+            if(el && el.tagName!==tag){ el.remove(); el=null; }
+            if(!el){ el=document.createElement(tag); el.className='doc__hit'; d.el.appendChild(el); }
+            if(url){ el.href=url; el.target='_blank'; el.rel='noopener';
+                     el.title='Ouvrir « '+sec.t+' » page '+sec.p; }
+            const html='<span class="lbl">'+esc(sec.t)+'</span>'+(sec.p?'<span class="pg">p. '+sec.p+'</span>':'');
+            if(el.innerHTML!==html) el.innerHTML=html;
+        }
+
+        /* Les lignes « pourquoi » sont differees : la frappe reste instantanee, elles
+           apparaissent des que l'utilisateur s'arrete. */
+        let hitT=null, hitsOn=false;
+        function planHits(A){
+            clearTimeout(hitT);
+            if(!A){
+                if(hitsOn){ grid.querySelectorAll('.doc__hit').forEach(el=>el.remove()); hitsOn=false; }
+                return;
+            }
+            hitT=setTimeout(()=>{
+                DOCS.forEach(d=>{ if(d.el) showHit(d, d.el.style.display!=='none' ? bestSection(d,A) : null); });
+                hitsOn=true;
+            }, 110);
         }
 
         /* Bandeau explicatif : ce que la recherche a reconnu */
@@ -820,9 +931,9 @@
             grid.querySelectorAll('.grp').forEach(grp=>{
                 const els=Array.from(grp.querySelectorAll('.doc'));
                 if(els.length<2) return;
-                const key=el=>{ const d=byId[el.dataset.id];
-                    return A ? -(A.hits.get(DOCS.indexOf(d))||0) : DOCS.indexOf(d); };
-                const sorted=els.slice().sort((a,b)=>key(a)-key(b)||DOCS.indexOf(byId[a.dataset.id])-DOCS.indexOf(byId[b.dataset.id]));
+                const idx=el=>byId[el.dataset.id].idx;
+                const key=el=> A ? -(A.hits.get(idx(el))||0) : idx(el);
+                const sorted=els.slice().sort((a,b)=>key(a)-key(b)||idx(a)-idx(b));
                 if(sorted.some((el,i)=>el!==els[i])) sorted.forEach(el=>grp.appendChild(el));
             });
             reordered=!!A;
@@ -847,6 +958,7 @@
                 if(d.el) d.el.style.display= ok?'':'none';
                 if(ok) visible++;
             });
+            planHits(A);
             const filtered = essOnly||favOnly||sharedSel||selTypes.size||lang!=='all'||!!A;
             /* pendant une recherche, les documents les plus pertinents remontent
                dans leur groupe (sinon on garde l'ordre du catalogue) */
@@ -951,7 +1063,7 @@
 
         /* Command palette */
         const cmdk=document.getElementById('cmdk'), cmdkInput=document.getElementById('cmdk-input'), cmdkResults=document.getElementById('cmdk-results');
-        let cmdkItems=[], cmdkActive=0;
+        let cmdkItems=[], cmdkActive=0, cmdkHits=[];
         const hl=(t,q)=>{ if(!q)return t; const i=norm(t).indexOf(q); if(i<0)return t; return t.slice(0,i)+'<mark>'+t.slice(i,i+q.length)+'</mark>'+t.slice(i+q.length); };
         function renderCmdk(query){
             const A=analyze(query);
@@ -968,21 +1080,31 @@
             }
             const bnr = banner ? '<div class="cmdk__banner">'+banner+'</div>' : '';
             cmdkItems=list; cmdkActive=0;
+            cmdkHits=list.map(d=>A ? bestSection(d,A) : null);
             if(!list.length){ cmdkResults.innerHTML=bnr+'<div class="cmdk__empty">Aucun résultat pour « '+esc(query)+' »</div>'; return; }
             const routed = !!(A && (A.alarms.length || A.product));
             let html=bnr+'<div class="cmdk__group">'+head+'</div>';
             list.forEach((d,i)=>{
                 const badges=(d.versions||[]).map(v=>'<span class="ci-lang">'+v.lang+'</span>').join('');
+                const sec=cmdkHits[i];
+                const why=sec ? '<div class="ci-hit">'+esc(sec.t)
+                    +(sec.p?' <span class="pg">p. '+sec.p+'</span>':'')+'</div>' : '';
                 html+='<div class="cmdk__item'+(i===0?' active':'')+(routed?' route':'')+'" data-i="'+i+'" style="--c:'+d.color+'">'
                     +'<span class="ci-ic">'+svgIcon(d.type)+'</span>'
                     +'<span class="ci-main"><div class="ci-name">'+hl(d.name,q)+(d.ess?' <span style="color:var(--primary);font-size:.72rem">★</span>':'')+'</div>'
-                    +'<div class="ci-path">'+d.cat+(d.group?' › '+d.group:'')+' · '+d.famLabel+'</div></span>'
+                    +'<div class="ci-path">'+d.cat+(d.group?' › '+d.group:'')+' · '+d.famLabel+'</div>'+why+'</span>'
                     +'<span class="ci-vers">'+badges+'</span></div>';
             });
             cmdkResults.innerHTML=html;
         }
         function setActive(i){ const it=cmdkResults.querySelectorAll('.cmdk__item'); if(!it.length)return; cmdkActive=(i+it.length)%it.length; it.forEach((el,x)=>el.classList.toggle('active',x===cmdkActive)); it[cmdkActive].scrollIntoView({block:'nearest'}); }
-        function openDoc(i){ const d=cmdkItems[i]; if(d&&d.url){ addRecent(d.id); window.open(d.url,'_blank','noopener'); closeCmdk(); } }
+        function openDoc(i){
+            const d=cmdkItems[i]; if(!d) return;
+            const sec=cmdkHits[i];
+            const url=(sec && pageURL(d, sec.p)) || d.url;
+            if(!url) return;
+            addRecent(d.id); window.open(url,'_blank','noopener'); closeCmdk();
+        }
         function openCmdk(){ cmdk.classList.add('open'); cmdkInput.value=''; renderCmdk(''); setTimeout(()=>cmdkInput.focus(),20); }
         function closeCmdk(){ cmdk.classList.remove('open'); }
         document.getElementById('open-cmdk').addEventListener('click', openCmdk);
