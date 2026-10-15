@@ -32,8 +32,8 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/571789/document.pdf" }
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/597499/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/602573/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/602571/document.pdf" }
           - name: "Manuel de configuration"
             type: guide
             versions:
@@ -72,9 +72,23 @@ categories:
           - name: "Liste guide d'application"
             type: list
             url: "https://ftp.danfoss.com/public/file/rUxna4kkfEqoCx1xGjJvEg/Guides%20d'Application_iC7%20Automation.pdf"
+          - name: "Liste guide d'application (iC7 Commun)"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/jotbdyhqlec29gozcu3kga/Guides%20d'Application_iC7%20Commun.pdf"
           - name: "Firmware (dernière version)"
             type: software
             url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
+          - name: "Guide d'application Motion"
+            type: guide
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/596775/document.pdf" }
+          - name: "Guide d'application Active Front End (AFE)"
+            type: guide
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/585073/document.pdf" }
+          - name: "Fichier GSDML PROFINET"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/589810/ID463213737383-0801.zip"
   - name: "iC-7 AQUA"
     family: ic7
     groups:
@@ -84,7 +98,8 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/595401/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/611311/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/611293/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             versions:
@@ -94,12 +109,12 @@ categories:
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/594901/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/601880/document.pdf" }
           - name: "Guide d'application"
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/582811/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/611848/document.pdf" }
           - name: "Fiche technique ULH"
             type: datasheet
             versions:
@@ -113,9 +128,24 @@ categories:
             type: drawings
             essential: true
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-aqua/#tab-3d-models-and-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/78u9-07f-0kbopdoch3vgq/Guidesd'Application_iC7Aqua.pdf"
+          - name: "Liste guide d'application (iC7 Commun)"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/jotbdyhqlec29gozcu3kga/Guides%20d'Application_iC7%20Commun.pdf"
           - name: "Firmware (dernière version)"
             type: software
-            url: "https://assets.danfoss.com/software/latest/584773/ID556835586141-0102.zip"
+            url: "https://assets.danfoss.com/software/latest/609443/ID556835586141-0201.zip"
+          - name: "Fichier GSDML PROFINET"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609446/ID556847024160-0201.zip"
+          - name: "Fichier EDS EtherNet/IP"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609440/ID556848000164-0201.zip"
+          - name: "Fichier ESI EtherCAT"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609464/ID556847586162-0201.zip"
   - name: "iC7-HVACR"
     family: ic7
     groups:
@@ -125,8 +155,8 @@ categories:
             type: brochure
             essential: true
             versions:
-              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/595409/document.pdf" }
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/595406/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/611151/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/611145/document.pdf" }
           - name: "Fiche technique"
             type: datasheet
             essential: true
@@ -137,12 +167,12 @@ categories:
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/594900/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/601881/document.pdf" }
           - name: "Guide d'application"
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/580970/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/611847/document.pdf" }
           - name: "Fiche technique ULH"
             type: datasheet
             versions:
@@ -156,9 +186,24 @@ categories:
             type: drawings
             essential: true
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/ic7-drives/ic7-hvacr/#tab-3d-models-and-drawings"
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/0oajgm_pp0ihhbmphd92vq/Guidesd'Application_iC7HVACR.pdf"
+          - name: "Liste guide d'application (iC7 Commun)"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/jotbdyhqlec29gozcu3kga/Guides%20d'Application_iC7%20Commun.pdf"
           - name: "Firmware (dernière version)"
             type: software
-            url: "https://assets.danfoss.com/software/latest/582990/ID556837117144-0101.zip"
+            url: "https://assets.danfoss.com/software/latest/609435/ID556837117144-0201.zip"
+          - name: "Fichier GSDML PROFINET"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609454/ID556847369161-0201.zip"
+          - name: "Fichier EDS EtherNet/IP"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609437/ID556848166165-0201.zip"
+          - name: "Fichier ESI EtherCAT"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/609447/ID556847787163-0201.zip"
   - name: "iC2"
     family: ic2
     groups:
@@ -178,7 +223,7 @@ categories:
           - name: "Manuel d'utilisation"
             type: manual
             versions:
-              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/403718/document.pdf" }
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/600731/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/587156/document.pdf" }
           - name: "Guide d'application"
             type: guide
@@ -300,6 +345,7 @@ categories:
             essential: true
             versions:
               - { lang: FR, url: "https://assets.danfoss.com/documents/latest/562083/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/601879/document.pdf" }
           - name: "Encombrements"
             type: drawings
             url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-hvac-drive-fc-102/#tab-drawings"
@@ -307,6 +353,54 @@ categories:
             type: list
             essential: true
             url: "https://ftp.danfoss.com/public/file/-snXSp3eJEykBjz15LCiMw/Guides%20d'Application_FC102%20VLT%20HVAC%20Drive.pdf"
+  - name: "FC-101"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/s5cu-gmPyUat8yiT4B3KAg/Guides%20d'application_FC101%20VLT%20HVAC%20Basic%20Drive.pdf"
+  - name: "FC-103"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/f6NjUaGNyEymkYYVG0U9GQ/Guides%20d'Application_FC103%20VLT%20Refrigeration%20Drive.pdf"
+  - name: "FC-280"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/0mN4A_8vyEafVlJ4U7NE9A/Guides%20d'Application_FC280%20VLT%20Midi%20Drive.pdf"
+  - name: "FC-51"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/kTMUxEfS6Eq0UTtFew6zWg/Guides%20d'Application_FC51%20VLT%20MICRO%20Drive.pdf"
+  - name: "Vacon 100"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/ksQqabKXG0_JUcKPh7ADWw/Guides%20d'Application_VACON100.pdf"
+  - name: "Vacon NX"
+    family: vlt
+    groups:
+      - name: ""
+        docs:
+          - name: "Liste guide d'application"
+            type: list
+            url: "https://ftp.danfoss.com/public/file/RHmHH2T8MEizYt7OwFTybQ/Guides%20d'Application_VACON%20NX.pdf"
   - name: "MCD 600"
     family: demarreurs
     groups:
@@ -370,7 +464,7 @@ categories:
             type: datasheet
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273343/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/601566/document.pdf" }
           - name: "MCA122 Modbus TCP"
             type: datasheet
             essential: true
@@ -386,6 +480,12 @@ categories:
             versions:
               - { lang: FR, url: "https://assets.danfoss.com/documents/latest/276821/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/276817/document.pdf" }
+          - name: "Fichier GSDML MCA120"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/600713/ID463167934368-0201.zip"
+          - name: "Guide d'application bus de terrain (iC7, Vacon, VLT)"
+            type: guide
+            url: "https://ftp.danfoss.com/public/file/2083Sgs4i0yc5fIPNGW_nA/Guides%20d'Application_Bus%20de%20terrain.pdf"
       - name: "Extensions (MCB)"
         docs:
           - name: "MCB152"
@@ -400,11 +500,19 @@ categories:
             essential: true
             versions:
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/549965/document.pdf" }
+          - name: "Guide d'application CBM"
+            type: guide
+            url: "https://ftp.danfoss.com/public/file/3z9diNQukEus4M1hnzWThA/Guides%20d'Application_CBM.pdf"
           - name: "STO"
             type: datasheet
             versions:
               - { lang: FR, url: "https://assets.danfoss.com/documents/latest/272672/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272633/document.pdf" }
+      - name: "Applications"
+        docs:
+          - name: "Tenue aux microcoupures (VLT)"
+            type: guide
+            url: "https://ftp.danfoss.com/public/file/tEcDiXldR0i2_DVrWZnf2Q/Guides%20d'Application_Tenue%20aux%20microcoupures.pdf"
       - name: "Filtrage"
         docs:
           - name: "Filtres de sortie"
@@ -439,7 +547,7 @@ categories:
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/570897/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/607613/document.pdf" }
       - name: "Sécurité & Monitoring"
         docs:
           - name: "Guide de sécurité"
@@ -456,7 +564,7 @@ categories:
             type: guide
             essential: true
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/579725/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/601564/document.pdf" }
   - name: "Options Démarreurs"
     family: options
     groups:
@@ -465,6 +573,7 @@ categories:
           - name: "Profibus"
             type: manual
             versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/270870/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272581/document.pdf" }
           - name: "DeviceNet"
             type: manual
@@ -473,11 +582,17 @@ categories:
           - name: "Modbus"
             type: manual
             versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/270482/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/274830/document.pdf" }
           - name: "EtherNet/IP"
             type: datasheet
             versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/277443/document.pdf" }
               - { lang: EN, url: "https://assets.danfoss.com/documents/latest/584590/document.pdf" }
+          - name: "PROFINET"
+            type: manual
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/273371/document.pdf" }
   - name: "Logiciels"
     family: outils
     groups:
@@ -486,14 +601,14 @@ categories:
           - name: "My Drive Insight"
             type: software
             essential: true
-            url: "https://datacore.mydrive.danfoss.com/assets/7f3a85fb-1fd4-49d9-bd4a-3b5dcbe0fed2?download"
+            url: "https://datacore.mydrive.danfoss.com/assets/cbb2e9ce-10b8-4093-b955-7db8b8801c36"
           - name: "MyDrive Suite"
             type: software
             url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/mydrive-suite/"
           - name: "MCT-10"
             type: software
             essential: true
-            url: "https://assets.danfoss.com/software/latest/566291/ID463243626411-0201.zip"
+            url: "https://assets.danfoss.com/software/latest/585969/ID463243626411-0202.zip"
           - name: "Logiciel iC7 (dernière version)"
             type: software
             url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
@@ -503,6 +618,9 @@ categories:
           - name: "Firmware variateurs (VLT / VACON / iC7)"
             type: software
             url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/ac-drive-firmware/"
+          - name: "TwinCAT Danfoss DriveManager Plug-in"
+            type: software
+            url: "https://assets.danfoss.com/software/latest/599351/ID461824814577-0801.zip"
   - name: "Librairies"
     family: outils
     groups:
@@ -514,7 +632,7 @@ categories:
             url: "https://www.danfoss.com/en/service-and-support/downloads/dds/plc-libraries/"
           - name: "Fichiers de configuration bus de terrain"
             type: software
-            url: "https://www.danfoss.com/en/service-and-support/downloads/dds/fieldbus-configuration-files/"
+            url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/fieldbus-configuration-files/"
           - name: "Outil SISTEMA (sécurité fonctionnelle)"
             type: software
-            url: "https://www.danfoss.com/en/service-and-support/downloads/dds/sistema-safety-integrity-software-tool/"
+            url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/sistema-safety-integrity-software-tool/"
