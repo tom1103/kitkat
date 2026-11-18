@@ -374,8 +374,38 @@ categories:
     groups:
       - name: ""
         docs:
+          - name: "Brochure"
+            type: brochure
+            essential: true
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/192344/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/316954/document.pdf" }
+          - name: "Guide de dimensionnement"
+            type: guide
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/272342/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/272336/document.pdf" }
+          - name: "Manuel d'utilisation"
+            type: manual
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/273210/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/270782/document.pdf" }
+          - name: "Guide de programmation"
+            type: guide
+            essential: true
+            versions:
+              - { lang: FR, url: "https://assets.danfoss.com/documents/latest/271139/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/271134/document.pdf" }
+          - name: "Fiche technique"
+            type: datasheet
+            versions:
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/250234/document.pdf" }
+          - name: "Encombrements"
+            type: drawings
+            url: "https://www.danfoss.com/fr-fr/products/dds/low-voltage-drives/vlt-drives/vlt-midi-drive-fc-280/#tab-3d-models-and-drawings"
           - name: "Liste guide d'application"
             type: list
+            essential: true
             url: "https://ftp.danfoss.com/public/file/0mN4A_8vyEafVlJ4U7NE9A/Guides%20d'Application_FC280%20VLT%20Midi%20Drive.pdf"
   - name: "FC-51"
     family: vlt
@@ -553,7 +583,7 @@ categories:
           - name: "Guide de sécurité"
             type: guide
             versions:
-              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/353022/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/432985/document.pdf" }
           - name: "Sécurité fonctionnelle (Automation)"
             type: guide
             essential: true
@@ -593,6 +623,7 @@ categories:
             type: manual
             versions:
               - { lang: FR, url: "https://assets.danfoss.com/documents/latest/273371/document.pdf" }
+              - { lang: EN, url: "https://assets.danfoss.com/documents/latest/273362/document.pdf" }
   - name: "Logiciels"
     family: outils
     groups:
@@ -608,13 +639,13 @@ categories:
           - name: "MCT-10"
             type: software
             essential: true
-            url: "https://assets.danfoss.com/software/latest/585969/ID463243626411-0202.zip"
+            url: "https://assets.danfoss.com/software/latest/607724/ID463243626411-0301.zip"
           - name: "Logiciel iC7 (dernière version)"
             type: software
             url: "https://assets.danfoss.com/software/latest/589830/ID463226340394-1201.zip"
           - name: "Logiciel système iC7-Automation (dernière version)"
             type: software
-            url: "https://assets.danfoss.com/software/latest/572932/ID543724747716-0201.zip"
+            url: "https://assets.danfoss.com/software/latest/614192/ID543724747716-0301.zip"
           - name: "Firmware variateurs (VLT / VACON / iC7)"
             type: software
             url: "https://www.danfoss.com/fr-fr/service-and-support/downloads/dds/ac-drive-firmware/"
